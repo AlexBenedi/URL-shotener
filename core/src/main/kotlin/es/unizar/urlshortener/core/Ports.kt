@@ -63,3 +63,18 @@ interface HashService {
      */
     fun hasUrl(url: String): String
 }
+
+/**
+ * [SafetyService] is the port to the service that checks if an URL is safe.
+ *
+ * **Note**: It is a design decision to create this port. It could be part of the core.
+ */
+interface SafetyService {
+    /**
+     * Checks if the given URL is safe.
+     * 
+     * @param url The URL to be checked.
+     * @return True if the URL is safe, false otherwise.
+     */
+    fun isUrlSafe(url: String): Boolean
+}

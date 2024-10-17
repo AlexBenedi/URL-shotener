@@ -2,4 +2,4 @@
 rootProject.name = "urlshortener"
 
 // Include the specified subprojects in the build
-include("core", "delivery", "repositories", "app")
+include("core", "delivery", "repositories", "app", "gateway")
