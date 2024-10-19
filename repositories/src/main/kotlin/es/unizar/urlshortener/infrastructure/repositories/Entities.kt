@@ -42,3 +42,46 @@ class ShortUrlEntity(
     val ip: String?,
     val country: String?
 )
+
+@Entity
+@Table(name = "link")
+@Suppress("LongParameterList", "JpaObjectClassSignatureInspection")
+class LinkEntity(
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    val id: Long? = null,
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "short_url_id", nullable = false)
+    val shortUrl: ShortUrlEntity, // Relación con ShortUrlEntity
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "click_id", nullable = false)
+    val click: ClickEntity, // Relación con ClickEntity
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    val user: UserEntity? = null,
+
+    //TODO: Add QR information
+)
+
+@Entity
+@Table(name = "user")
+@Suppress("LongParameterList", "JpaObjectClassSignatureInspection")
+class UserEntity(
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    val id: Long? = null,
+
+    @Column(length = 50, nullable = false, unique = true)
+    val username: String,
+
+    @Column(length = 255, nullable = false)
+    val password: String,
+
+    @OneToMany(mappedBy = "user", cascade = [CascadeType.PERSIST, CascadeType.MERGE], fetch = FetchType.LAZY)
+    val links: MutableList<LinkEntity> = mutableListOf()
+)
+
+
