@@ -23,9 +23,14 @@ dependencies {
 
     // Include Spring Kafka as an implementation dependency
     implementation(libs.spring.kafka)
+    implementation("org.apache.kafka:kafka-clients:2.7.1")
+    implementation("org.apache.kafka:kafka-streams:2.7.1")
 
     // Include Spring Kafka Test as a test implementation dependency
     testImplementation(libs.spring.kafka.test)
+    testImplementation("org.apache.kafka:kafka-clients:2.7.1")
+    testImplementation("org.apache.kafka:kafka-streams:2.7.1")
+    
 
     // Include Spring Boot Starter Test as a test implementation dependency
     testImplementation(libs.spring.boot.starter.test)

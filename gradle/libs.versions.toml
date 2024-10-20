@@ -10,6 +10,8 @@ detekt = "1.23.6"  # Detekt version
 jquery = "3.6.1"  # jQuery version
 commonsValidator = "1.6"  # Apache Commons Validator version
 guava = "31.1-jre"  # Google Guava version
+springKafka = "2.7.1"
+springKafkaTest = "2.7.1"
 
 # Define plugins with their respective IDs and version references
 [plugins]
@@ -46,3 +48,7 @@ jquery = { module = "org.webjars:jquery", version.ref = "jquery" }  # jQuery
 commons-validator = { module = "commons-validator:commons-validator", version.ref = "commonsValidator" }  # Apache Commons Validator
 guava = { module = "com.google.guava:guava", version.ref = "guava" }  # Google Guava
 mockito-kotlin =  { module = "org.mockito.kotlin:mockito-kotlin", version.ref = "mockitoKotlin" }  # Mockito Kotlin
+
+# Apache Kafka dependencies
+spring-kafka = { module = "org.springframework.kafka:spring-kafka", version.ref = "springKafka" }
+spring-kafka-test = { module = "org.springframework.kafka:spring-kafka-test", version.ref = "springKafkaTest" }
