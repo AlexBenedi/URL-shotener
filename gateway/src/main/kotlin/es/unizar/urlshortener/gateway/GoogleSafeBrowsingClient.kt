@@ -1,4 +1,4 @@
-package es.unizar.urlshortener.infrastructure.gateway
+package es.unizar.urlshortener.gateway
 
 import org.springframework.stereotype.Component
 import org.springframework.web.client.RestTemplate

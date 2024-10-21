@@ -4,6 +4,7 @@ import es.unizar.urlshortener.core.usecases.CreateShortUrlUseCaseImpl
 import es.unizar.urlshortener.core.usecases.LogClickUseCaseImpl
 import es.unizar.urlshortener.core.usecases.RedirectUseCaseImpl
 import es.unizar.urlshortener.infrastructure.delivery.HashServiceImpl
+import es.unizar.urlshortener.infrastructure.delivery.SafetyServiceImpl
 import es.unizar.urlshortener.infrastructure.delivery.ValidatorServiceImpl
 import es.unizar.urlshortener.infrastructure.repositories.ClickEntityRepository
 import es.unizar.urlshortener.infrastructure.repositories.ClickRepositoryServiceImpl
@@ -50,6 +51,13 @@ class ApplicationConfiguration(
      */
     @Bean
     fun hashService() = HashServiceImpl()
+
+    /**
+     * Provides an implementation of the SafetyService.
+     * @return an instance of SafetyServiceImpl.
+     */
+    @Bean
+    fun safetyService() = SafetyServiceImpl()
 
     /**
      * Provides an implementation of the RedirectUseCase.

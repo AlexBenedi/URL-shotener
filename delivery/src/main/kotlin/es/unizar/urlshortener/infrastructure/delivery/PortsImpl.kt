@@ -3,6 +3,8 @@ package es.unizar.urlshortener.infrastructure.delivery
 import com.google.common.hash.Hashing
 import es.unizar.urlshortener.core.HashService
 import es.unizar.urlshortener.core.ValidatorService
+import es.unizar.urlshortener.core.SafetyService
+import es.unizar.urlshortener.gateway.GoogleSafeBrowsingClient
 import org.apache.commons.validator.routines.UrlValidator
 import java.nio.charset.StandardCharsets
 
@@ -37,4 +39,17 @@ class HashServiceImpl : HashService {
      * @return the hash of the URL as a string
      */
     override fun hasUrl(url: String) = Hashing.murmur3_32_fixed().hashString(url, StandardCharsets.UTF_8).toString()
+}
+
+/**
+ * Implementation of the port [SafetyService].
+ */
+class SafetyServiceImpl : SafetyService {
+    /**
+     * Checks if the given URL is safe.
+     *
+     * @param url the URL to check
+     * @return true if the URL is safe, false otherwise
+     */
+    override fun isUrlSafe(url: String) = GoogleSafeBrowsingClient().isUrlSafe(url) 
 }

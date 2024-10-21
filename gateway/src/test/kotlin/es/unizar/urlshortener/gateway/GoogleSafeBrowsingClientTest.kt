@@ -1,6 +1,6 @@
 @file:Suppress("WildcardImport")
 
-package es.unizar.urlshortener.infrastructure.gateway
+package es.unizar.urlshortener.gateway
 
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
