@@ -2,6 +2,23 @@ package es.unizar.urlshortener.infrastructure.repositories
 
 import org.springframework.data.jpa.repository.JpaRepository
 
+
+/**
+ * Specification of the repository of [LinkEntity].
+ *
+ * **Note**: Spring Boot is able to discover this [JpaRepository] without further configuration.
+ */
+interface LinkEntityRepository : JpaRepository<LinkEntity, Long>
+
+/**
+ * Specification of the repository of [UserEntity].
+ *
+ * **Note**: Spring Boot is able to discover this [JpaRepository] without further configuration.
+ */
+interface UserEntityRepository : JpaRepository<UserEntity, Long>
+
+
+
 /**
  * Specification of the repository of [ShortUrlEntity].
  *

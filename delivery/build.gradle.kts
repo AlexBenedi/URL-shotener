@@ -51,7 +51,6 @@ dependencies {
 
     // Spring Security Core (manejo de la seguridad)
     implementation("org.springframework.boot:spring-boot-starter-security")
-
     implementation("org.springframework.security:spring-security-config")
 
     // OAuth2 Client para autenticación con OAuth2 y OpenID Connect

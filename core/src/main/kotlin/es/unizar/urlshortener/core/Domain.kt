@@ -58,7 +58,8 @@ data class ClickProperties(
  */
 data class Link(
     val click: Click,
-    val shortUrlId: ShortUrl
+    val shortUrl: ShortUrl,
+    val userId: Long? = null
     //TODO: Add QR information
 )
 
@@ -67,7 +68,7 @@ data class Link(
  */
 data class User(
     val username: String,
-    val password: String,
+    val email: String,
     val links: List<Link> = emptyList()
 )
 

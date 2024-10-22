@@ -1,6 +1,50 @@
 package es.unizar.urlshortener.core
 
 /**
+ * [LinkRepositoryService] is the port to the repository that provides persistence to [Links][Link].
+ */
+interface LinkRepositoryService {
+    /**
+     * Saves a [Link] entity to the repository.
+     *
+     * @param l The [Link] entity to be saved.
+     * @return The saved [Link] entity.
+     */
+    fun save(l: Link): Link
+
+    /**
+     * Finds a [Link] entity by its userId.
+     *
+     * @param userId The userId of the [Link] entity.
+     * @return The found [Link] entity or null if not found.
+     */
+    fun findById(userId: Long): List<Link>
+}
+
+/**
+ * [UserRepositoryService] is the port to the repository that provides management to [Users][User].
+ */
+interface UserRepositoryService {
+    /**
+     * Finds a [User] entity by its id.
+     *
+     * @param id The id of the [User] entity.
+     * @return The found [User] entity or null if not found.
+     */
+    fun findById(id: Long): User?
+
+
+    /**
+     * Saves a [User] entity to the repository.
+     *
+     * @param u The [User] entity to be saved.
+     * @return The saved [User] entity.
+     */
+    fun save(u: User): User
+}
+
+
+/**
  * [ClickRepositoryService] is the port to the repository that provides persistence to [Clicks][Click].
  */
 interface ClickRepositoryService {

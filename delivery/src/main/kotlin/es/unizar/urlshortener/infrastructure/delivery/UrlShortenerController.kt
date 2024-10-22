@@ -11,6 +11,7 @@ import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -117,7 +118,10 @@ class UrlShortenerControllerImpl(
         * @return the user information
      */
     @GetMapping("/user")
-    fun user(principal: Principal): Principal {
-        return principal
+    fun user(token: OAuth2AuthenticationToken): Principal {
+        //Mostrar en un map nombre y email
+        val name = token.principal.attributes["name"]
+        val email = token.principal.attributes["email"]
+        return Principal { "$name - $email" }
     }
 }

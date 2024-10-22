@@ -61,7 +61,7 @@ class LinkEntity(
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    val user: UserEntity? = null,
+    val user: Long? = null,
 
     //TODO: Add QR information
 )
@@ -74,11 +74,11 @@ class UserEntity(
     @GeneratedValue(strategy = GenerationType.AUTO)
     val id: Long? = null,
 
-    @Column(length = 50, nullable = false, unique = true)
+    @Column(length = 50, nullable = false)
     val username: String,
 
-    @Column(length = 255, nullable = false)
-    val password: String,
+    @Column(length = 255, nullable = false, unique = true)
+    val email: String,
 
     @OneToMany(mappedBy = "user", cascade = [CascadeType.PERSIST, CascadeType.MERGE], fetch = FetchType.LAZY)
     val links: MutableList<LinkEntity> = mutableListOf()

@@ -66,3 +66,44 @@ fun ShortUrl.toEntity() = ShortUrlEntity(
     ip = properties.ip,
     country = properties.country
 )
+
+/**
+ * Extension method to convert a [LinkEntity] into a domain [Link].
+ */
+fun LinkEntity.toDomain() = Link(
+    click = click.toDomain(),
+    shortUrl = shortUrl.toDomain(),
+    userId = user
+)
+
+/**
+ * Extension method to convert a domain [Link] into a [LinkEntity].
+ */
+fun Link.toEntity() = LinkEntity(
+    id = null,
+    shortUrl = shortUrl.toEntity(),
+    click = click.toEntity(),
+    user = userId
+)
+
+/**
+ * Extension method to convert a [UserEntity] into a domain [User].
+ */
+fun UserEntity.toDomain() = User(
+    username = username,
+    email = email,
+    links = links.map { it.toDomain() }
+)
+
+/**
+ * Extension method to convert a domain [User] into a [UserEntity].
+ */
+fun User.toEntity() = UserEntity(
+    id = null,
+    username = username,
+    email = email,
+    links = links.map { it.toEntity() }.toMutableList()
+)
+
+
+
