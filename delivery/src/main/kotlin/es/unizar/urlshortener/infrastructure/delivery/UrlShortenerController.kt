@@ -111,6 +111,11 @@ class UrlShortenerControllerImpl(
             ResponseEntity<ShortUrlDataOut>(response, h, HttpStatus.CREATED)
         }
 
+    /*
+        * This method is used to get the user information.
+        * @param principal the user information
+        * @return the user information
+     */
     @GetMapping("/user")
     fun user(principal: Principal): Principal {
         return principal
