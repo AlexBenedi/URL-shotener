@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RestController
 import java.net.URI
 
+import java.security.Principal;
+
 /**
  * The specification of the controller.
  */
@@ -108,4 +110,9 @@ class UrlShortenerControllerImpl(
             )
             ResponseEntity<ShortUrlDataOut>(response, h, HttpStatus.CREATED)
         }
+
+    @GetMapping("/user")
+    fun user(principal: Principal): Principal {
+        return principal
+    }
 }
