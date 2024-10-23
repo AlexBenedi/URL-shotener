@@ -41,6 +41,7 @@ class CreateShortUrlUseCaseImpl(
     override fun create(url: String, data: ShortUrlProperties): ShortUrl =
         if (safeCall { validatorService.isValid(url) }) {
             if (!safeCall { safetyService.isUrlSafe(url) }) {
+                println("URL is not safe")
                 throw UnsafeUrlException(url)
             }
             val id = safeCall { hashService.hasUrl(url) }
