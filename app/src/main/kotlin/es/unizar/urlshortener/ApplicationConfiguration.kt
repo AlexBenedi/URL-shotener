@@ -79,5 +79,5 @@ class ApplicationConfiguration(
      */
     @Bean
     fun createShortUrlUseCase() =
-        CreateShortUrlUseCaseImpl(shortUrlRepositoryService(), validatorService(), hashService())
+        CreateShortUrlUseCaseImpl(shortUrlRepositoryService(), validatorService(), hashService(), safetyService())
 }

@@ -7,13 +7,14 @@ import org.springframework.http.ResponseEntity
 
 @Component
 class GoogleSafeBrowsingClient(
-    private val restTemplate: RestTemplate
+    private val restTemplate: RestTemplate? = null
 ) {
     private val apiKey = System.getenv("GOOGLE_SAFE_BROWSING_API_KEY") ?: ""
     private val url = "https://safebrowsing.googleapis.com/v4/threatMatches:find?key=$apiKey"
 
     fun isUrlSafe(targetUrl: String): Boolean {
         // Request body following the Google Safe Browsing API
+        val effectiveRestTemplate = restTemplate ?: RestTemplate()
         val requestBody = mapOf(
             "client" to mapOf(
                 "clientId" to "urlshortener-fractal-link",
@@ -35,7 +36,7 @@ class GoogleSafeBrowsingClient(
         return try {
             // Send the request to the Google Safe Browsing API, using POST as they say
             val response: ResponseEntity<GoogleSafeBrowsingResponse> = 
-                restTemplate.postForEntity(url, requestBody, GoogleSafeBrowsingResponse::class.java)
+                effectiveRestTemplate.postForEntity(url, requestBody, GoogleSafeBrowsingResponse::class.java)
 
             /*
             * If the response body is empty, the URL is safe, otherwise it is not 
