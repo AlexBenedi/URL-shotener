@@ -38,6 +38,13 @@ interface UrlShortenerController {
      * **Note**: Delivery of use case [CreateShortUrlUseCase].
      */
     fun shortener(data: ShortUrlDataIn, request: HttpServletRequest): ResponseEntity<ShortUrlDataOut>
+
+    /**
+     * This method is used to get the user information.
+     * @param tocken the user information
+     * @return the user information
+     */
+     fun user(token: OAuth2AuthenticationToken): Principal
 }
 
 /**
@@ -112,17 +119,20 @@ class UrlShortenerControllerImpl(
             ResponseEntity<ShortUrlDataOut>(response, h, HttpStatus.CREATED)
         }
 
-    /*
-        * This method is used to get the user information.
-        * @param principal the user information
-        * @return the user information
+    /**
+     * This method is used to get the user information.
+     * @param principal the user information
+     * @return the user information
      */
+
     @GetMapping("/user")
-    fun user(token: OAuth2AuthenticationToken): Principal {
+    override fun user(token: OAuth2AuthenticationToken): Principal {
         //Mostrar en un map nombre y email
         val name = token.principal.attributes["name"]
         val email = token.principal.attributes["email"]
         val userId = token.principal.attributes["sub"]
         return Principal { "$name - $email - $userId" }
     }
+
 }
+

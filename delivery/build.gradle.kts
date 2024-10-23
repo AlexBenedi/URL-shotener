@@ -46,18 +46,13 @@ dependencies {
     // Include Spring Boot Starter Test as a test implementation dependency
     testImplementation(libs.spring.boot.starter.test)
 
-    // Spring Boot Web
-    implementation ("org.springframework.boot:spring-boot-starter-web")
-
-    // Spring Security Core (manejo de la seguridad)
-    implementation("org.springframework.boot:spring-boot-starter-security")
+    // Spring Security Config (configuración de seguridad)
     implementation("org.springframework.security:spring-security-config")
 
     // OAuth2 Client para autenticación con OAuth2 y OpenID Connect
     implementation ("org.springframework.boot:spring-boot-starter-oauth2-client")
 
-    // Dependencias para pruebas (si necesitas realizar tests relacionados con seguridad)
-    testImplementation ("org.springframework.boot:spring-boot-starter-test")
+    // OAuth2 Resource Server para proteger recursos
     testImplementation ("org.springframework.security:spring-security-test")
 }
 
