@@ -2,12 +2,6 @@ plugins {
     // Apply the common conventions plugin for the project
     id("urlshortener-common-conventions")
 
-    // Apply the Kotlin JPA plugin
-    alias(libs.plugins.kotlin.jpa)
-
-    // Apply the Kotlin Spring plugin
-    alias(libs.plugins.kotlin.spring)
-
     // Apply the Spring Boot plugin but do not apply it immediately
     alias(libs.plugins.spring.boot) apply false
 
@@ -18,36 +12,27 @@ plugins {
 dependencies {
     // Include the core project as an implementation dependency
     implementation(project(":core"))
-
-    implementation(project(":gateway"))
-
-
-    // Include Spring Boot Starter Web as an implementation dependency
+    
+    configurations {
+        all {
+            exclude(group = "commons-logging", module = "commons-logging")
+        }
+    }
+   
+   // Include Spring Boot Starter Web for creating web applications
     implementation(libs.spring.boot.starter.web)
 
-    // Include Spring Boot Starter HATEOAS as an implementation dependency
-    implementation(libs.spring.boot.starter.hateoas)
+    // Include Google Safe Browsing API client
+    implementation(libs.google.api.client )
 
-    // Include Apache Commons Validator as an implementation dependency
-    implementation(libs.commons.validator)
-
-    // Include Google Guava as an implementation dependency
-    implementation(libs.guava)
-
-    // Include Kotlin Test as a test implementation dependency
-    testImplementation(libs.kotlin.test)
-
-    // Include Mockito Kotlin as a test implementation dependency
-    testImplementation(libs.mockito.kotlin)
-
-    // Include JUnit Jupiter as a test implementation dependency
-    testImplementation(libs.junit.jupiter)
-
-    // Include JUnit Platform Launcher as a test runtime-only dependency
-    testRuntimeOnly(libs.junit.platform.launcher)
-
-    // Include Spring Boot Starter Test as a test implementation dependency
+    // Include Spring Boot Starter Test for testing
     testImplementation(libs.spring.boot.starter.test)
+
+    // Include additional testing libraries if needed
+    testImplementation(libs.kotlin.test)
+    testImplementation(libs.mockito.kotlin)
+    testImplementation(libs.junit.jupiter)
+    testRuntimeOnly(libs.junit.platform.launcher)
 }
 
 dependencyManagement {

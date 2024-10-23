@@ -22,6 +22,14 @@ sealed class DomainException(message: String, cause: Throwable? = null):
 class InvalidUrlException(url: String) : DomainException("[$url] does not follow a supported schema")
 
 /**
+ * An exception indicating that a provided URL is considered unsafe.
+ * This exception is thrown when a URL is deemed unsafe by a safety service.
+ *
+ * @param url The URL that is considered unsafe.
+ */
+class UnsafeUrlException(url: String) : DomainException("[$url] is considered unsafe")
+
+/**
  * An exception indicating that a redirection key could not be found.
  * This exception is thrown when a specified redirection key does not exist in the system.
  *
