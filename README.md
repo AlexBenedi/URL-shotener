@@ -2,6 +2,19 @@
 # URL Shortener project by FractalLink
 
 This repository is a modification of the `https://github.com/UNIZAR-30246-WebEngineering/urlshortener` project. Read its README to understand its architecture, requirements, and main functionalities.
+# Setup & execution instructions 
+
+This project is using the following technologies: 
+- Kotlin 2.0.20 as the main programming language. 
+- Gradle 8.5 as the build system. 
+- Spring Boot 3.3.3 as a framework that simplifies the development of web applications. It requires a Java version between 17 and 21.
+
+As Gradle is used as the build tool, to build, test & deploy the application you must follow these steps: 
+1. Run ```./gradlew build``` to compile the code, run the tests and pack the artifacts. It also verify the dependencies and secures the project is production-ready. 
+2. Run ```./gradlew check``` in order to execute all verifications and validations defined in the project. It also runs the tests.
+3. Run ```./gradlew bootrun``` to deploy the web application at http://localhost:8080 
+
+You can also run ```./gradlew test``` in order to execute the tests without building the project nor performing aditional verification steps. 
 
 # Updates' Proof of Concept
 
