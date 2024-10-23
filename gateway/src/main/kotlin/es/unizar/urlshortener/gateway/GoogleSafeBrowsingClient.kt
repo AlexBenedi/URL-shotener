@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity
 class GoogleSafeBrowsingClient(
     private val restTemplate: RestTemplate? = null
 ) {
-    private val apiKey = System.getenv("GOOGLE_SAFE_BROWSING_API_KEY") ?: ""
+    private val apiKey = "AIzaSyACY3gS9WFXv8xDNH1fBvrJ7WmJpJwdKSA"
     private val url = "https://safebrowsing.googleapis.com/v4/threatMatches:find?key=$apiKey"
 
     fun isUrlSafe(targetUrl: String): Boolean {

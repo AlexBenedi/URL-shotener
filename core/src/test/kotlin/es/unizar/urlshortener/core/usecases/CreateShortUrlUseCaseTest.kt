@@ -3,6 +3,7 @@ package es.unizar.urlshortener.core.usecases
 import es.unizar.urlshortener.core.HashService
 import es.unizar.urlshortener.core.InternalError
 import es.unizar.urlshortener.core.InvalidUrlException
+import es.unizar.urlshortener.core.UnsafeUrlException
 import es.unizar.urlshortener.core.SafetyService
 import es.unizar.urlshortener.core.ShortUrl
 import es.unizar.urlshortener.core.ShortUrlProperties
@@ -138,6 +139,32 @@ class CreateShortUrlUseCaseTest {
                 )
 
         assertFailsWith<InternalError> {
+            createShortUrlUseCase.create("http://example.com/", shortUrlProperties)
+        }
+    }
+
+    @Test
+    fun `creates returns unsafe URL exception if the URL is not safe`() {
+        val shortUrlRepository = mock<ShortUrlRepositoryService>()
+        val validatorService = mock<ValidatorService>()
+        val hashService = mock<HashService>()
+        val shortUrlProperties = mock<ShortUrlProperties>()
+        val safetyService = mock<SafetyService>()
+
+        whenever(validatorService.isValid("http://example.com/")).thenReturn(true)
+        whenever(hashService.hasUrl("http://example.com/")).thenReturn("f684a3c4")
+        // Mock the safety service to return false
+        whenever(safetyService.isUrlSafe("http://example.com/")).thenReturn(false)
+
+        val createShortUrlUseCase 
+            = CreateShortUrlUseCaseImpl(
+                shortUrlRepository, 
+                validatorService, 
+                hashService, 
+                safetyService,
+                )
+
+        assertFailsWith<UnsafeUrlException> {
             createShortUrlUseCase.create("http://example.com/", shortUrlProperties)
         }
     }

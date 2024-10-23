@@ -132,6 +132,19 @@ class HttpRequestTest {
     }
 
     /**
+     * Tests that a forbidden status is returned if the URL is not safe.
+     */
+    @Test
+    fun `creates returns forbidden if the URL is not safe`() {
+        val response = shortUrl("https://testsafebrowsing.appspot.com/s/phishing.html")
+
+        assertThat(response.statusCode).isEqualTo(HttpStatus.FORBIDDEN)
+
+        assertThat(JdbcTestUtils.countRowsInTable(jdbcTemplate, "shorturl")).isEqualTo(0)
+        assertThat(JdbcTestUtils.countRowsInTable(jdbcTemplate, "click")).isEqualTo(0)
+    }
+
+    /**
      * Creates a short URL for the given URL.
      * @param url The URL to shorten.
      * @return The response entity containing the short URL data.

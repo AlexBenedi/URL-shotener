@@ -2,6 +2,7 @@ package es.unizar.urlshortener.infrastructure.delivery
 
 import es.unizar.urlshortener.core.InvalidUrlException
 import es.unizar.urlshortener.core.RedirectionNotFound
+import es.unizar.urlshortener.core.UnsafeUrlException
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.ControllerAdvice
@@ -29,6 +30,17 @@ class RestResponseEntityExceptionHandler : ResponseEntityExceptionHandler() {
     @ExceptionHandler(value = [InvalidUrlException::class])
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     fun invalidUrls(ex: InvalidUrlException) = ErrorMessage(HttpStatus.BAD_REQUEST.value(), ex.message)
+
+    /**
+     * Handles UnsafeUrlException and returns a FORBIDDEN response.
+     * 
+     * @param ex the UnsafeUrlException thrown
+     * @return an ErrorMessage containing the status code and exception message
+     */
+    @ResponseBody
+    @ExceptionHandler(value = [UnsafeUrlException::class])
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    fun unsafeUrl(ex: UnsafeUrlException) = ErrorMessage(HttpStatus.FORBIDDEN.value(), ex.message)
 
     /**
      * Handles RedirectionNotFound exception and returns a NOT_FOUND response.
