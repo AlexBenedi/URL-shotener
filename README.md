@@ -1,3 +1,4 @@
+![CI](https://github.com/juanguppy/fractallink/actions/workflows/ci.yml/badge.svg)
 # Getting Started with the URL Shortener project
 
 2024-08-31
