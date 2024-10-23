@@ -15,4 +15,7 @@ dependencies {
 
     // Add JUnit Platform Launcher for launching tests
     testRuntimeOnly(libs.junit.platform.launcher)
+
+    implementation("com.google.zxing:core:3.5.1")
+    implementation("com.google.zxing:javase:3.5.1") // Required for MatrixToImageWriter
 }

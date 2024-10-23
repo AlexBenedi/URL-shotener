@@ -7,7 +7,7 @@ plugins {
 
 kotlin {
     // Configures the Kotlin JVM toolchain to use JDK 17.
-    jvmToolchain(17)
+    jvmToolchain(21)
 }
 
 repositories {

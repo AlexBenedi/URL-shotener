@@ -16,6 +16,13 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RestController
 import java.net.URI
+import com.google.zxing.BarcodeFormat
+import com.google.zxing.client.j2se.MatrixToImageWriter
+import com.google.zxing.qrcode.QRCodeWriter
+import com.google.zxing.common.BitMatrix
+import org.springframework.web.bind.annotation.RequestParam
+import java.io.ByteArrayOutputStream
+import java.util.Base64
 
 /**
  * The specification of the controller.
@@ -65,6 +72,17 @@ class UrlShortenerControllerImpl(
     val createShortUrlUseCase: CreateShortUrlUseCase
 ) : UrlShortenerController {
 
+    // generates a QR code as a Base64-encoded string
+    private fun generateQRCode(url: String, size: Int = 250): String {
+        val qrCodeWriter = QRCodeWriter()
+        val bitMatrix: BitMatrix = qrCodeWriter.encode(url, BarcodeFormat.QR_CODE, size, size)
+        ByteArrayOutputStream().use { outputStream ->
+            MatrixToImageWriter.writeToStream(bitMatrix, "PNG", outputStream)
+            val qrCodeBytes = outputStream.toByteArray()
+            return Base64.getEncoder().encodeToString(qrCodeBytes)
+        }
+    }
+
     /**
      * Redirects and logs a short url identified by its [id].
      *
@@ -100,10 +118,15 @@ class UrlShortenerControllerImpl(
             val h = HttpHeaders()
             val url = linkTo<UrlShortenerControllerImpl> { redirectTo(hash, request) }.toUri()
             h.location = url
+
+            // Generate the QR code
+            val qrCodeBase64 = generateQRCode(url.toString())
+
             val response = ShortUrlDataOut(
                 url = url,
                 properties = mapOf(
-                    "safe" to properties.safe
+                    "safe" to properties.safe,
+                    "qrCode" to qrCodeBase64 // Add the QR code to the response
                 )
             )
             ResponseEntity<ShortUrlDataOut>(response, h, HttpStatus.CREATED)

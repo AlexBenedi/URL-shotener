@@ -1,6 +1,12 @@
 package es.unizar.urlshortener.core
 
 import java.time.OffsetDateTime
+import com.google.zxing.BarcodeFormat
+import com.google.zxing.qrcode.QRCodeWriter
+import com.google.zxing.client.j2se.MatrixToImageWriter
+import java.nio.file.Path
+import java.nio.file.Paths
+import java.io.IOException
 
 /**
  * A [Click] captures a request of redirection of a [ShortUrl] identified by its [hash].
@@ -20,7 +26,25 @@ data class ShortUrl(
     val redirection: Redirection,
     val created: OffsetDateTime = OffsetDateTime.now(),
     val properties: ShortUrlProperties = ShortUrlProperties()
-)
+) {
+    /**
+     * Generates a QR code image for this ShortUrl and saves it to the specified output path.
+     *
+     * @param outputFilePath the path where the QR code image will be saved
+     */
+    fun generateQRCode(outputFilePath: String) {
+        val qrCodeWriter = QRCodeWriter()
+        val bitMatrix = qrCodeWriter.encode(redirection.target, BarcodeFormat.QR_CODE, 200, 200)
+
+        val outputPath: Path = Paths.get(outputFilePath)
+        try {
+            MatrixToImageWriter.writeToPath(bitMatrix, "PNG", outputPath)
+        } catch (e: IOException) {
+            // Handle the exception, e.g., log it or rethrow it
+            e.printStackTrace()
+        }
+    }
+}
 
 /**
  * A [Redirection] specifies the [target] and the [status code][mode] of a redirection.
