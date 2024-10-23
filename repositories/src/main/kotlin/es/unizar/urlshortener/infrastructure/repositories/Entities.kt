@@ -49,7 +49,7 @@ class ShortUrlEntity(
 class LinkEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    val id: Long? = null,
+    val id: Long?,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "short_url_id", nullable = false)
@@ -61,7 +61,7 @@ class LinkEntity(
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    val user: Long? = null,
+    val userId: UserEntity
 
     //TODO: Add QR information
 )
@@ -71,17 +71,7 @@ class LinkEntity(
 @Suppress("LongParameterList", "JpaObjectClassSignatureInspection")
 class UserEntity(
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    val id: Long? = null,
-
-    @Column(length = 50, nullable = false)
-    val username: String,
-
-    @Column(length = 255, nullable = false, unique = true)
-    val email: String,
-
-    @OneToMany(mappedBy = "user", cascade = [CascadeType.PERSIST, CascadeType.MERGE], fetch = FetchType.LAZY)
-    val links: MutableList<LinkEntity> = mutableListOf()
+    val id: String
 )
 
 

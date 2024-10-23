@@ -15,7 +15,7 @@ interface LinkEntityRepository : JpaRepository<LinkEntity, Long>
  *
  * **Note**: Spring Boot is able to discover this [JpaRepository] without further configuration.
  */
-interface UserEntityRepository : JpaRepository<UserEntity, Long>
+interface UserEntityRepository : JpaRepository<UserEntity, String>
 
 
 

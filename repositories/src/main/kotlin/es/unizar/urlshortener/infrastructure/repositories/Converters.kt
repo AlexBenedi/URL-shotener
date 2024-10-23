@@ -73,7 +73,7 @@ fun ShortUrl.toEntity() = ShortUrlEntity(
 fun LinkEntity.toDomain() = Link(
     click = click.toDomain(),
     shortUrl = shortUrl.toDomain(),
-    userId = user
+    userId = userId.toDomain().userId
 )
 
 /**
@@ -83,27 +83,23 @@ fun Link.toEntity() = LinkEntity(
     id = null,
     shortUrl = shortUrl.toEntity(),
     click = click.toEntity(),
-    user = userId
+    userId = UserEntity(userId)
 )
 
 /**
  * Extension method to convert a [UserEntity] into a domain [User].
  */
 fun UserEntity.toDomain() = User(
-    username = username,
-    email = email,
-    links = links.map { it.toDomain() }
+    userId = id
 )
 
 /**
  * Extension method to convert a domain [User] into a [UserEntity].
  */
 fun User.toEntity() = UserEntity(
-    id = null,
-    username = username,
-    email = email,
-    links = links.map { it.toEntity() }.toMutableList()
+    id = userId
 )
+
 
 
 

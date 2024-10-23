@@ -9,6 +9,7 @@ import es.unizar.urlshortener.core.UserRepositoryService
 import es.unizar.urlshortener.core.Link
 import es.unizar.urlshortener.core.LinkRepositoryService
 
+
 /**
  * Implementation of the port [LinkRepositoryService].
  */
@@ -22,16 +23,6 @@ class LinkRepositoryServiceImpl(
      * @return The saved [Link] entity.
      */
     override fun save(l: Link): Link = linkEntityRepository.save(l.toEntity()).toDomain()
-
-    /**
-     * Finds a [Link] entity by its userId.
-     *
-     * @param userId The userId of the [Link] entity.
-     * @return The found [Link] entity or null if not found.
-     */
-    override fun findById(userId: Long): List<Link> {
-        return linkEntityRepository.findAll().filter { it.shortUrl.owner == userId.toString() }.map { it.toDomain() }
-    }
 }
 
 
@@ -48,7 +39,7 @@ class UserRepositoryServiceImpl(
      * @param id The id of the [User] entity.
      * @return The found [User] entity or null if not found.
      */
-    override fun findById(id: Long): User? {
+    override fun findById(id: String): User? {
         return userEntityRepository.findById(id).orElse(null)?.toDomain()
     }
 
@@ -58,8 +49,11 @@ class UserRepositoryServiceImpl(
      * @param u The [User] entity to be saved.
      * @return The saved [User] entity.
      */
-    override fun save(u: User): User = userEntityRepository.save(u.toEntity()).toDomain()
+    override fun save(u: User): User {
+        return userEntityRepository.save(u.toEntity()).toDomain()
+    }
 }
+
 
 /**
  * Implementation of the port [ClickRepositoryService].

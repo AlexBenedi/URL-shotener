@@ -122,6 +122,7 @@ class UrlShortenerControllerImpl(
         //Mostrar en un map nombre y email
         val name = token.principal.attributes["name"]
         val email = token.principal.attributes["email"]
-        return Principal { "$name - $email" }
+        val userId = token.principal.attributes["sub"]
+        return Principal { "$name - $email - $userId" }
     }
 }

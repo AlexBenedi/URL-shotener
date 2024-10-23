@@ -59,7 +59,7 @@ data class ClickProperties(
 data class Link(
     val click: Click,
     val shortUrl: ShortUrl,
-    val userId: Long? = null
+    val userId: String
     //TODO: Add QR information
 )
 
@@ -67,8 +67,6 @@ data class Link(
  * A [User] is the entity that represents a user of the application.
  */
 data class User(
-    val username: String,
-    val email: String,
-    val links: List<Link> = emptyList()
+    val userId : String
 )
 
