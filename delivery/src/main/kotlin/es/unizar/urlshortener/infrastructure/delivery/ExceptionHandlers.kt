@@ -51,7 +51,7 @@ class RestResponseEntityExceptionHandler : ResponseEntityExceptionHandler() {
     @ResponseBody
     @ExceptionHandler(value = [InvalidNameBrandedUrl::class])
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    fun InvalidNameBrandedUrl(ex: InvalidNameBrandedUrl) = ErrorMessage(HttpStatus.BAD_REQUEST.value(), ex.message)
+    fun invalidNameBrandedUrl(ex: InvalidNameBrandedUrl) = ErrorMessage(HttpStatus.BAD_REQUEST.value(), ex.message)
 
     /**
      * Handles InternalError and returns an INTERNAL_SERVER_ERROR response.

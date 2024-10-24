@@ -114,7 +114,8 @@ class CreateShortUrlUseCaseTest {
         whenever(shortUrlRepository.save(any())).doAnswer { it.arguments[0] as ShortUrl }
 
         val createShortUrlUseCase = CreateShortUrlUseCaseImpl(shortUrlRepository, validatorService, hashService)
-        val shortUrl = createShortUrlUseCase.create("http://example.com/", ShortUrlProperties(isBranded = true, name = "branded"))
+        val properties = ShortUrlProperties(isBranded = true, name = "branded")
+        val shortUrl = createShortUrlUseCase.create("http://example.com/", properties)
 
         assertEquals(shortUrl.hash, "branded")
     }
