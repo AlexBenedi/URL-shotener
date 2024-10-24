@@ -43,7 +43,7 @@ interface UrlShortenerController {
 data class ShortUrlDataIn(
     val url: String,
     val isBranded: Boolean? = null,
-    val id: String? = null,
+    val name: String? = null,
     val sponsor: String? = null
 )
 
@@ -98,7 +98,7 @@ class UrlShortenerControllerImpl(
                 ip = request.remoteAddr,
                 sponsor = data.sponsor,
                 isBranded = data.isBranded,
-                id = data.id
+                name = data.name
             )
         ).run {
             val h = HttpHeaders()

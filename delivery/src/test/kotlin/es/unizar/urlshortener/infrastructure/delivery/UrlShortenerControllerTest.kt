@@ -135,7 +135,7 @@ class UrlShortenerControllerTest {
         given(
             createShortUrlUseCase.create(
                 url = "http://example.com/",
-                data = ShortUrlProperties(ip = "127.0.0.1", id = "test", isBranded = true)
+                data = ShortUrlProperties(ip = "127.0.0.1", name = "test", isBranded = true)
             )
         ).willReturn(ShortUrl("test", Redirection("http://example.com/")))
 
@@ -143,7 +143,7 @@ class UrlShortenerControllerTest {
         mockMvc.perform(
             post("/api/link")
                 .param("url", "http://example.com/")
-                .param("id", "test")
+                .param("name", "test")
                 .param("isBranded", "true")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
         )
