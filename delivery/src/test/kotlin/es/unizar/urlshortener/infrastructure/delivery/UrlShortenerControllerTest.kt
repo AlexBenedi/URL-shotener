@@ -158,7 +158,7 @@ class UrlShortenerControllerTest {
      */
     @Test
     fun `creates returns bad request if name have not been introduced`() {
-        // Mock the behavior of createShortUrlUseCase to return a ShortUrl object
+        // Mock the behavior of createShortUrlUseCase to throw an InvalidNameBrandedUrl
         given(
             createShortUrlUseCase.create(
                 url = "http://example.com/",
