@@ -40,8 +40,12 @@ class CreateShortUrlUseCaseImpl(
     override fun create(url: String, data: ShortUrlProperties): ShortUrl =
         if (safeCall { validatorService.isValid(url) }) {
             var id = safeCall { hashService.hasUrl(url) }
-            if (data.isBranded == true && data.id != null) {
-                id = data.id
+            if (data.isBranded == true ) {
+                if ( data.name != null ) {
+                    id = data.name
+                } else {
+                    throw InvalidNameBrandedUrl()
+                }
             }
             val su = ShortUrl(
                 hash = id,
