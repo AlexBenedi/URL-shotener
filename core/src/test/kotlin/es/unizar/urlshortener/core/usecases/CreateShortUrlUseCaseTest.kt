@@ -3,6 +3,7 @@ package es.unizar.urlshortener.core.usecases
 import es.unizar.urlshortener.core.HashService
 import es.unizar.urlshortener.core.InternalError
 import es.unizar.urlshortener.core.InvalidUrlException
+import es.unizar.urlshortener.core.InvalidNameBrandedUrl
 import es.unizar.urlshortener.core.ShortUrl
 import es.unizar.urlshortener.core.ShortUrlProperties
 import es.unizar.urlshortener.core.ShortUrlRepositoryService
@@ -113,8 +114,42 @@ class CreateShortUrlUseCaseTest {
         whenever(shortUrlRepository.save(any())).doAnswer { it.arguments[0] as ShortUrl }
 
         val createShortUrlUseCase = CreateShortUrlUseCaseImpl(shortUrlRepository, validatorService, hashService)
-        val shortUrl = createShortUrlUseCase.create("http://example.com/", ShortUrlProperties(isBranded = true, id = "branded"))
+        val shortUrl = createShortUrlUseCase.create("http://example.com/", ShortUrlProperties(isBranded = true, name = "branded"))
 
         assertEquals(shortUrl.hash, "branded")
+    }
+
+    @Test
+    fun `create a return invalid branded link exception if name is empty`() {
+        val shortUrlRepository = mock<ShortUrlRepositoryService>()
+        val validatorService = mock<ValidatorService>()
+        val hashService = mock<HashService>()
+        val shortUrlProperties = mock<ShortUrlProperties>()
+
+        whenever(validatorService.isValid("http://example.com/")).thenReturn(true)
+        whenever(shortUrlRepository.save(any())).doAnswer { it.arguments[0] as ShortUrl }
+
+        val createShortUrlUseCase = CreateShortUrlUseCaseImpl(shortUrlRepository, validatorService, hashService)
+
+        assertFailsWith<InvalidNameBrandedUrl> {
+            createShortUrlUseCase.create("http://example.com/", ShortUrlProperties(isBranded = true))
+        }
+    }
+
+    @Test
+    fun `creates returns a basic redirect if it can compute a hash and branded flag is desactivated`() {
+        val shortUrlRepository = mock<ShortUrlRepositoryService>()
+        val validatorService = mock<ValidatorService>()
+        val hashService = mock<HashService>()
+        val shortUrlProperties = mock<ShortUrlProperties>()
+
+        whenever(validatorService.isValid("http://example.com/")).thenReturn(true)
+        whenever(hashService.hasUrl("http://example.com/")).thenReturn("f684a3c4")
+        whenever(shortUrlRepository.save(any())).doAnswer { it.arguments[0] as ShortUrl }
+
+        val createShortUrlUseCase = CreateShortUrlUseCaseImpl(shortUrlRepository, validatorService, hashService)
+        val shortUrl = createShortUrlUseCase.create("http://example.com/", ShortUrlProperties(isBranded = false))
+
+        assertEquals(shortUrl.hash, "f684a3c4")
     }
 }
