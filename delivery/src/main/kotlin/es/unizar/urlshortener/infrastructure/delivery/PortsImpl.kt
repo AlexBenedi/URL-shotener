@@ -24,6 +24,14 @@ class ValidatorServiceImpl : ValidatorService {
          */
         val urlValidator = UrlValidator(arrayOf("http", "https"))
     }
+
+    /**
+     * Validates if the given id can be used.
+     *
+     * @param id The id to be validated.
+     * @return True if the id is valid, false otherwise.
+     */
+    override fun isValidBrandedUrl(id: String?): Boolean = id != null
 }
 
 /**
