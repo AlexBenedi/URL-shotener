@@ -20,5 +20,5 @@ dependencies {
     implementation("com.google.zxing:javase:3.5.1") // Required for MatrixToImageWriter
 
     implementation("org.slf4j:slf4j-api:2.0.7") // Add this line for SLF4J API
-    implementation("org.slf4j:slf4j-simple:2.0.7") // Add this for a simple logger implementation
+    //implementation("org.slf4j:slf4j-simple:2.0.7") // Add this for a simple logger implementation
 }

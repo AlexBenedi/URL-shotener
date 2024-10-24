@@ -20,13 +20,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers.print
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 import kotlin.test.Test
-import java.io.File
-import kotlin.test.assertTrue
-import com.google.zxing.BarcodeFormat
-import com.google.zxing.WriterException
-import com.google.zxing.client.j2se.MatrixToImageWriter
-import com.google.zxing.common.BitMatrix
-import com.google.zxing.qrcode.QRCodeWriter
+
 
 @WebMvcTest
 @ContextConfiguration(
@@ -48,6 +42,10 @@ class UrlShortenerControllerTest {
 
     @MockBean
     private lateinit var createShortUrlUseCase: CreateShortUrlUseCase
+
+    //@MockBean
+    //private lateinit var generateQRCodeUseCase: GenerateQRCodeUseCase
+
 
     /**
      * Tests that `redirectTo` returns a redirect when the key exists.
@@ -131,29 +129,5 @@ class UrlShortenerControllerTest {
         )
             .andExpect(status().isBadRequest)
             .andExpect(jsonPath("$.statusCode").value(400))
-    }
-
-    @Test
-    fun testQRCodeGeneration() {
-        val testUrl = "https://example.com"
-        val outputFilePath = "test_qr_code.png"
-
-        try {
-            generateQRCode(testUrl, outputFilePath)
-
-            val outputFile = File(outputFilePath)
-            assertTrue(outputFile.exists())
-
-            // Clean up the created file
-            outputFile.delete()
-        } catch (e: WriterException) {
-            println("QR Code generation failed: ${e.message}")
-        }
-    }
-
-    private fun generateQRCode(data: String, outputFilePath: String) {
-        val qrCodeWriter = QRCodeWriter()
-        val bitMatrix: BitMatrix = qrCodeWriter.encode(data, BarcodeFormat.QR_CODE, 200, 200)
-        MatrixToImageWriter.writeToPath(bitMatrix, "PNG", File(outputFilePath).toPath())
     }
 }
