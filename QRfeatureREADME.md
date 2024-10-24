@@ -14,17 +14,10 @@ How te QR is going to be generated:
 
 Functionality:
 1. In the Domain.kt:
-   New Method for QR Code Generation:
-        Functionality: A new private function named generateQRCode(data: String, outputFilePath: String). 
-        Reason: This method encapsulates the logic for creating QR codes from a given URL, making it reusable throughout the project.
-        Location: Inside the UrlShortenerControllerImpl class, as it directly relates to the functionality of generating a short URL and providing a QR code for it.
+   New class QRCode to represent the QR code data which will be used after in the response.
+        Reason: This class represents the QR code data, including the Base64-encoded image, the URL associated with the QR code and the size of it. It is used to store the QR code data before sending it to the client.
+2. New Use Case: GenerateQRCodeUseCase.kt
+        In this use case, we have the implementation of the method which generates a QR code for a given URL. It accepts a URL and a size parameter, encodes the URL into a QR code format, converts the QR code into a PNG byte stream, and encodes it into a Base64 string for easy use in web applications.
 
-2. In the UrlShortenerController.kt:
-   New Method for QR Code Generation: private fun generateQRCode(url: String, size: Int = 250): String
-        Reason: This method generates a QR code as a Base64-encoded string. It accepts a URL and a size parameter, encodes the URL into a QR code format, converts the QR code into a PNG byte stream, and encodes it into a Base64 string for easy use in web applications
-   
-   Modification in the shortener Method: val qrCodeBase64 = generateQRCode(url.toString())
-        Reason: After creating a short URL, this line calls the generateQRCode method to create a QR code for the newly generated URL. The resulting Base64 string is then included in the response.
-
-   Including QR Code in the Response: qrCode" to qrCodeBase64
-        Reason: The QR code Base64 string is added to the ShortUrlDataOut response object. This allows the client to receive the QR code along with the short URL.
+3. In the UrlShortenerController.kt:
+   We add directly instantiate the QR Code use case implementation and then, in the post method which create the short URL, we call the generateQRCode method from the use case and store the QR code data in the database.

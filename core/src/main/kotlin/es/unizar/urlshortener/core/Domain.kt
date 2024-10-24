@@ -76,3 +76,16 @@ data class ClickProperties(
     val platform: String? = null,
     val country: String? = null
 )
+
+/**
+ * A [QRCode] represents a generated QR code for a given URL.
+ *
+ * @param url The URL the QR code represents.
+ * @param base64Image The QR code image encoded as a Base64 string.
+ * @param size The size of the QR code (e.g., 250x250 pixels).
+ */
+data class QRCode(
+    val url: String,           // The URL for which the QR code is generated
+    val base64Image: String,   // The QR code image encoded in Base64 format
+    val size: Int              // The size of the QR code (e.g., 250x250 pixels)
+)
