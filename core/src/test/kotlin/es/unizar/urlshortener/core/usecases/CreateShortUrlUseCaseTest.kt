@@ -100,4 +100,21 @@ class CreateShortUrlUseCaseTest {
             createShortUrlUseCase.create("http://example.com/", shortUrlProperties)
         }
     }
+
+    
+    @Test 
+    fun `creates returns a valid branded short URL`() {
+        val shortUrlRepository = mock<ShortUrlRepositoryService>()
+        val validatorService = mock<ValidatorService>()
+        val hashService = mock<HashService>()
+        val shortUrlProperties = mock<ShortUrlProperties>()
+
+        whenever(validatorService.isValid("http://example.com/")).thenReturn(true)
+        whenever(shortUrlRepository.save(any())).doAnswer { it.arguments[0] as ShortUrl }
+
+        val createShortUrlUseCase = CreateShortUrlUseCaseImpl(shortUrlRepository, validatorService, hashService)
+        val shortUrl = createShortUrlUseCase.create("http://example.com/", ShortUrlProperties(isBranded = true, id = "branded"))
+
+        assertEquals(shortUrl.hash, "branded")
+    }
 }
