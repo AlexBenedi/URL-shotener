@@ -47,8 +47,7 @@ class GetUserInformationUseCaseImpl(
     override fun processUser(user: User) {
         if (safeCall {userRepository.findById(user.userId)} == null) {
             safeCall {userRepository.save(user)}
-            insertExampleLink(user, "kamalmola")
-            insertExampleLink(user, "HOLACOMOESTAS")
+            insertExampleLink(user, user.userId)
         }
     }
 
