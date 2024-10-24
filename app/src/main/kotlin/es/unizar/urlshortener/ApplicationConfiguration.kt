@@ -54,19 +54,6 @@ class ApplicationConfiguration(
             .build()
     }
 
-    @Bean
-    @Profile("test")
-    fun testSecurityFilterChain(http: HttpSecurity): SecurityFilterChain {
-        return http
-            .csrf { it.disable() } // Desactiva CSRF para simplificar el access
-            .authorizeHttpRequests { registry ->
-                registry.anyRequest().permitAll()
-            }
-            .oauth2Login(Customizer.withDefaults())
-            //.formLogin(Customizer.withDefaults())
-            .build()
-    }
-
     /**
      * Provides an implementation of the ClickRepositoryService.
      * @return an instance of ClickRepositoryServiceImpl.

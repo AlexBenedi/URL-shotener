@@ -47,7 +47,7 @@ class UrlShortenerControllerTest {
     private lateinit var getUserInformationUseCase: GetUserInformationUseCase
 
     @MockBean
-    private lateinit var testSecurityFilterChain: SecurityFilterChain
+    private lateinit var securityFilterChain: SecurityFilterChain
 
 
     /**
