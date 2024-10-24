@@ -8,6 +8,9 @@ import java.nio.file.Path
 import java.nio.file.Paths
 import java.io.IOException
 
+private const val QR_CODE_WIDTH = 200
+private const val QR_CODE_HEIGHT = 200
+
 /**
  * A [Click] captures a request of redirection of a [ShortUrl] identified by its [hash].
  */
@@ -34,15 +37,10 @@ data class ShortUrl(
      */
     fun generateQRCode(outputFilePath: String) {
         val qrCodeWriter = QRCodeWriter()
-        val bitMatrix = qrCodeWriter.encode(redirection.target, BarcodeFormat.QR_CODE, 200, 200)
+        val bitMatrix = qrCodeWriter.encode(redirection.target, BarcodeFormat.QR_CODE, QR_CODE_WIDTH, QR_CODE_HEIGHT)
 
         val outputPath: Path = Paths.get(outputFilePath)
-        try {
-            MatrixToImageWriter.writeToPath(bitMatrix, "PNG", outputPath)
-        } catch (e: IOException) {
-            // Handle the exception, e.g., log it or rethrow it
-            e.printStackTrace()
-        }
+        MatrixToImageWriter.writeToPath(bitMatrix, "PNG", outputPath)
     }
 }
 

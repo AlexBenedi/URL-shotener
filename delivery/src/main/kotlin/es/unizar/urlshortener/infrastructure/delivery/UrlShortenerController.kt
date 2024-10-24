@@ -17,10 +17,15 @@ import com.google.zxing.BarcodeFormat
 import com.google.zxing.client.j2se.MatrixToImageWriter
 import com.google.zxing.qrcode.QRCodeWriter
 import com.google.zxing.common.BitMatrix
-import es.unizar.urlshortener.core.usecases.*
 import org.springframework.web.bind.annotation.RequestParam
 import java.io.ByteArrayOutputStream
 import java.util.Base64
+import es.unizar.urlshortener.core.usecases.RedirectUseCase
+import es.unizar.urlshortener.core.usecases.LogClickUseCase
+import es.unizar.urlshortener.core.usecases.CreateShortUrlUseCase
+import es.unizar.urlshortener.core.usecases.GenerateQRCodeUseCase
+import es.unizar.urlshortener.core.usecases.GenerateQRCodeUseCaseImpl
+
 
 /**
  * The specification of the controller.

@@ -1,12 +1,16 @@
 package es.unizar.urlshortener.core.usecases
-import es.unizar.urlshortener.core.*
 
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.client.j2se.MatrixToImageWriter
 import com.google.zxing.qrcode.QRCodeWriter
 import es.unizar.urlshortener.core.QRCode
+import es.unizar.urlshortener.core.InvalidUrlException
 import java.io.ByteArrayOutputStream
 import java.util.Base64
+import org.slf4j.LoggerFactory
+import java.net.URISyntaxException
+
+private val logger = LoggerFactory.getLogger("GenerateQRCodeUseCase")
 
 /**
  * Interface to generate a QR code for a given URL.
@@ -30,10 +34,8 @@ class GenerateQRCodeUseCaseImpl : GenerateQRCodeUseCase {
         if (!isValidUrl(url)) {
             throw InvalidUrlException(url)
         }
-
         val qrCodeWriter = QRCodeWriter()
         val bitMatrix = qrCodeWriter.encode(url, BarcodeFormat.QR_CODE, size, size)
-
         ByteArrayOutputStream().use { outputStream ->
             MatrixToImageWriter.writeToStream(bitMatrix, "PNG", outputStream)
             val qrCodeBytes = outputStream.toByteArray()
@@ -50,8 +52,10 @@ class GenerateQRCodeUseCaseImpl : GenerateQRCodeUseCase {
         return try {
             val uri = java.net.URI(url)
             uri.scheme != null && uri.host != null
-        } catch (e: Exception) {
+        } catch (e: URISyntaxException) {
+            // Log the exception and return false for invalid URLs
+            logger.warn("Invalid URL: $url", e)
             false
-        }
+    }
     }
 }

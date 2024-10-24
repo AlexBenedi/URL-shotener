@@ -36,7 +36,10 @@ class GenerateQRCodeUseCaseTest {
         val generateQRCodeUseCase = mock<GenerateQRCodeUseCase>()
 
         // Simulate a failure during the QR code generation
-        whenever(generateQRCodeUseCase.generateQRCode(any(), any())).thenThrow(RuntimeException("QR code generation failed"))
+        whenever(
+            generateQRCodeUseCase.generateQRCode(any(), any())
+        ).thenThrow(RuntimeException("QR code generation failed"))
+
 
         assertFailsWith<RuntimeException> {
             generateQRCodeUseCase.generateQRCode("http://example.com/", 250)
