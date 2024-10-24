@@ -12,7 +12,7 @@ This project is using the following technologies:
 As Gradle is used as the build tool, to build, test & deploy the application you must follow these steps: 
 1. Run ```./gradlew build``` to compile the code, run the tests and pack the artifacts. It also verify the dependencies and secures the project is production-ready. 
 2. Run ```./gradlew check``` in order to execute all verifications and validations defined in the project. It also runs the tests.
-3. Run ```./gradlew bootrun``` to deploy the web application at http://localhost:8080 
+3. Run ```./gradlew bootrun``` to deploy the web application at http://localhost:8080. 
 
 You can also run ```./gradlew test``` in order to execute the tests without building the project nor performing aditional verification steps. 
 
