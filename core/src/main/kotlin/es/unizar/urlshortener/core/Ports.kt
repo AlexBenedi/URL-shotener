@@ -32,6 +32,14 @@ interface ShortUrlRepositoryService {
      * @return The saved [ShortUrl] entity.
      */
     fun save(su: ShortUrl): ShortUrl
+
+    /**
+     * Counts the number of shortened URLs for a specific user.
+     *
+     * @param userId The ID of the user.
+     * @return The count of shortened URLs.
+     */
+    fun countShortenedUrlsByUser(userId: String): Int
 }
 
 /**

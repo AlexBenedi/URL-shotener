@@ -14,6 +14,7 @@ import org.mockito.kotlin.whenever
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
+import es.unizar.urlshortener.core.*
 
 class CreateShortUrlUseCaseTest {
 
@@ -97,6 +98,25 @@ class CreateShortUrlUseCaseTest {
         val createShortUrlUseCase = CreateShortUrlUseCaseImpl(shortUrlRepository, validatorService, hashService)
 
         assertFailsWith<InternalError> {
+            createShortUrlUseCase.create("http://example.com/", shortUrlProperties)
+        }
+    }
+
+    // New test to simulate user exceeding the limit
+    @Test
+    fun `throws LimitExceededException when user exceeds the limit of shortened URLs`() {
+        val shortUrlRepository = mock<ShortUrlRepositoryService>()
+        val validatorService = mock<ValidatorService>()
+        val hashService = mock<HashService>()
+        val shortUrlProperties = ShortUrlProperties(ip = "127.0.0.1", sponsor = "user123")
+
+        // Simulate that the user has already shortened 5 URLs
+        whenever(shortUrlRepository.countShortenedUrlsByUser("user123")).thenReturn(5)
+
+        val createShortUrlUseCase = CreateShortUrlUseCaseImpl(shortUrlRepository, validatorService, hashService)
+
+        // Expect a LimitExceededException to be thrown
+        assertFailsWith<LimitExceededException> {
             createShortUrlUseCase.create("http://example.com/", shortUrlProperties)
         }
     }

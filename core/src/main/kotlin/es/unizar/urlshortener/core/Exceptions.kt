@@ -21,6 +21,9 @@ sealed class DomainException(message: String, cause: Throwable? = null):
  */
 class InvalidUrlException(url: String) : DomainException("[$url] does not follow a supported schema")
 
+class LimitExceededException(message: String) : RuntimeException(message)
+
+
 /**
  * An exception indicating that a redirection key could not be found.
  * This exception is thrown when a specified redirection key does not exist in the system.

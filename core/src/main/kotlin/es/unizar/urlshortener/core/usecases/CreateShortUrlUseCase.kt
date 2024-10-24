@@ -37,7 +37,16 @@ class CreateShortUrlUseCaseImpl(
      * @return The created [ShortUrl] entity.
      * @throws InvalidUrlException if the URL is not valid.
      */
-    override fun create(url: String, data: ShortUrlProperties): ShortUrl =
+    override fun create(url: String, data: ShortUrlProperties): ShortUrl {
+        // Get the user ID from the data (modify as needed to get the actual user ID)
+        val userId = data.sponsor ?: "anonymous" // or however you identify users
+
+        // Check if the user has exceeded the limit
+        val count = shortUrlRepository.countShortenedUrlsByUser(userId)
+        if (count >= 5) {
+            throw LimitExceededException("You have reached the limit of 5 shortened URLs. Please try again later.")
+        }
+
         if (safeCall { validatorService.isValid(url) }) {
             val id = safeCall { hashService.hasUrl(url) }
             val su = ShortUrl(
@@ -49,8 +58,9 @@ class CreateShortUrlUseCaseImpl(
                     sponsor = data.sponsor
                 )
             )
-            safeCall { shortUrlRepository.save(su) }
+            return safeCall { shortUrlRepository.save(su) }
         } else {
             throw InvalidUrlException(url)
         }
+    }
 }
