@@ -55,6 +55,14 @@ class UrlShortenerControllerTest {
      */
     @Test
     fun `redirectTo returns a redirect when the key exists`() {
+
+        //Mock the behavior of getUserInformationUseCase to return a User object
+        given(getUserInformationUseCase.getLinks(User("1"))).willReturn(emptyList())
+
+        //Mock the behavior of securityFilterChain to return a SecurityFilterChain object
+        given(securityFilterChain.toString()).willReturn("SecurityFilterChain")
+
+
         // Mock the behavior of redirectUseCase to return a redirection URL
         given(redirectUseCase.redirectTo("key")).willReturn(Redirection("http://example.com/"))
 
