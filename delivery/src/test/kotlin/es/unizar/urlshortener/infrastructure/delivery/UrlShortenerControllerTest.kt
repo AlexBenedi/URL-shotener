@@ -50,8 +50,6 @@ class UrlShortenerControllerTest {
     private lateinit var testSecurityFilterChain: SecurityFilterChain
 
 
-
-
     /**
      * Tests that `redirectTo` returns a redirect when the key exists.
      */

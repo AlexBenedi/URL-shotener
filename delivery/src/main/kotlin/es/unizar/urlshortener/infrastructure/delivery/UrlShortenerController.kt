@@ -76,7 +76,7 @@ class UrlShortenerControllerImpl(
     val redirectUseCase: RedirectUseCase,
     val logClickUseCase: LogClickUseCase,
     val createShortUrlUseCase: CreateShortUrlUseCase,
-    val processUser : GetUserInformationUseCase
+    val getUserInformationUseCase : GetUserInformationUseCase
 ) : UrlShortenerController {
 
     /**
@@ -138,9 +138,9 @@ class UrlShortenerControllerImpl(
         val email = token.principal.attributes["email"].toString()
 
         // Llamar a processUser para obtener los enlaces asociados al usuario
-        processUser.processUser(user)
+        getUserInformationUseCase.processUser(user)
 
-        val links = processUser.getLinks(user)
+        val links = getUserInformationUseCase.getLinks(user)
 
         // Convertir los links en una representación adecuada (puede ser una lista de strings, JSON, etc.)
         val linkInfo = links.map { link ->
