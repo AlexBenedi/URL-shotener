@@ -2,7 +2,18 @@
 
 package es.unizar.urlshortener.core.usecases
 
-import es.unizar.urlshortener.core.*
+import es.unizar.urlshortener.core.ShortUrlRepositoryService
+import es.unizar.urlshortener.core.ShortUrlProperties
+import es.unizar.urlshortener.core.ShortUrl
+import es.unizar.urlshortener.core.ValidatorService
+import es.unizar.urlshortener.core.HashService
+import es.unizar.urlshortener.core.LimitExceededException
+import es.unizar.urlshortener.core.usecases.CreateShortUrlUseCase
+import es.unizar.urlshortener.core.InvalidUrlException
+import es.unizar.urlshortener.core.safeCall
+import es.unizar.urlshortener.core.Redirection
+
+private const val MAX_SHORTENED_URLS = 5
 
 /**
  * Given an url returns the key that is used to create a short URL.
@@ -43,7 +54,7 @@ class CreateShortUrlUseCaseImpl(
 
         // Check if the user has exceeded the limit
         val count = shortUrlRepository.countShortenedUrlsByUser(userId)
-        if (count >= 5) {
+        if (count >= MAX_SHORTENED_URLS) {
             throw LimitExceededException("You have reached the limit of 5 shortened URLs. Please try again later.")
         }
 
