@@ -60,7 +60,6 @@ data class Link(
     val click: Click,
     val shortUrl: ShortUrl,
     val userId: String
-    //TODO: Add QR information
 )
 
 /**

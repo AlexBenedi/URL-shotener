@@ -12,6 +12,15 @@ interface LinkRepositoryService {
      */
     fun save(l: Link): Link
 
+
+    /**
+     * Finds a [Link] entity by its user id.
+     *
+     * @param userId The user id of the [Link] entity.
+     * @return The found [Link] entity or null if not found.
+     */
+    fun findByUserId(user: User): List<Link>
+
 }
 
 /**
