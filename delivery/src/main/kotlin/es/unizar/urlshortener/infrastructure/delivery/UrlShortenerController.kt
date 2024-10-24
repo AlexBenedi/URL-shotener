@@ -31,6 +31,7 @@ import es.unizar.urlshortener.core.usecases.GenerateQRCodeUseCaseImpl
  * The specification of the controller.
  */
 interface UrlShortenerController {
+    
 
     /**
      * Redirects and logs a short url identified by its [id].
