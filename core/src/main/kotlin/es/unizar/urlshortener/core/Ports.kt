@@ -57,6 +57,7 @@ interface ClickRepositoryService {
      * @return The saved [Click] entity.
      */
     fun save(cl: Click): Click
+
 }
 
 /**
