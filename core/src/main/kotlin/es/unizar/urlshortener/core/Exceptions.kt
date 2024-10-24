@@ -30,6 +30,12 @@ class InvalidUrlException(url: String) : DomainException("[$url] does not follow
 class RedirectionNotFound(key: String) : DomainException("[$key] is not known")
 
 /**
+ * An exception indicating that the id of the branded link must not be empty.
+ * This exception is thrown when the flag isBranded is activate but the id is empty.
+ */
+class InvalidBrandedUrl() : DomainException("Id must not be empty")
+
+/**
  * An exception indicating an internal error within the application.
  * This exception can be used to represent unexpected issues that occur within the application,
  * providing both a message and a cause for the error.
