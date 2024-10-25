@@ -25,5 +25,5 @@ New test have been implemented to ensure the correct functioning of the branded 
 
 ### Future 
 
-In the future, `index.html` and `app.js` will be modified to enable users to introduce the branded links in a more user-friendly way. Basic back-end has been introduced por this POC but the front-end part has not been implemented yet. 
+In the future, `index.html` and `app.js` will be modified to enable users to introduce the branded links in a more user-friendly way. Basic back-end has been introduced for this POC but the front-end part has not been implemented yet. 
 
