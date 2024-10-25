@@ -62,4 +62,3 @@ inline fun <T> safeCall(
     onSuccess = { it },
     onFailure = { throw onFailure(it) }
 )
-

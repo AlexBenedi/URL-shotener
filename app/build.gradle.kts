@@ -17,6 +17,9 @@ dependencies {
     // Adds the repositories project as an implementation dependency.
     implementation(project(":repositories"))
 
+    implementation("com.google.zxing:core:3.5.1")
+    implementation("com.google.zxing:javase:3.5.1") // Required for MatrixToImageWriter
+
     // Adds the Spring Boot starter as an implementation dependency.
     implementation(libs.spring.boot.starter)
     // Adds Bootstrap as an implementation dependency.

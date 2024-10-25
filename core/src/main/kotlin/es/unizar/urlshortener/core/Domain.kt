@@ -1,6 +1,15 @@
 package es.unizar.urlshortener.core
 
 import java.time.OffsetDateTime
+import com.google.zxing.BarcodeFormat
+import com.google.zxing.qrcode.QRCodeWriter
+import com.google.zxing.client.j2se.MatrixToImageWriter
+import java.nio.file.Path
+import java.nio.file.Paths
+import java.io.IOException
+
+private const val QR_CODE_WIDTH = 200
+private const val QR_CODE_HEIGHT = 200
 
 /**
  * A [Click] captures a request of redirection of a [ShortUrl] identified by its [hash].
@@ -20,7 +29,20 @@ data class ShortUrl(
     val redirection: Redirection,
     val created: OffsetDateTime = OffsetDateTime.now(),
     val properties: ShortUrlProperties = ShortUrlProperties()
-)
+) {
+    /**
+     * Generates a QR code image for this ShortUrl and saves it to the specified output path.
+     *
+     * @param outputFilePath the path where the QR code image will be saved
+     */
+    fun generateQRCode(outputFilePath: String) {
+        val qrCodeWriter = QRCodeWriter()
+        val bitMatrix = qrCodeWriter.encode(redirection.target, BarcodeFormat.QR_CODE, QR_CODE_WIDTH, QR_CODE_HEIGHT)
+
+        val outputPath: Path = Paths.get(outputFilePath)
+        MatrixToImageWriter.writeToPath(bitMatrix, "PNG", outputPath)
+    }
+}
 
 /**
  * A [Redirection] specifies the [target] and the [status code][mode] of a redirection.
@@ -70,4 +92,15 @@ data class Link(
 data class User(
     val userId : String
 )
-
+/**
+ * A [QRCode] represents a generated QR code for a given URL.
+ *
+ * @param url The URL the QR code represents.
+ * @param base64Image The QR code image encoded as a Base64 string.
+ * @param size The size of the QR code (e.g., 250x250 pixels).
+ */
+data class QRCode(
+    val url: String,           // The URL for which the QR code is generated
+    val base64Image: String,   // The QR code image encoded in Base64 format
+    val size: Int              // The size of the QR code (e.g., 250x250 pixels)
+)

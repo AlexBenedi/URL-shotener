@@ -4,10 +4,7 @@ import es.unizar.urlshortener.core.ClickProperties
 import es.unizar.urlshortener.core.ShortUrlProperties
 import es.unizar.urlshortener.core.User
 import es.unizar.urlshortener.core.Link
-import es.unizar.urlshortener.core.usecases.CreateShortUrlUseCase
 import es.unizar.urlshortener.core.usecases.GetUserInformationUseCase
-import es.unizar.urlshortener.core.usecases.LogClickUseCase
-import es.unizar.urlshortener.core.usecases.RedirectUseCase
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.hateoas.server.mvc.linkTo
 import org.springframework.http.HttpHeaders
@@ -20,6 +17,19 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RestController
 import java.net.URI
+import com.google.zxing.BarcodeFormat
+import com.google.zxing.client.j2se.MatrixToImageWriter
+import com.google.zxing.qrcode.QRCodeWriter
+import com.google.zxing.common.BitMatrix
+import org.springframework.web.bind.annotation.RequestParam
+import java.io.ByteArrayOutputStream
+import java.util.Base64
+import es.unizar.urlshortener.core.usecases.RedirectUseCase
+import es.unizar.urlshortener.core.usecases.LogClickUseCase
+import es.unizar.urlshortener.core.usecases.CreateShortUrlUseCase
+import es.unizar.urlshortener.core.usecases.GenerateQRCodeUseCase
+import es.unizar.urlshortener.core.usecases.GenerateQRCodeUseCaseImpl
+
 
 import java.security.Principal;
 
@@ -27,6 +37,7 @@ import java.security.Principal;
  * The specification of the controller.
  */
 interface UrlShortenerController {
+    
 
     /**
      * Redirects and logs a short url identified by its [id].
@@ -65,6 +76,7 @@ data class ShortUrlDataIn(
  */
 data class ShortUrlDataOut(
     val url: URI? = null,
+    val qrCode: String? = null, // Add the QR code here as a separate field
     val properties: Map<String, Any> = emptyMap()
 )
 
@@ -80,6 +92,9 @@ class UrlShortenerControllerImpl(
     val createShortUrlUseCase: CreateShortUrlUseCase,
     val getUserInformationUseCase : GetUserInformationUseCase
 ) : UrlShortenerController {
+
+    // Directly instantiate the QR Code use case implementation
+    private val generateQRCodeUseCase = GenerateQRCodeUseCaseImpl()
 
     /**
      * Redirects and logs a short url identified by its [id].
@@ -118,8 +133,13 @@ class UrlShortenerControllerImpl(
             val h = HttpHeaders()
             val url = linkTo<UrlShortenerControllerImpl> { redirectTo(hash, request) }.toUri()
             h.location = url
+
+            // Generate the QR code
+            val qrCode = generateQRCodeUseCase.generateQRCode(url.toString())
+
             val response = ShortUrlDataOut(
                 url = url,
+                qrCode = qrCode.base64Image, // Assign the QR code here directly
                 properties = mapOf(
                     "safe" to properties.safe
                 )

@@ -34,6 +34,9 @@ dependencies {
     // Include Google Guava as an implementation dependency
     implementation(libs.guava)
 
+    implementation("com.google.zxing:core:3.5.1")
+    implementation("com.google.zxing:javase:3.5.1") // Required for MatrixToImageWriter
+
     // Include Kotlin Test as a test implementation dependency
     testImplementation(libs.kotlin.test)
 
