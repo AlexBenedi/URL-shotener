@@ -77,3 +77,29 @@ To run the Proof of Concept (PoC), you will need to open your terminal and navig
 ### Implemented Tests
 In our development process, we have implemented an integration test, done in `app/src/test/kotlin/es/unizar/urlshortener/IntegrationTests.kt` that validates the requirement for authentication when accessing the `/user` route. This test ensures that only authenticated users can gain access, thereby reinforcing the security measures we have put in place. Additionally, we have developed unit tests to thoroughly check the functionality of the GetUserInformationUseCase in `core/src/test/kotlin/es/unizar/urlshortener/core/usecases/GetUserInformationUseCaseTest.kt`. These unit tests verify that the use case behaves as expected under various conditions, ensuring the reliability and correctness of the user management features within the application. 
 
+## QR
+This API generates a QR code for a given shortened URL, providing an alternative method of access. The generated QR code must contain the shortened URL.
+
+How te QR is going to be generated:
+1. The QR code is generated using the `QRCodeWriter` class from the `zxing` library: https://github.com/zxing/zxing/tree/master/core/src/main/java/com/google/zxing/qrcode
+2. With the encode method, the QR code is generated from the shortened URL to a `BitMatrix` object. https://github.com/zxing/zxing/blob/master/core/src/main/java/com/google/zxing/qrcode/QRCodeWriter.java
+3. The `BitMatrix` object is then converted to a `BufferedImage` object using the `MatrixToImageWriter` class. https://github.com/zxing/zxing/blob/master/javase/src/main/java/com/google/zxing/client/j2se/MatrixToImageWriter.java
+
+Functionality:
+1. In the Domain.kt:
+   New class QRCode to represent the QR code data which will be used after in the response.
+        Reason: This class represents the QR code data, including the Base64-encoded image, the URL associated with the QR code and the size of it. It is used to store the QR code data before sending it to the client.
+2. New Use Case: GenerateQRCodeUseCase.kt
+        In this use case, we have the implementation of the method which generates a QR code for a given URL. It accepts a URL and a size parameter, encodes the URL into a QR code format, converts the QR code into a PNG byte stream, and encodes it into a Base64 string for easy use in web applications.
+
+3. In the UrlShortenerController.kt:
+   We add directly instantiate the QR Code use case implementation and then, in the post method which create the short URL, we call the generateQRCode method from the use case and store the QR code data in the database.
+
+## Redirection limit
+Description: Enforce a limit on the number of URLs that can be shortened by both logged-in and non-logged-in users to avoid misuse of the service.
+
+Implementation:
+    For checking how many URLs a user has shortened, we can maintain a field on the table of each user which has the count if the number of ShortenedUrl in the last hour. When a user tries to shorten a URL, we can quickly check the table to see if the user has reached their limit. If the user has not reached the limit, we can increment the count and allow the user to shorten the URL. If the user has reached the limit, we can reject the request.
+    When we call the method "create" in the CreateShortUrlUseCase.kt, firstly we do the check if the user has reached the limit. If the user has reached the limit, we return an error message. Otherwise, we increment the count and create the shortened URL.
+    For checking that field in the database, we will have to use a query declared in the Repository.
+    We will have to create a function which clear that field every hour for every user. We can use a cron job for that. 
