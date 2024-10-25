@@ -102,4 +102,8 @@ class ShortUrlRepositoryServiceImpl(
      * @return The saved [ShortUrl] entity.
      */
     override fun save(su: ShortUrl): ShortUrl = shortUrlEntityRepository.save(su.toEntity()).toDomain()
+
+    override fun countShortenedUrlsByUser(userId: String): Int {
+        return shortUrlEntityRepository.countByOwner(userId)
+    }
 }

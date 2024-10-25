@@ -38,6 +38,9 @@ interface ShortUrlEntityRepository : JpaRepository<ShortUrlEntity, String> {
      * @return The found [ShortUrlEntity] or null if not found.
      */
     fun findByHash(hash: String): ShortUrlEntity?
+
+    @Query("SELECT COUNT(s) FROM ShortUrlEntity s WHERE s.owner = :userId")
+    fun countByOwner(@Param("userId") userId: String): Int
 }
 
 /**

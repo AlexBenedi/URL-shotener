@@ -21,6 +21,9 @@ sealed class DomainException(message: String, cause: Throwable? = null):
  */
 class InvalidUrlException(url: String) : DomainException("[$url] does not follow a supported schema")
 
+class LimitExceededException(message: String) : RuntimeException(message)
+
+
 /**
  * An exception indicating that a provided URL is considered unsafe.
  * This exception is thrown when a URL is deemed unsafe by a safety service.
