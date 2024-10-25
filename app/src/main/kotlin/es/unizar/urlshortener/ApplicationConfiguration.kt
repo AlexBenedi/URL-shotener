@@ -103,26 +103,4 @@ class ApplicationConfiguration(
      */
     @Bean
     fun safetyService() = SafetyServiceImpl()
-
-    /**
-     * Provides an implementation of the RedirectUseCase.
-     * @return an instance of RedirectUseCaseImpl.
-     */
-    @Bean
-    fun redirectUseCase() = RedirectUseCaseImpl(shortUrlRepositoryService())
-
-    /**
-     * Provides an implementation of the LogClickUseCase.
-     * @return an instance of LogClickUseCaseImpl.
-     */
-    @Bean
-    fun logClickUseCase() = LogClickUseCaseImpl(clickRepositoryService())
-
-    /**
-     * Provides an implementation of the CreateShortUrlUseCase.
-     * @return an instance of CreateShortUrlUseCaseImpl.
-     */
-    @Bean
-    fun createShortUrlUseCase() =
-        CreateShortUrlUseCaseImpl(shortUrlRepositoryService(), validatorService(), hashService(), safetyService())
 }

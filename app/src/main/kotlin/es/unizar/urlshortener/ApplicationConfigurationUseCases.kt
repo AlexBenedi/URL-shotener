@@ -7,6 +7,7 @@ import es.unizar.urlshortener.core.usecases.RedirectUseCaseImpl
 import es.unizar.urlshortener.ApplicationConfiguration
 import es.unizar.urlshortener.infrastructure.delivery.HashServiceImpl
 import es.unizar.urlshortener.infrastructure.delivery.ValidatorServiceImpl
+import es.unizar.urlshortener.infrastructure.delivery.SafetyServiceImpl
 import es.unizar.urlshortener.infrastructure.repositories.ClickEntityRepository
 import es.unizar.urlshortener.infrastructure.repositories.ClickRepositoryServiceImpl
 import es.unizar.urlshortener.infrastructure.repositories.ShortUrlEntityRepository
@@ -49,7 +50,8 @@ class ApplicationConfigurationUseCases(
     fun createShortUrlUseCase() =
         CreateShortUrlUseCaseImpl(ShortUrlRepositoryServiceImpl(shortUrlEntityRepository),
             ValidatorServiceImpl(),
-            HashServiceImpl()
+            HashServiceImpl(),
+            SafetyServiceImpl(),
         )
 
     /**
