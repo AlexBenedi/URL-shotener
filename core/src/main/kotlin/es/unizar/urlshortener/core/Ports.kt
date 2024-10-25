@@ -47,6 +47,14 @@ interface ValidatorService {
      * @return True if the URL is valid, false otherwise.
      */
     fun isValid(url: String): Boolean
+
+    /**
+     * Validates if the given id can be used.
+     *
+     * @param id The id to be validated.
+     * @return True if the id is valid, false otherwise.
+     */
+    fun isValidBrandedUrl(id: String?): Boolean
 }
 
 /**

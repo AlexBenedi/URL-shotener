@@ -125,4 +125,55 @@ class UrlShortenerControllerTest {
             .andExpect(status().isBadRequest)
             .andExpect(jsonPath("$.statusCode").value(400))
     }
+
+    /**
+     * Tests that `creates` returns a basic redirect if it can create a branded linkk.
+     */
+    @Test
+    fun `creates returns a basic redirect if it can create a branded link`() {
+        // Mock the behavior of createShortUrlUseCase to return a ShortUrl object
+        given(
+            createShortUrlUseCase.create(
+                url = "http://example.com/",
+                data = ShortUrlProperties(ip = "127.0.0.1", name = "test", isBranded = true)
+            )
+        ).willReturn(ShortUrl("test", Redirection("http://example.com/")))
+
+        // Perform a POST request and verify the response status, redirection URL, and JSON response
+        mockMvc.perform(
+            post("/api/link")
+                .param("url", "http://example.com/")
+                .param("name", "test")
+                .param("isBranded", "true")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+        )
+            .andDo(print())
+            .andExpect(status().isCreated)
+            .andExpect(redirectedUrl("http://localhost/test"))
+            .andExpect(jsonPath("$.url").value("http://localhost/test"))
+    }
+
+    /**
+     * Tests that `creates` returns a bad request status if name have not been introduced.
+     */
+    @Test
+    fun `creates returns bad request if name have not been introduced`() {
+        // Mock the behavior of createShortUrlUseCase to throw an InvalidNameBrandedUrl
+        given(
+            createShortUrlUseCase.create(
+                url = "http://example.com/",
+                data = ShortUrlProperties(ip = "127.0.0.1", isBranded = true)
+            )
+        ).willAnswer { throw InvalidNameBrandedUrl() }
+
+        // Perform a POST request and verify the response status and error message
+        mockMvc.perform(
+            post("/api/link")
+                .param("url", "http://example.com/")
+                .param("isBranded", "true")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+        )
+            .andExpect(status().isBadRequest)
+            .andExpect(jsonPath("$.statusCode").value(400))
+    }
 }

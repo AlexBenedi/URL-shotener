@@ -44,14 +44,22 @@ class CreateShortUrlUseCaseImpl(
                 println("URL is not safe")
                 throw UnsafeUrlException(url)
             }
-            val id = safeCall { hashService.hasUrl(url) }
+            var id = safeCall { hashService.hasUrl(url) }
+            if (data.isBranded == true ) {
+                if ( data.name != null ) {
+                    id = data.name
+                } else {
+                    throw InvalidNameBrandedUrl()
+                }
+            }
             val su = ShortUrl(
                 hash = id,
                 redirection = Redirection(target = url),
                 properties = ShortUrlProperties(
                     safe = data.safe,
                     ip = data.ip,
-                    sponsor = data.sponsor
+                    sponsor = data.sponsor,
+                    isBranded = data.isBranded != null && data.name != null,
                 )
             )
             safeCall { shortUrlRepository.save(su) }

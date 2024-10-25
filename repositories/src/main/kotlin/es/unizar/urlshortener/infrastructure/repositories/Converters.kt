@@ -64,5 +64,6 @@ fun ShortUrl.toEntity() = ShortUrlEntity(
     sponsor = properties.sponsor,
     safe = properties.safe,
     ip = properties.ip,
-    country = properties.country
+    country = properties.country,
+    isBranded = properties.isBranded
 )
