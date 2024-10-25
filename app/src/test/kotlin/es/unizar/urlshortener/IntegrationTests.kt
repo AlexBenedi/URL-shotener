@@ -143,6 +143,25 @@ class HttpRequestTest {
         assertThat(JdbcTestUtils.countRowsInTable(jdbcTemplate, "shorturl")).isEqualTo(0)
         assertThat(JdbcTestUtils.countRowsInTable(jdbcTemplate, "click")).isEqualTo(0)
     }
+    /** 
+     * Tests that accessing the /users/ endpoint redirects to the Google OAuth authentication page.
+     */
+    @Test
+    fun `user endpoint redirects to Google OAuth`() {
+        // Realiza una solicitud GET a la ruta /users/
+        val response = restTemplate.getForEntity("http://localhost:$port/user", String::class.java)
+
+        // Verifica que la respuesta sea un redireccionamiento
+        assertThat(response.statusCode).isEqualTo(HttpStatus.FOUND) // 302 Found
+
+        // Verifica que el Location header contenga la URL de Google OAuth
+        val location = response.headers.location
+        require(location != null) { "Location header should not be null" }
+
+        assertThat(location.toString()).contains("/oauth2/authorization/google")
+    }
+
+
 
     /**
      * Creates a short URL for the given URL.

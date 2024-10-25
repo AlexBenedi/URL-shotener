@@ -43,3 +43,34 @@ class ShortUrlEntity(
     val country: String?,
     val isBranded: Boolean?
 )
+
+@Entity
+@Table(name = "link")
+@Suppress("LongParameterList", "JpaObjectClassSignatureInspection")
+class LinkEntity(
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    val id: Long?,
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
+    @JoinColumn(name = "short_url_id", nullable = false)
+    val shortUrl: ShortUrlEntity, // Relación con ShortUrlEntity
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
+    @JoinColumn(name = "click_id", nullable = false)
+    val click: ClickEntity, // Relación con ClickEntity
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    val userId: UserEntity
+)
+
+@Entity
+@Table(name = "user")
+@Suppress("LongParameterList", "JpaObjectClassSignatureInspection")
+class UserEntity(
+    @Id
+    val id: String
+)
+
+

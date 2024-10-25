@@ -2,7 +2,10 @@ package es.unizar.urlshortener.infrastructure.delivery
 
 import es.unizar.urlshortener.core.ClickProperties
 import es.unizar.urlshortener.core.ShortUrlProperties
+import es.unizar.urlshortener.core.User
+import es.unizar.urlshortener.core.Link
 import es.unizar.urlshortener.core.usecases.CreateShortUrlUseCase
+import es.unizar.urlshortener.core.usecases.GetUserInformationUseCase
 import es.unizar.urlshortener.core.usecases.LogClickUseCase
 import es.unizar.urlshortener.core.usecases.RedirectUseCase
 import jakarta.servlet.http.HttpServletRequest
@@ -11,11 +14,14 @@ import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RestController
 import java.net.URI
+
+import java.security.Principal;
 
 /**
  * The specification of the controller.
@@ -35,6 +41,13 @@ interface UrlShortenerController {
      * **Note**: Delivery of use case [CreateShortUrlUseCase].
      */
     fun shortener(data: ShortUrlDataIn, request: HttpServletRequest): ResponseEntity<ShortUrlDataOut>
+
+    /**
+     * This method is used to get the user information.
+     * @param tocken the user information
+     * @return the user information
+     */
+     fun user(token: OAuth2AuthenticationToken): Map<String, Any>
 }
 
 /**
@@ -64,7 +77,8 @@ data class ShortUrlDataOut(
 class UrlShortenerControllerImpl(
     val redirectUseCase: RedirectUseCase,
     val logClickUseCase: LogClickUseCase,
-    val createShortUrlUseCase: CreateShortUrlUseCase
+    val createShortUrlUseCase: CreateShortUrlUseCase,
+    val getUserInformationUseCase : GetUserInformationUseCase
 ) : UrlShortenerController {
 
     /**
@@ -112,4 +126,55 @@ class UrlShortenerControllerImpl(
             )
             ResponseEntity<ShortUrlDataOut>(response, h, HttpStatus.CREATED)
         }
+
+    /**
+     * This method is used to get the user information.
+     * @param principal the user information
+     * @return the user information
+     */
+    @GetMapping("/user")
+    override fun user(token: OAuth2AuthenticationToken): Map<String, Any> {
+        // Crear el usuario a partir del token de autenticación OAuth2
+        val user = User(token.principal.attributes["sub"].toString())
+
+        // Obtener los atributos del token (nombre y correo)
+        val name = token.principal.attributes["name"].toString()
+        val email = token.principal.attributes["email"].toString()
+
+        // Llamar a processUser para obtener los enlaces asociados al usuario
+        getUserInformationUseCase.processUser(user)
+
+        val links = getUserInformationUseCase.getLinks(user)
+
+        // Convertir los links en una representación adecuada (puede ser una lista de strings, JSON, etc.)
+        val linkInfo = links.map { link ->
+            mapOf(
+                "click" to mapOf(
+                    "hash" to link.click.hash,
+                    "properties" to link.click.properties,
+                    "created" to link.click.created
+                ),
+                "shortUrl" to mapOf(
+                    "hash" to link.shortUrl.hash,
+                    "redirection" to link.shortUrl.redirection.target,
+                    "created" to link.shortUrl.created,
+                    "properties" to link.shortUrl.properties
+                ),
+                "userId" to link.userId
+            )
+        }
+
+        // Devolver toda la información como un mapa
+        return mapOf(
+            "user" to mapOf(
+                "id" to user.userId,
+                "name" to name,
+                "email" to email
+            ),
+            "links" to linkInfo
+        )
+    }
+
+
 }
+

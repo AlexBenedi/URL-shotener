@@ -54,3 +54,20 @@ data class ClickProperties(
     val platform: String? = null,
     val country: String? = null
 )
+
+/**
+ * A [Link] is the association between a [Click] and a [ShortUrl].
+ */
+data class Link(
+    val click: Click,
+    val shortUrl: ShortUrl,
+    val userId: String
+)
+
+/**
+ * A [User] is the entity that represents a user of the application.
+ */
+data class User(
+    val userId : String
+)
+

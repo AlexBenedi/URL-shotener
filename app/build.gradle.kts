@@ -45,6 +45,10 @@ dependencies {
     testImplementation(libs.junit.jupiter)
     // Adds JUnit Platform launcher as a test runtime-only dependency.
     testRuntimeOnly(libs.junit.platform.launcher)
+
+    // OAuth2 Client para autenticación con OAuth2 y OpenID Connect
+    implementation ("org.springframework.boot:spring-boot-starter-oauth2-client")
+
 }
 
 dependencyManagement {

@@ -3,6 +3,7 @@ package es.unizar.urlshortener
 import es.unizar.urlshortener.core.usecases.CreateShortUrlUseCaseImpl
 import es.unizar.urlshortener.core.usecases.LogClickUseCaseImpl
 import es.unizar.urlshortener.core.usecases.RedirectUseCaseImpl
+import es.unizar.urlshortener.core.usecases.GetUserInformationUseCaseImpl
 import es.unizar.urlshortener.infrastructure.delivery.HashServiceImpl
 import es.unizar.urlshortener.infrastructure.delivery.SafetyServiceImpl
 import es.unizar.urlshortener.infrastructure.delivery.ValidatorServiceImpl
@@ -10,9 +11,17 @@ import es.unizar.urlshortener.infrastructure.repositories.ClickEntityRepository
 import es.unizar.urlshortener.infrastructure.repositories.ClickRepositoryServiceImpl
 import es.unizar.urlshortener.infrastructure.repositories.ShortUrlEntityRepository
 import es.unizar.urlshortener.infrastructure.repositories.ShortUrlRepositoryServiceImpl
+import es.unizar.urlshortener.infrastructure.repositories.UserEntityRepository
+import es.unizar.urlshortener.infrastructure.repositories.UserRepositoryServiceImpl
+import es.unizar.urlshortener.infrastructure.repositories.LinkEntityRepository
+import es.unizar.urlshortener.infrastructure.repositories.LinkRepositoryServiceImpl
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.Profile
+import org.springframework.security.config.Customizer
+import org.springframework.security.config.annotation.web.builders.HttpSecurity
+import org.springframework.security.web.SecurityFilterChain
 
 /**
  * Wires use cases with service implementations, and services implementations with repositories.
@@ -22,8 +31,30 @@ import org.springframework.context.annotation.Configuration
 @Configuration
 class ApplicationConfiguration(
     @Autowired val shortUrlEntityRepository: ShortUrlEntityRepository,
-    @Autowired val clickEntityRepository: ClickEntityRepository
+    @Autowired val clickEntityRepository: ClickEntityRepository,
+    @Autowired val userEntityRepository: UserEntityRepository,
+    @Autowired val linkEntityRepository: LinkEntityRepository
+    
 ) {
+
+    /**
+     * Configures the security filter chain.
+     * @param http the [HttpSecurity] object.
+     * @return the [SecurityFilterChain] object.
+     */
+    @Bean
+    fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
+        return http
+            .csrf { it.disable() } // Desactiva CSRF para simplificar el access
+            .authorizeHttpRequests { registry ->
+                registry.requestMatchers("/user").authenticated()
+                registry.anyRequest().permitAll()
+            }
+            .oauth2Login(Customizer.withDefaults())
+            //.formLogin(Customizer.withDefaults())
+            .build()
+    }
+
     /**
      * Provides an implementation of the ClickRepositoryService.
      * @return an instance of ClickRepositoryServiceImpl.
@@ -37,6 +68,20 @@ class ApplicationConfiguration(
      */
     @Bean
     fun shortUrlRepositoryService() = ShortUrlRepositoryServiceImpl(shortUrlEntityRepository)
+    
+    /**
+     * Provides an implementation of the UserRepositoryService.
+     * @return an instance of UserRepositoryServiceImpl.
+     */
+    @Bean
+    fun userRepositoryService() = UserRepositoryServiceImpl(userEntityRepository)
+    
+    /**
+     * Provides an implementation of the LinkRepositoryService.
+     * @return an instance of LinkRepositoryServiceImpl.
+     */
+    @Bean
+    fun linkRepositoryService() = LinkRepositoryServiceImpl(linkEntityRepository)
 
     /**
      * Provides an implementation of the ValidatorService.

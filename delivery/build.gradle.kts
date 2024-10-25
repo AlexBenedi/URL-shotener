@@ -48,6 +48,9 @@ dependencies {
 
     // Include Spring Boot Starter Test as a test implementation dependency
     testImplementation(libs.spring.boot.starter.test)
+
+    // OAuth2 Client para autenticación con OAuth2 y OpenID Connect
+    implementation ("org.springframework.boot:spring-boot-starter-oauth2-client")
 }
 
 dependencyManagement {

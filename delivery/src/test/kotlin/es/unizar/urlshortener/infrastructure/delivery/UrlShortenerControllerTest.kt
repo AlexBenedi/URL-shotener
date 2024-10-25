@@ -1,9 +1,9 @@
 @file:Suppress("WildcardImport")
 
 package es.unizar.urlshortener.infrastructure.delivery
-
 import es.unizar.urlshortener.core.*
 import es.unizar.urlshortener.core.usecases.CreateShortUrlUseCase
+import es.unizar.urlshortener.core.usecases.GetUserInformationUseCase
 import es.unizar.urlshortener.core.usecases.LogClickUseCase
 import es.unizar.urlshortener.core.usecases.RedirectUseCase
 import org.mockito.BDDMockito.given
@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.MediaType
+import org.springframework.security.web.SecurityFilterChain
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
@@ -42,11 +43,26 @@ class UrlShortenerControllerTest {
     @MockBean
     private lateinit var createShortUrlUseCase: CreateShortUrlUseCase
 
+    @MockBean
+    private lateinit var getUserInformationUseCase: GetUserInformationUseCase
+
+    @MockBean
+    private lateinit var securityFilterChain: SecurityFilterChain
+
+
     /**
      * Tests that `redirectTo` returns a redirect when the key exists.
      */
     @Test
     fun `redirectTo returns a redirect when the key exists`() {
+
+        //Mock the behavior of getUserInformationUseCase to return a User object
+        given(getUserInformationUseCase.getLinks(User("1"))).willReturn(emptyList())
+
+        //Mock the behavior of securityFilterChain to return a SecurityFilterChain object
+        given(securityFilterChain.toString()).willReturn("SecurityFilterChain")
+
+
         // Mock the behavior of redirectUseCase to return a redirection URL
         given(redirectUseCase.redirectTo("key")).willReturn(Redirection("http://example.com/"))
 
@@ -176,4 +192,5 @@ class UrlShortenerControllerTest {
             .andExpect(status().isBadRequest)
             .andExpect(jsonPath("$.statusCode").value(400))
     }
+    
 }
