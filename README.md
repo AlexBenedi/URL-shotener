@@ -63,7 +63,9 @@ We created the repositories in `/repositories/src/main/kotlin/es/unizar/urlshort
 
 Additionally, we implemented the GetUserInformationUseCase in `core/src/main/kotlin/es/unizar/urlshortener/core/usecases/CreateShortUrlUseCase.kt`, which centralizes user-related functionalities. This use case first checks if a user already exists in the database; if not, it inserts a new user entry, ensuring proper registration before users can create links. It also allows users to insert a sample link, providing them with a quick way to test or demonstrate functionality within their accounts. Furthermore, the use case includes a method to retrieve all links associated with a specific user.
 
-Finally we implemented a security configuration bean that manages access controls for Google OAuth authentication. This bean, done in `/app/src/main/kotlin/es/unizar/urlshortener/ApplicationConfiguration.kt`,is responsible for configuring the security filter chain to specify how authentication and authorization should be handled within the application.
+Finally we implemented a security configuration bean that manages access controls for Google OAuth authentication. This bean, done in `/app/src/main/kotlin/es/unizar/urlshortener/ApplicationConfiguration.kt`, is responsible for configuring the security filter chain to specify how authentication and authorization should be handled within the application.
+
+In future updates, we'll move integration logic into `gateway` module and authentication logic into `core/UseCases`, insted of doing it in the same function. We did it because it was the faster way to make the proof of concept and test the feature's scope. 
 
 ### Justification for the choice of any additional libraries or frameworks
 We chose the spring-boot-starter-oauth2-client to simplify the implementation of OAuth2 and OpenID Connect authentication in our application. This library provides a comprehensive and easy-to-use framework for integrating third-party authentication providers, such as Google, enabling users to log in using their existing accounts. By leveraging established OAuth2 flows, we enhance the user experience by streamlining the authentication process and reducing friction during login. Additionally, this library handles the complexities of token management and user session handling, allowing us to focus on building application features rather than dealing with the intricacies of authentication protocols. 
@@ -103,3 +105,28 @@ Implementation:
     When we call the method "create" in the CreateShortUrlUseCase.kt, firstly we do the check if the user has reached the limit. If the user has reached the limit, we return an error message. Otherwise, we increment the count and create the shortened URL.
     For checking that field in the database, we will have to use a query declared in the Repository.
     We will have to create a function which clear that field every hour for every user. We can use a cron job for that. 
+
+## Branded Links
+Allow for the creation and management of custom, branded links.
+
+### Implementation
+1. ***New atribute in ShortUrlEntity***: ShortUrlEntity has been modified to introduce a new atribute: `isBranded`. This new atribute allows distinguishing between a normal link and a branded link directly in the database.
+
+2. ***New properties in the body of the POST request***: The properties `isBranded` and `name` have been introduced as optional in the request. `isBranded` allows distinguishing between a normal and a branded link, while `name` indicates the name that the branded link will use.
+
+3. ***New excepctions***: `InvalidNameBrandedUrl` has been added to handle an excepcional case dureing the creation of branded links when atrubute `name` is empty. This exception has been integrated into `ExceptionHandler`to inform the client of the error.
+
+4. ***Modification UrlShortenerController***: The implementation of the `create` function at `UrlShortenerController`class has been slightly modified. The `ìsBranded` attribute of `data` distinguish between a branded link and a normal link. If it is a branded Link  `name` will be use to create the link and it would be saved as a normal link.
+
+### Implemented Tests
+
+New test have been implemented to ensure the correct functioning of the branded links. These have been introduced in two differents files: `UrlShortenerController.kt`and `CreateShortUrlUseCaseTest.kt`. In both files, both correct and incorrect creation of a branded link have been tested, along with other rare cases.
+
+### Future 
+
+In the future, `index.html` and `app.js` will be modified to enable users to introduce the branded links in a more user-friendly way. Basic back-end has been introduced for this POC but the front-end part has not been implemented yet. 
+
+# Work distribution
+We have distributed the work equally. Sergio Garcés has been in charge of the QR PoC and Redirection Limits, Alejandro Benedí has been in charge of the branded links, Kamal Bouzi for authentication and user creation and Juan Almodóvar about checking whether a link is safe or not by integrating with the Google Safe Browsing API. We also had a meeting to decide how to divide up the work and decide everyone's roles.
+
+
