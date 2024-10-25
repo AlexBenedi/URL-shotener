@@ -2,16 +2,7 @@
 
 package es.unizar.urlshortener.core.usecases
 
-import es.unizar.urlshortener.core.ShortUrlRepositoryService
-import es.unizar.urlshortener.core.ShortUrlProperties
-import es.unizar.urlshortener.core.ShortUrl
-import es.unizar.urlshortener.core.ValidatorService
-import es.unizar.urlshortener.core.HashService
-import es.unizar.urlshortener.core.LimitExceededException
-import es.unizar.urlshortener.core.usecases.CreateShortUrlUseCase
-import es.unizar.urlshortener.core.InvalidUrlException
-import es.unizar.urlshortener.core.safeCall
-import es.unizar.urlshortener.core.Redirection
+import es.unizar.urlshortener.core.*
 
 private const val MAX_SHORTENED_URLS = 5
 

@@ -254,11 +254,17 @@ class CreateShortUrlUseCaseTest {
         val validatorService = mock<ValidatorService>()
         val hashService = mock<HashService>()
         val shortUrlProperties = ShortUrlProperties(ip = "127.0.0.1", sponsor = "user123")
+        val safetyService = mock<SafetyService>()
 
         // Simulate that the user has already shortened 5 URLs
         whenever(shortUrlRepository.countShortenedUrlsByUser("user123")).thenReturn(5)
 
-        val createShortUrlUseCase = CreateShortUrlUseCaseImpl(shortUrlRepository, validatorService, hashService)
+        val createShortUrlUseCase = CreateShortUrlUseCaseImpl(
+                                                        shortUrlRepository, 
+                                                        validatorService, 
+                                                        hashService, 
+                                                        safetyService,
+                                                    )
 
         // Expect a LimitExceededException to be thrown
         assertFailsWith<LimitExceededException> {
