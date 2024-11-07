@@ -19,8 +19,12 @@ jobs:
         uses: gradle/wrapper-validation-action@e6e38bacfdf1a337459f332974bb2327a31aaf4b
       - name: Build with Gradle
         run: ./gradlew build --no-daemon
+        env:
+          GOOGLE_API_SAFETY_KEY: ${{ secrets.GOOGLE_API_SAFETY_KEY }}
       - name: Test with Gradle
         run: ./gradlew check --no-daemon
+        env:
+          GOOGLE_API_SAFETY_KEY: ${{ secrets.GOOGLE_API_SAFETY_KEY }}
       - name: Cleanup Gradle Cache
         run: |
           rm -f ~/.gradle/caches/modules-2/modules-2.lock
