@@ -12,7 +12,13 @@ class GoogleSafeBrowsingClient(
     private val apiKey = System.getenv("GOOGLE_API_SAFETY_KEY") ?: ""
     private val url = "https://safebrowsing.googleapis.com/v4/threatMatches:find?key=$apiKey"
 
-    fun isUrlSafe(targetUrl: String): Boolean {
+    /**
+     * Checks if a given URL is safe by querying the Google Safe Browsing API.
+     *
+     * @param targetUrl The URL to be checked for safety.
+     * @return UrlSafetyResponse containing the safety status and threat details if any.
+     */
+    fun isUrlSafe(targetUrl: String): UrlSafetyResponse {
         // Request body following the Google Safe Browsing API
         val effectiveRestTemplate = restTemplate ?: RestTemplate()
         val requestBody = mapOf(
@@ -40,12 +46,22 @@ class GoogleSafeBrowsingClient(
 
             /*
             * If the response body is empty, the URL is safe, otherwise it is not 
-            * -> Maybe give more feedback in the future and not return just true or false (why is it not safe...)
+            * We add the unsafety information if it is not. 
             */
-            response.body?.matches?.isEmpty() ?: true
+            val isSafe = response.body?.matches?.isEmpty() ?: true
+            UrlSafetyResponse(
+                isSafe = isSafe,
+                threatType = response.body?.matches?.firstOrNull()?.threatType,
+                platformType = response.body?.matches?.firstOrNull()?.platformType,
+                threatEntryType = response.body?.matches?.firstOrNull()?.threatEntryType,
+                threatInfo = response.body?.matches?.firstOrNull()?.threat?.url,
+            )
         } catch (e: HttpClientErrorException) {
             println(e.message)
-            false // fails --> not safe (for now, we should give more feedback)
+            UrlSafetyResponse(
+                isSafe = false, // or maybe null?
+                threatType = "Verification error",
+            )
         }
     }
 }
@@ -75,4 +91,13 @@ class ThreatEntryMetadata(
 class Entry(
     val key: String? = null,
     val value: String? = null
+)
+
+// Represents the information about the URL which will be returned 
+data class UrlSafetyResponse(
+    val isSafe: Boolean, 
+    val threatType: String? = null, 
+    val platformType: String? = null, 
+    val threatEntryType: String? = null, 
+    val threatInfo: String? = null
 )
