@@ -1,5 +1,6 @@
 package es.unizar.urlshortener.gateway
 
+import es.unizar.urlshortener.core.Domain.UrlSafetyResponse
 import org.springframework.stereotype.Component
 import org.springframework.web.client.RestTemplate
 import org.springframework.web.client.HttpClientErrorException
@@ -91,13 +92,4 @@ class ThreatEntryMetadata(
 class Entry(
     val key: String? = null,
     val value: String? = null
-)
-
-// Represents the information about the URL which will be returned 
-data class UrlSafetyResponse(
-    val isSafe: Boolean, 
-    val threatType: String? = null, 
-    val platformType: String? = null, 
-    val threatEntryType: String? = null, 
-    val threatInfo: String? = null
 )

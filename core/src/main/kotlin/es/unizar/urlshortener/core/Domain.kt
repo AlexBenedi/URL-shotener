@@ -104,3 +104,20 @@ data class QRCode(
     val base64Image: String,   // The QR code image encoded in Base64 format
     val size: Int              // The size of the QR code (e.g., 250x250 pixels)
 )
+
+/**
+ * Represents the safety status of a URL as determined by the Google Safe Browsing API.
+ *
+ * @property isSafe Indicates whether the URL is considered safe.
+ * @property threatType The type of threat detected, if any (e.g., MALWARE, SOCIAL_ENGINEERING).
+ * @property platformType The platform type on which the threat was detected (e.g., ANY_PLATFORM).
+ * @property threatEntryType The type of threat entry (e.g., URL).
+ * @property threatInfo Additional information about the threat, such as the URL.
+ */
+data class UrlSafetyResponse(
+    val isSafe: Boolean, 
+    val threatType: String? = null, 
+    val platformType: String? = null, 
+    val threatEntryType: String? = null, 
+    val threatInfo: String? = null
+)
