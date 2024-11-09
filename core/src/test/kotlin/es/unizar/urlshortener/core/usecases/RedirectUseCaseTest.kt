@@ -4,7 +4,9 @@ import es.unizar.urlshortener.core.InternalError
 import es.unizar.urlshortener.core.Redirection
 import es.unizar.urlshortener.core.RedirectionNotFound
 import es.unizar.urlshortener.core.ShortUrl
+import es.unizar.urlshortener.core.ShortUrlProperties
 import es.unizar.urlshortener.core.ShortUrlRepositoryService
+import es.unizar.urlshortener.core.UrlSafetyResponse
 import org.mockito.Mockito.mock
 import org.mockito.kotlin.whenever
 import kotlin.test.Test
@@ -17,7 +19,9 @@ class RedirectUseCaseTest {
     fun `redirectTo returns a redirect when the key exists`() {
         val repository = mock<ShortUrlRepositoryService> ()
         val redirection = mock<Redirection>()
-        val shortUrl = ShortUrl("key", redirection)
+        val safety = mock<UrlSafetyResponse>()
+        whenever(safety.isSafe).thenReturn(true)
+        val shortUrl = ShortUrl("key", redirection, properties = ShortUrlProperties(safe = safety))
         whenever(repository.findByKey("key")).thenReturn(shortUrl)
         val useCase = RedirectUseCaseImpl(repository)
 

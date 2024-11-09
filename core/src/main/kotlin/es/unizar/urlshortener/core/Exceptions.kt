@@ -30,7 +30,26 @@ class LimitExceededException(message: String) : RuntimeException(message)
  *
  * @param url The URL that is considered unsafe.
  */
-class UnsafeUrlException(url: String) : DomainException("[$url] is considered unsafe")
+class UnsafeUrlException(
+    threatType: String,
+    platformType: String, 
+    threatEntryType: String, 
+    threatInfo: String
+) : DomainException(
+    """
+    This URL is considered unsafe!.
+    Threat Type: $threatType
+    Platform Type: $platformType
+    Threat Entry Type: $threatEntryType
+    Threat Info: $threatInfo
+    """.trimIndent()
+)
+
+/**
+ * An exception indicating that the safety of a URL has not been checked.
+ * This exception is thrown when the safety of a URL has not been verified before use.
+ */
+class UrlSafetyNotCheckedException : DomainException("The safety of the URL has not been checked")
 
 /**
  * An exception indicating that a redirection key could not be found.

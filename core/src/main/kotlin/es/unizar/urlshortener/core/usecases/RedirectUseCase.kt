@@ -4,6 +4,8 @@ import es.unizar.urlshortener.core.Redirection
 import es.unizar.urlshortener.core.RedirectionNotFound
 import es.unizar.urlshortener.core.ShortUrlRepositoryService
 import es.unizar.urlshortener.core.safeCall
+import es.unizar.urlshortener.core.UnsafeUrlException
+import es.unizar.urlshortener.core.UrlSafetyNotCheckedException
 
 /**
  * Given a key returns a [Redirection] that contains a [URI target][Redirection.target]
@@ -35,7 +37,24 @@ class RedirectUseCaseImpl(
      * @return The [Redirection] containing the target URL and redirection mode.
      * @throws RedirectionNotFound if no redirection is found for the given key.
      */
-    override fun redirectTo(key: String) = safeCall {
-        shortUrlRepository.findByKey(key)
-    }?.redirection ?: throw RedirectionNotFound(key)
+    override fun redirectTo(key: String) : Redirection {
+        val shortUrl = safeCall { shortUrlRepository.findByKey(key) }
+        if(shortUrl != null){
+            val safetyResponse = shortUrl.properties.safe
+            println(shortUrl)
+            if(safetyResponse == null || safetyResponse.isSafe == null){ // safety not checked yet
+                throw UrlSafetyNotCheckedException()
+            } else if(safetyResponse.isSafe == false){ // url is unsafe
+                throw UnsafeUrlException(
+                    safetyResponse.threatType ?: "Unknown",
+                    safetyResponse.platformType ?: "Unknown",
+                    safetyResponse.threatEntryType ?: "Unknown",
+                    safetyResponse.threatInfo ?: "Unknown"
+                )
+            }
+            return shortUrl.redirection ?: throw RedirectionNotFound(key) // url is safe
+        } else {
+            throw RedirectionNotFound(key)
+        }
+    }
 }

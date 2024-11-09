@@ -38,7 +38,9 @@ class CreateShortUrlUseCaseImpl(
      * @param url The URL to be shortened.
      * @param data The optional properties for the short URL.
      * @return The created [ShortUrl] entity.
-     * @throws InvalidUrlException if the URL is not valid.
+     * @throws InvalidUrlException if the URL is not valid, InvalidNameBrandedUrl if
+     *         the name is not provided for a branded URL, or LimitExceededException if the user 
+     *         has exceeded the limit of shortened URLs.
      */
     override fun create(url: String, data: ShortUrlProperties): ShortUrl {
         // Get the user ID from the data (modify as needed to get the actual user ID)
@@ -63,7 +65,7 @@ class CreateShortUrlUseCaseImpl(
                     throw InvalidNameBrandedUrl()
                 }
             }
-            val safety = safeCall { safetyService.isUrlSafe(url) }
+            val safety = safeCall { safetyService.isUrlSafe(url) } // this must be async
             println(safety)
             val su = ShortUrl(
                 hash = id,
