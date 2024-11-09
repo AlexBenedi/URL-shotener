@@ -183,4 +183,7 @@ class HttpRequestTest {
             ShortUrlDataOut::class.java
         )
     }
+    // TODO Update the test to match with the current implementation
+    // test url is unsafe (403)
+    // test unsafety not checked (400)
 }

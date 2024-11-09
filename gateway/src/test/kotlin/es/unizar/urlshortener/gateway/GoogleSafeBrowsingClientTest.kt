@@ -24,7 +24,7 @@ class GoogleSafeBrowsingClientTest {
     }
 
     @Test
-    fun `isUrlUnSafe returns false when API response has matches`() {
+    fun `isUrlSafe returns false when API response has matches`() {
         val restTemplate = RestTemplate()
         val client = GoogleSafeBrowsingClient(restTemplate)
 
@@ -33,5 +33,18 @@ class GoogleSafeBrowsingClientTest {
 
         assertTrue(result.isSafe == false)
     }
-    //TODO tests which verify the information 
+
+    @Test
+    fun `isUrlSafe provides information when URL is unsafe`(){
+        val restTemplate = RestTemplate()
+        val client = GoogleSafeBrowsingClient(restTemplate)
+
+        // This URL is a phishing test page 
+        val result = client.isUrlSafe("https://testsafebrowsing.appspot.com/s/malware.html")
+
+        assertTrue(result.threatType == "MALWARE")
+        assertTrue(result.platformType == "ANY_PLATFORM")
+        assertTrue(result.threatEntryType == "URL")
+        assertTrue(result.threatInfo == "https://testsafebrowsing.appspot.com/s/malware.html")
+    }
 }

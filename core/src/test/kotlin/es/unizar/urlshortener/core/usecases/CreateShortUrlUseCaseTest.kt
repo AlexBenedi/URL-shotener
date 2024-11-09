@@ -149,32 +149,6 @@ class CreateShortUrlUseCaseTest {
             createShortUrlUseCase.create("http://example.com/", shortUrlProperties)
         }
     }
-    @Ignore("This test is not needed now TODO: Readapt to the new implementation") 
-    @Test
-    fun `creates returns unsafe URL exception if the URL is not safe`() {
-        val shortUrlRepository = mock<ShortUrlRepositoryService>()
-        val validatorService = mock<ValidatorService>()
-        val hashService = mock<HashService>()
-        val shortUrlProperties = mock<ShortUrlProperties>()
-        val safetyService = mock<SafetyService>()
-
-        whenever(validatorService.isValid("http://example.com/")).thenReturn(true)
-        whenever(hashService.hasUrl("http://example.com/")).thenReturn("f684a3c4")
-        // Mock the safety service to return false
-        whenever(safetyService.isUrlSafe("http://example.com/")).thenReturn(UrlSafetyResponse(false))
-
-        val createShortUrlUseCase 
-            = CreateShortUrlUseCaseImpl(
-                shortUrlRepository, 
-                validatorService, 
-                hashService, 
-                safetyService,
-                )
-
-        assertFailsWith<UnsafeUrlException> {
-            createShortUrlUseCase.create("http://example.com/", shortUrlProperties)
-        }
-    }
 
     @Test 
     fun `creates returns a valid branded short URL`() {

@@ -49,5 +49,8 @@ class RedirectUseCaseTest {
             useCase.redirectTo("key")
         }
     }
+    // TODO Update the test to match with the current implementation
+    // test unsafety exception
+    // test safety not checked exception
 }
 
