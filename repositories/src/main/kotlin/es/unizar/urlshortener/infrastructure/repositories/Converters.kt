@@ -46,9 +46,16 @@ fun ShortUrlEntity.toDomain() = ShortUrl(
     properties = ShortUrlProperties(
         sponsor = sponsor,
         owner = owner,
-        safe = safe,
+        safe = UrlSafetyResponse(
+            isSafe = isSafe,
+            threatType = threatType,
+            platformType = platformType,
+            threatEntryType = threatEntryType,
+            threatInfo = threatInfo
+        ),
         ip = ip,
-        country = country
+        country = country, 
+        isBranded = isBranded
     )
 )
 
@@ -62,7 +69,11 @@ fun ShortUrl.toEntity() = ShortUrlEntity(
     created = created,
     owner = properties.owner,
     sponsor = properties.sponsor,
-    safe = properties.safe,
+    isSafe = properties.safe?.isSafe,
+    threatType = properties.safe?.threatType,
+    platformType = properties.safe?.platformType,
+    threatEntryType = properties.safe?.threatEntryType,
+    threatInfo = properties.safe?.threatInfo,
     ip = properties.ip,
     country = properties.country,
     isBranded = properties.isBranded

@@ -141,7 +141,13 @@ class UrlShortenerControllerImpl(
                 url = url,
                 qrCode = qrCode.base64Image, // Assign the QR code here directly
                 properties = mapOf(
-                    "safe" to properties.safe
+                    "safe" to mapOf(
+                        "isSafe" to properties.safe?.isSafe,
+                        "threatType" to properties.safe?.threatType,
+                        "platformType" to properties.safe?.platformType,
+                        "threatEntryType" to properties.safe?.threatEntryType,
+                        "threatInfo" to properties.safe?.threatInfo
+                    )
                 )
             )
             ResponseEntity<ShortUrlDataOut>(response, h, HttpStatus.CREATED)

@@ -139,5 +139,5 @@ interface SafetyService {
      * @param url The URL to be checked.
      * @return True if the URL is safe, false otherwise.
      */
-    fun isUrlSafe(url: String): Boolean
+    fun isUrlSafe(url: String): UrlSafetyResponse
 }

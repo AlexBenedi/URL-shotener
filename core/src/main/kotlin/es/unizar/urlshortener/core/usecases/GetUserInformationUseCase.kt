@@ -88,7 +88,7 @@ class GetUserInformationUseCaseImpl(
         val shortUrlProperties = ShortUrlProperties(
             ip = "192.168.1.1",
             sponsor = "Sponsor",
-            safe = true,
+            safe = UrlSafetyResponse(true),
             owner = "OwnerName",
             country = "US"
         )

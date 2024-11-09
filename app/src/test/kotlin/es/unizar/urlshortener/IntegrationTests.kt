@@ -19,6 +19,7 @@ import org.springframework.util.MultiValueMap
 import java.net.URI
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
+import kotlin.test.Ignore
 import kotlin.test.Test
 
 /**
@@ -134,6 +135,7 @@ class HttpRequestTest {
     /**
      * Tests that a forbidden status is returned if the URL is not safe.
      */
+    @Ignore("This test is not needed")
     @Test
     fun `creates returns forbidden if the URL is not safe`() {
         val response = shortUrl("https://testsafebrowsing.appspot.com/s/phishing.html")

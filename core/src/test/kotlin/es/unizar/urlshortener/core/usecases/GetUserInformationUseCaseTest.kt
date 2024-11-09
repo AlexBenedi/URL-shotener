@@ -1,5 +1,6 @@
 package es.unizar.urlshortener.core.usecases
 
+import es.unizar.urlshortener.core.UrlSafetyResponse
 import es.unizar.urlshortener.core.UserRepositoryService
 import es.unizar.urlshortener.core.LinkRepositoryService
 import es.unizar.urlshortener.core.Click
@@ -56,7 +57,7 @@ class GetUserInformationUseCaseTest {
                 hash = "kamalmola",
                 redirection = Redirection("http://example.com", 307),
                 created = OffsetDateTime.now(),
-                properties = ShortUrlProperties("192.168.1.1", "Sponsor", true, "OwnerName", "US")
+                properties = ShortUrlProperties("192.168.1.1", "Sponsor", UrlSafetyResponse(true), "OwnerName", "US")
             ),
             userId = user.userId
         )

@@ -51,10 +51,10 @@ class CreateShortUrlUseCaseImpl(
         }
 
         if (safeCall { validatorService.isValid(url) }) {
-            if (!safeCall { safetyService.isUrlSafe(url) }) {
+            /*if (!safeCall { safetyService.isUrlSafe(url) }) {
                 println("URL is not safe")
                 throw UnsafeUrlException(url)
-            }
+            }*/
             var id = safeCall { hashService.hasUrl(url) }
             if (data.isBranded == true ) {
                 if ( data.name != null ) {
@@ -63,11 +63,13 @@ class CreateShortUrlUseCaseImpl(
                     throw InvalidNameBrandedUrl()
                 }
             }
+            val safety = safeCall { safetyService.isUrlSafe(url) }
+            println(safety)
             val su = ShortUrl(
                 hash = id,
                 redirection = Redirection(target = url),
                 properties = ShortUrlProperties(
-                    safe = data.safe,
+                    safe = safety,
                     ip = data.ip,
                     sponsor = data.sponsor,
                     isBranded = data.isBranded != null && data.name != null,

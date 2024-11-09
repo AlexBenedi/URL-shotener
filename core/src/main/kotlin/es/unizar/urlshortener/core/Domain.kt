@@ -59,7 +59,7 @@ data class Redirection(
 data class ShortUrlProperties(
     val ip: String? = null,
     val sponsor: String? = null,
-    val safe: Boolean = true,
+    val safe: UrlSafetyResponse? = null,
     val owner: String? = null,
     val country: String? = null,
     val isBranded: Boolean? = null,
@@ -115,7 +115,7 @@ data class QRCode(
  * @property threatInfo Additional information about the threat, such as the URL.
  */
 data class UrlSafetyResponse(
-    val isSafe: Boolean, 
+    val isSafe: Boolean? = null, 
     val threatType: String? = null, 
     val platformType: String? = null, 
     val threatEntryType: String? = null, 

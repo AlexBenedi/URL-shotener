@@ -38,7 +38,11 @@ class ShortUrlEntity(
     val created: OffsetDateTime,
     val owner: String?,
     val mode: Int,
-    val safe: Boolean,
+    val isSafe: Boolean?,
+    val threatType: String? = null, 
+    val platformType: String? = null, 
+    val threatEntryType: String? = null, 
+    val threatInfo: String? = null,
     val ip: String?,
     val country: String?,
     val isBranded: Boolean?

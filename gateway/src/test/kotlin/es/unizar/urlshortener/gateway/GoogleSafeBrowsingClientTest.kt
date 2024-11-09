@@ -20,7 +20,7 @@ class GoogleSafeBrowsingClientTest {
         val result = client.isUrlSafe("https://unizar.es/")
         println(result)
 
-        assertTrue(result.isSafe)
+        assertTrue(result.isSafe ?: false) // If null, it is not safe yet
     }
 
     @Test
@@ -31,7 +31,7 @@ class GoogleSafeBrowsingClientTest {
         // This URL is a phishing test page 
         val result = client.isUrlSafe("https://testsafebrowsing.appspot.com/s/phishing.html")
 
-        assertTrue(!result.isSafe)
+        assertTrue(result.isSafe == false)
     }
     //TODO tests which verify the information 
 }

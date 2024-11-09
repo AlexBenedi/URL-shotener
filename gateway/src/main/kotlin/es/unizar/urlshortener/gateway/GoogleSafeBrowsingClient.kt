@@ -1,6 +1,6 @@
 package es.unizar.urlshortener.gateway
 
-import es.unizar.urlshortener.core.Domain.UrlSafetyResponse
+import es.unizar.urlshortener.core.UrlSafetyResponse
 import org.springframework.stereotype.Component
 import org.springframework.web.client.RestTemplate
 import org.springframework.web.client.HttpClientErrorException
@@ -13,9 +13,9 @@ class GoogleSafeBrowsingClient(
     private val apiKey = System.getenv("GOOGLE_API_SAFETY_KEY") ?: ""
     private val url = "https://safebrowsing.googleapis.com/v4/threatMatches:find?key=$apiKey"
 
-    /**
+    /** 
      * Checks if a given URL is safe by querying the Google Safe Browsing API.
-     *
+     * 
      * @param targetUrl The URL to be checked for safety.
      * @return UrlSafetyResponse containing the safety status and threat details if any.
      */
