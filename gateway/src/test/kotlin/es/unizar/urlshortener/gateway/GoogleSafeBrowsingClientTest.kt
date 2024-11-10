@@ -39,7 +39,7 @@ class GoogleSafeBrowsingClientTest {
         val restTemplate = RestTemplate()
         val client = GoogleSafeBrowsingClient(restTemplate)
 
-        // This URL is a phishing test page 
+        // This URL is a malware test page 
         val result = client.isUrlSafe("https://testsafebrowsing.appspot.com/s/malware.html")
 
         assertTrue(result.threatType == "MALWARE")

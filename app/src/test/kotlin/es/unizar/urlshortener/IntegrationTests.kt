@@ -84,6 +84,21 @@ class HttpRequestTest {
     }
 
     /**
+     * Tests that a forbidden is returned when the key exists but url is unsafe.
+     */
+    @Test
+    fun `redirectTo returns a redirect when the key exists but url is unsafe`() {
+        val target = shortUrl("https://testsafebrowsing.appspot.com/s/malware.html").headers.location
+        require(target != null)
+        val response = restTemplate.getForEntity(target, String::class.java)
+        assertThat(response.statusCode).isEqualTo(HttpStatus.FORBIDDEN)
+
+        assertThat(JdbcTestUtils.countRowsInTable(jdbcTemplate, "click")).isEqualTo(0)
+    }
+
+    // TODO test unsafety not checked (400): Will be made when async verification is implemented
+
+    /**
      * Tests that a not found status is returned when the key does not exist.
      */
     @Test
@@ -183,7 +198,4 @@ class HttpRequestTest {
             ShortUrlDataOut::class.java
         )
     }
-    // TODO Update the test to match with the current implementation
-    // test url is unsafe (403)
-    // test unsafety not checked (400)
 }

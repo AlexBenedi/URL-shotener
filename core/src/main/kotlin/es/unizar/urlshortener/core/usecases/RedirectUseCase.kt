@@ -35,7 +35,9 @@ class RedirectUseCaseImpl(
      *
      * @param key The key associated with the target URL.
      * @return The [Redirection] containing the target URL and redirection mode.
-     * @throws RedirectionNotFound if no redirection is found for the given key.
+     * @throws RedirectionNotFound if no redirection is found for the given key, 
+     *         UrlSafetyNotCheckedException if URL's safety hasn't been checked yet
+     *         and UnsafeUrlException if URL is unsafe. 
      */
     override fun redirectTo(key: String) : Redirection {
         val shortUrl = safeCall { shortUrlRepository.findByKey(key) }

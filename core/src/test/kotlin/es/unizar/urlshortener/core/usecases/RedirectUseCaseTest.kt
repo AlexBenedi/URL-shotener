@@ -7,6 +7,8 @@ import es.unizar.urlshortener.core.ShortUrl
 import es.unizar.urlshortener.core.ShortUrlProperties
 import es.unizar.urlshortener.core.ShortUrlRepositoryService
 import es.unizar.urlshortener.core.UrlSafetyResponse
+import es.unizar.urlshortener.core.UrlSafetyNotCheckedException
+import es.unizar.urlshortener.core.UnsafeUrlException
 import org.mockito.Mockito.mock
 import org.mockito.kotlin.whenever
 import kotlin.test.Test
@@ -49,8 +51,37 @@ class RedirectUseCaseTest {
             useCase.redirectTo("key")
         }
     }
-    // TODO Update the test to match with the current implementation
-    // test unsafety exception
-    // test safety not checked exception
+
+    @Test
+    fun `redirectTo returns url not checked when url safety is not checked`(){
+        val repository = mock<ShortUrlRepositoryService> ()
+        val redirection = mock<Redirection>()
+        val properties = mock<ShortUrlProperties>()
+        whenever(properties.safe).thenReturn(null) // safety is null
+        val shortUrl = ShortUrl("key", redirection, properties = properties)
+        whenever(repository.findByKey("key")).thenReturn(shortUrl)
+        val useCase = RedirectUseCaseImpl(repository)
+
+        assertFailsWith<UrlSafetyNotCheckedException> {
+            useCase.redirectTo("key")
+        }
+
+    } 
+
+    @Test
+    fun `redirectTo returns unsafe url when url is not safe`(){
+        val repository = mock<ShortUrlRepositoryService> ()
+        val redirection = mock<Redirection>()
+        val safety = mock<UrlSafetyResponse>()
+        whenever(safety.isSafe).thenReturn(false) // mock url unsafety
+        val shortUrl = ShortUrl("key", redirection, properties = ShortUrlProperties(safe = safety))
+        whenever(repository.findByKey("key")).thenReturn(shortUrl)
+        val useCase = RedirectUseCaseImpl(repository)
+
+        assertFailsWith<UnsafeUrlException> {
+            useCase.redirectTo("key")
+        }
+
+    }
 }
 
