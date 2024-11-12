@@ -14,11 +14,11 @@ import org.springframework.kafka.core.KafkaTemplate
 import org.springframework.kafka.core.ProducerFactory
 
 @Configuration
-class KafkaConfiguration {
-
+open class KafkaConfiguration {
+    //https://www.geeksforgeeks.org/spring-boot-integration-with-kafka/
     // Creates KafkaProducer's instances with the configuration provided
     @Bean
-    fun producerFactory(): ProducerFactory<String, String> {
+    open fun producerFactory(): ProducerFactory<String, String> {
         val configProps: MutableMap<String, Any> = HashMap()
         configProps[ProducerConfig.BOOTSTRAP_SERVERS_CONFIG] = "localhost:9092" // Kafka server (localhost:9092)
         configProps[ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG] = StringSerializer::class.java
@@ -28,13 +28,13 @@ class KafkaConfiguration {
 
     // Creates KafkaTemplate's instances with the configuration provided
     @Bean
-    fun kafkaTemplate(): KafkaTemplate<String, String> {
+    open fun kafkaTemplate(): KafkaTemplate<String, String> {
         return KafkaTemplate(producerFactory())
     }
 
     // Creates KafkaConsumer's instances with the configuration provided
     @Bean
-    fun consumerFactory(): ConsumerFactory<String, String> {
+    open fun consumerFactory(): ConsumerFactory<String, String> {
         val configProps: MutableMap<String, Any> = HashMap()
         configProps[ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG] = "localhost:9092" // Kafka server (localhost:9092)
         configProps[ConsumerConfig.GROUP_ID_CONFIG] = "group_id" // Group ID for the consumer
@@ -48,7 +48,7 @@ class KafkaConfiguration {
     * This class is used to listen to the messages sent to the Kafka server.
     */ 
     @Bean
-    fun kafkaListenerContainerFactory(): ConcurrentKafkaListenerContainerFactory<String, String> {
+    open fun kafkaListenerContainerFactory(): ConcurrentKafkaListenerContainerFactory<String, String> {
         val factory = ConcurrentKafkaListenerContainerFactory<String, String>()
         factory.consumerFactory = consumerFactory()
         return factory

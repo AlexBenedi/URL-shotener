@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test
 import org.mockito.ArgumentCaptor
 import org.mockito.Mockito.*
 import org.springframework.kafka.core.KafkaTemplate
+import org.springframework.boot.test.context.SpringBootTest
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 

@@ -18,6 +18,7 @@ plugins {
 dependencies {
     // Include the core project as an implementation dependency
     implementation(project(":core"))
+    implementation(project(":app"))
     // Include Spring Boot Starter Web as an implementation dependency
     implementation(libs.spring.boot.starter.web)
 

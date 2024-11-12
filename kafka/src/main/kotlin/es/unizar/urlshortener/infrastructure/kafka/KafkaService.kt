@@ -5,6 +5,7 @@ import org.springframework.kafka.annotation.KafkaListener
 import org.springframework.stereotype.Service
 import java.util.concurrent.CountDownLatch
 
+//https://www.geeksforgeeks.org/spring-boot-integration-with-kafka/
 // Class which defines kafka producer service
 @Service
 class KafkaProducerService(private val kafkaTemplate: KafkaTemplate<String, String>) {
