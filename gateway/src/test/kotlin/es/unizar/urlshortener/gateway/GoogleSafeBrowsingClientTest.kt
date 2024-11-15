@@ -7,15 +7,18 @@ import org.junit.jupiter.api.Test
 import org.mockito.ArgumentMatchers.any
 import org.mockito.ArgumentMatchers.anyString
 import org.mockito.Mockito
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.ResponseEntity
 import org.springframework.web.client.RestTemplate
 
+@SpringBootTest(classes=[GoogleSafeBrowsingClient::class])
 class GoogleSafeBrowsingClientTest {
+    @Autowired 
+    lateinit var client: GoogleSafeBrowsingClient
+
     @Test
     fun `isUrlSafe returns true when API response has no matches`() {
-        val restTemplate = RestTemplate()
-        val client = GoogleSafeBrowsingClient(restTemplate)
-
         // Unizar should be safe 
         val result = client.isUrlSafe("https://unizar.es/")
         println(result)
@@ -25,9 +28,6 @@ class GoogleSafeBrowsingClientTest {
 
     @Test
     fun `isUrlSafe returns false when API response has matches`() {
-        val restTemplate = RestTemplate()
-        val client = GoogleSafeBrowsingClient(restTemplate)
-
         // This URL is a phishing test page 
         val result = client.isUrlSafe("https://testsafebrowsing.appspot.com/s/phishing.html")
 
@@ -36,9 +36,6 @@ class GoogleSafeBrowsingClientTest {
 
     @Test
     fun `isUrlSafe provides information when URL is unsafe`(){
-        val restTemplate = RestTemplate()
-        val client = GoogleSafeBrowsingClient(restTemplate)
-
         // This URL is a malware test page 
         val result = client.isUrlSafe("https://testsafebrowsing.appspot.com/s/malware.html")
 

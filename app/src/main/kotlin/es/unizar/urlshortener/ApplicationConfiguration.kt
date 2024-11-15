@@ -96,11 +96,4 @@ class ApplicationConfiguration(
      */
     @Bean
     fun hashService() = HashServiceImpl()
-
-    /**
-     * Provides an implementation of the SafetyService.
-     * @return an instance of SafetyServiceImpl.
-     */
-    @Bean
-    fun safetyService() = SafetyServiceImpl()
 }

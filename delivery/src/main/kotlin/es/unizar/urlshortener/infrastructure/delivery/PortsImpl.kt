@@ -6,6 +6,7 @@ import es.unizar.urlshortener.core.ValidatorService
 import es.unizar.urlshortener.core.SafetyService
 import es.unizar.urlshortener.gateway.GoogleSafeBrowsingClient
 import org.apache.commons.validator.routines.UrlValidator
+import org.springframework.stereotype.Service
 import java.nio.charset.StandardCharsets
 
 /**
@@ -52,12 +53,15 @@ class HashServiceImpl : HashService {
 /**
  * Implementation of the port [SafetyService].
  */
-class SafetyServiceImpl : SafetyService {
+@Service
+class SafetyServiceImpl(
+    private val googleSafeBrowsingClient: GoogleSafeBrowsingClient
+) : SafetyService {
     /**
      * Checks if the given URL is safe.
      *
      * @param url the URL to check
      * @return true if the URL is safe, false otherwise
      */
-    override fun isUrlSafe(url: String) = GoogleSafeBrowsingClient().isUrlSafe(url) 
+    override fun isUrlSafe(url: String) = googleSafeBrowsingClient.isUrlSafe(url) 
 }

@@ -25,7 +25,8 @@ class ApplicationConfigurationUseCases(
     @Autowired val shortUrlEntityRepository: ShortUrlEntityRepository,
     @Autowired val clickEntityRepository: ClickEntityRepository,
     @Autowired val userEntityRepository: UserEntityRepository,
-    @Autowired val linkEntityRepository: LinkEntityRepository
+    @Autowired val linkEntityRepository: LinkEntityRepository,
+    @Autowired val safetyServiceImpl: SafetyServiceImpl,
 ){
 
     /**
@@ -51,7 +52,7 @@ class ApplicationConfigurationUseCases(
         CreateShortUrlUseCaseImpl(ShortUrlRepositoryServiceImpl(shortUrlEntityRepository),
             ValidatorServiceImpl(),
             HashServiceImpl(),
-            SafetyServiceImpl(),
+            safetyServiceImpl,
         )
 
     /**
