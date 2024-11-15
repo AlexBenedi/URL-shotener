@@ -32,3 +32,7 @@ configurations.matching { it.name == "detekt" }.all {
         }
     }
 }
+
+tasks.bootRun {
+    args("--server.port=9090")
+}
