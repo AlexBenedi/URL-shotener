@@ -23,7 +23,7 @@ class GoogleSafeBrowsingClientTest {
         val result = client.isUrlSafe("https://unizar.es/")
         println(result)
 
-        assertTrue(result.isSafe ?: false) // If null, it is not safe yet
+        assertTrue(result.isSafe ?: false) // If null, it is not safe yet.
     }
 
     @Test
