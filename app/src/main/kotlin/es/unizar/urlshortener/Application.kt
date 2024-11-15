@@ -2,6 +2,8 @@ package es.unizar.urlshortener
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
+import org.springframework.context.annotation.ComponentScan
+import org.springframework.context.annotation.FilterType
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 
 /**
@@ -9,6 +11,11 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
  */
 @SpringBootApplication
 @EnableWebSecurity
+@ComponentScan(
+    excludeFilters = [
+        ComponentScan.Filter(type = FilterType.REGEX, pattern = ["es.unizar.urlshortener.springbootkafkaexample.*"])
+    ]
+)
 class Application
 
 /**
