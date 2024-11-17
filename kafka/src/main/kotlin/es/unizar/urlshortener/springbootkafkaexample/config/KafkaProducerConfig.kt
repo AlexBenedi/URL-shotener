@@ -10,10 +10,10 @@ import org.springframework.kafka.core.ProducerFactory
 import org.springframework.kafka.support.serializer.JsonSerializer
 
 @Configuration
-class KafkaProducerConfig {
+open class KafkaProducerConfig {
 
     @Bean
-    fun producerFactory(): ProducerFactory<String, String> {
+    open fun producerFactory(): ProducerFactory<String, String> {
         val configProps: MutableMap<String, Any> = HashMap()
         configProps[ProducerConfig.BOOTSTRAP_SERVERS_CONFIG] = "localhost:9092"
         configProps[ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG] = StringSerializer::class.java
@@ -22,7 +22,7 @@ class KafkaProducerConfig {
     }
 
     @Bean
-    fun kafkaTemplate(): KafkaTemplate<String, String> {
+    open fun kafkaTemplate(): KafkaTemplate<String, String> {
         return KafkaTemplate(producerFactory())
     }
 }

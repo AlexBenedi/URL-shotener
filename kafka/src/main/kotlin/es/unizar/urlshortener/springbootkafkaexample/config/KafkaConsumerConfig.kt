@@ -11,10 +11,10 @@ import org.springframework.kafka.core.DefaultKafkaConsumerFactory
 
 @EnableKafka
 @Configuration
-class KafkaConsumerConfig {
+open class KafkaConsumerConfig {
 
     @Bean
-    fun consumerFactory(): ConsumerFactory<String, String> {
+    open fun consumerFactory(): ConsumerFactory<String, String> {
         val configProps: MutableMap<String, Any> = HashMap()
         configProps[ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG] = "localhost:9092"
         configProps[ConsumerConfig.GROUP_ID_CONFIG] = "group_id"
@@ -24,7 +24,7 @@ class KafkaConsumerConfig {
     }
 
     @Bean
-    fun kafkaListenerContainerFactory(): ConcurrentKafkaListenerContainerFactory<String, String> {
+    open fun kafkaListenerContainerFactory(): ConcurrentKafkaListenerContainerFactory<String, String> {
         val factory = ConcurrentKafkaListenerContainerFactory<String, String>()
         factory.consumerFactory = consumerFactory()
         return factory

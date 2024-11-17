@@ -11,11 +11,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
  */
 @SpringBootApplication
 @EnableWebSecurity
-@ComponentScan(
-    excludeFilters = [
-        ComponentScan.Filter(type = FilterType.REGEX, pattern = ["es.unizar.urlshortener.springbootkafkaexample.*"])
-    ]
-)
 class Application
 
 /**

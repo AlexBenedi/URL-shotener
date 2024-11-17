@@ -1,13 +1,17 @@
 plugins {
-    // Applies the common conventions plugin for the URL shortener project.
+    // Apply the common conventions plugin for the URL shortener project
     id("urlshortener-common-conventions")
-    // Applies the Kotlin Spring plugin using an alias from the version catalog.
-    alias(libs.plugins.kotlin.spring)
-    // Applies the Spring Boot plugin using an alias from the version catalog.
-    alias(libs.plugins.spring.boot)
-    // Applies the Spring Dependency Management plugin using an alias from the version catalog.
+
+    // Apply the Kotlin JPA plugin
+    alias(libs.plugins.kotlin.jpa)
+
+    // Apply the Spring Boot plugin without automatically applying it
+    alias(libs.plugins.spring.boot) apply false
+
+    // Apply the Spring Dependency Management plugin
     alias(libs.plugins.spring.dependency.management)
 }
+
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.kafka:spring-kafka")
@@ -31,8 +35,4 @@ configurations.matching { it.name == "detekt" }.all {
             useVersion("1.9.23")
         }
     }
-}
-
-tasks.bootRun {
-    args("--server.port=9090")
 }

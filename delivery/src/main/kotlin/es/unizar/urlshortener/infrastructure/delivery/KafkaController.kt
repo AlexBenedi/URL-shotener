@@ -1,4 +1,4 @@
-package es.unizar.urlshortener.springbootkafkaexample.controller
+package es.unizar.urlshortener.infrastructure.delivery
 
 import es.unizar.urlshortener.springbootkafkaexample.service.KafkaProducerService
 import org.springframework.web.bind.annotation.GetMapping
