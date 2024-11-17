@@ -13,6 +13,9 @@ plugins {
 }
 
 dependencies {
+    implementation(project(":gateway"))
+    implementation(project(":core"))
+    
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.kafka:spring-kafka")
     runtimeOnly("org.springframework.boot:spring-boot-devtools")

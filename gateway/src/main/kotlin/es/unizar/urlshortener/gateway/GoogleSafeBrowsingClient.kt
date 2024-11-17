@@ -53,6 +53,7 @@ class GoogleSafeBrowsingClient(
             * If the response body is empty, the URL is safe, otherwise it is not 
             * We add the unsafety information if it is not. 
             */
+            println(targetUrl)
             val isSafe = response.body?.matches?.isEmpty() ?: true
             UrlSafetyResponse(
                 isSafe = isSafe,

@@ -11,13 +11,13 @@ class KafkaController(private val kafkaProducerService: KafkaProducerService) {
 
     @GetMapping("/send")
     fun sendMessage(@RequestParam message: String): String {
-        kafkaProducerService.sendMessage(message)
+        kafkaProducerService.sendMessage("my_topic", message)
         return "Message sent successfully"
     }
 
     @PostMapping("/check-safety")
     fun checkSafety(@RequestParam url: String): String {
-        kafkaProducerService.sendMessage(url)
+        kafkaProducerService.sendMessage("check-safety", url)
         return "Safety check requested"
     }
 }
