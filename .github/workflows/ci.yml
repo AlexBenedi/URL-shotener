@@ -21,11 +21,15 @@ jobs:
         run: ./gradlew build --no-daemon
         env:
           GOOGLE_SAFE_BROWSING_API_KEY: ${{ secrets.GOOGLE_API_SAFETY_KEY }}
+          GOOGLE_CLIENT_ID_API_KEY: ${{ secrets.GOOGLE_CLIENT_ID_API_KEY }}
+          GOOGLE_CLIENT_SECRET_API_KEY: ${{ secrets.GOOGLE_CLIENT_SECRET_API_KEY }}
       - name: Test with Gradle
         run: ./gradlew check --no-daemon
         env:
           GOOGLE_SAFE_BROWSING_API_KEY: ${{ secrets.GOOGLE_API_SAFETY_KEY }}
-      - name: Cleanup Gradle Cache
+          GOOGLE_CLIENT_ID_API_KEY: ${{ secrets.GOOGLE_CLIENT_ID_API_KEY }}
+          GOOGLE_CLIENT_SECRET_API_KEY: ${{ secrets.GOOGLE_CLIENT_SECRET_API_KEY }}
+      - name: Cleanup Gradle CacheGOOGLE_API_SAFETY_KEY
         run: |
           rm -f ~/.gradle/caches/modules-2/modules-2.lock
           rm -f ~/.gradle/caches/modules-2/gc.properties

@@ -15,7 +15,7 @@ class GoogleSafeBrowsingClient(
     private lateinit var apiKey: String
 
     private val url: String
-        get() = "https://safebrowsing.googleapis.com/v4/threatMatches:find?key=$apiKey"
+    get() = "https://safebrowsing.googleapis.com/v4/threatMatches:find?key=$apiKey"
 
     /** 
      * Checks if a given URL is safe by querying the Google Safe Browsing API.
