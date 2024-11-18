@@ -41,6 +41,8 @@ interface ShortUrlEntityRepository : JpaRepository<ShortUrlEntity, String> {
 
     @Query("SELECT COUNT(s) FROM ShortUrlEntity s WHERE s.owner = :userId")
     fun countByOwner(@Param("userId") userId: String): Int
+
+    fun findByTarget(target: String): ShortUrlEntity?
 }
 
 /**
@@ -49,3 +51,5 @@ interface ShortUrlEntityRepository : JpaRepository<ShortUrlEntity, String> {
  * **Note**: Spring Boot is able to discover this [JpaRepository] without further configuration.
  */
 interface ClickEntityRepository : JpaRepository<ClickEntity, Long>
+
+

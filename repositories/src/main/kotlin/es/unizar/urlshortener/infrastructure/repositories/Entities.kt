@@ -45,7 +45,9 @@ class ShortUrlEntity(
     val threatInfo: String? = null,
     val ip: String?,
     val country: String?,
-    val isBranded: Boolean?
+    val isBranded: Boolean?,
+    @Column(length = 65535)
+    val qrCode: String?
 )
 
 @Entity

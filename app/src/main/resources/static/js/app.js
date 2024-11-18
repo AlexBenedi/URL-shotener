@@ -17,18 +17,37 @@ $(document).ready(
                     data: $(this).serialize(),
                     /**
                      * Handles the successful AJAX response.
-                     * Displays the shortened URL in the result div.
+                     * Displays the shortened URL and QR code (if present) in the result div.
                      * @param {Object} msg - The response message.
                      * @param {string} status - The status of the response.
                      * @param {Object} request - The XMLHttpRequest object.
                      */
                     success: function (msg, status, request) {
-                        $("#result").html(
+                        var resultDiv = $("#result");
+                        var shortenedUrl = request.getResponseHeader('Location');
+                        resultDiv.html(
                             "<div class='alert alert-success lead'><a target='_blank' href='"
-                            + request.getResponseHeader('Location')
+                            + shortenedUrl
                             + "'>"
-                            + request.getResponseHeader('Location')
-                            + "</a></div>");
+                            + shortenedUrl
+                            + "</a></div>"
+                        );
+
+                        // Display the QR code image if it exists
+                        if (msg.qrCode) {
+                            resultDiv.append('<p>QR Code:</p>');
+                            resultDiv.append('<img src="data:image/png;base64,' + msg.qrCode + '" alt="QR Code">');
+
+                            // Create a download link for the QR code image
+                            // The URL for downloading will be in the form /{id}/qr
+                            resultDiv.append('<p>QR Code link to download the QR:</p>');
+                            var qrCodeDownloadUrl = "/" + shortenedUrl.split('/').pop() + "/qr";
+                            resultDiv.append(
+                                '<p><a href="' + qrCodeDownloadUrl + '" download="qrcode.png">Download QR Code</a></p>'
+                            );
+                            // Show the URL purely to download the QR code
+                            resultDiv.append('<p>' + window.location.origin + qrCodeDownloadUrl + '</p>');
+                        }
                     },
                     /**
                      * Handles the AJAX error response.

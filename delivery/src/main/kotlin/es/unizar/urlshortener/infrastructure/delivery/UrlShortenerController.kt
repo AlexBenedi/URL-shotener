@@ -29,6 +29,7 @@ import es.unizar.urlshortener.core.usecases.LogClickUseCase
 import es.unizar.urlshortener.core.usecases.CreateShortUrlUseCase
 import es.unizar.urlshortener.core.usecases.GenerateQRCodeUseCase
 import es.unizar.urlshortener.core.usecases.GenerateQRCodeUseCaseImpl
+import es.unizar.urlshortener.core.ShortUrlRepositoryService
 
 
 import java.security.Principal;
@@ -59,6 +60,15 @@ interface UrlShortenerController {
      * @return the user information
      */
      fun user(token: OAuth2AuthenticationToken): Map<String, Any>
+
+    /**
+     * Retrieves the QR code image associated with a short URL identified by its [id].
+     *
+     * @param id The identifier of the short URL.
+     * @return The QR code as a downloadable image.
+     */
+    fun getQRCode(id: String): ResponseEntity<ByteArray>
+
 }
 
 /**
@@ -68,7 +78,8 @@ data class ShortUrlDataIn(
     val url: String,
     val isBranded: Boolean? = null,
     val name: String? = null,
-    val sponsor: String? = null
+    val sponsor: String? = null,
+    val generateQRCode : Boolean? = null // Field to know if the client wants to generate a QR code
 )
 
 /**
@@ -90,11 +101,12 @@ class UrlShortenerControllerImpl(
     val redirectUseCase: RedirectUseCase,
     val logClickUseCase: LogClickUseCase,
     val createShortUrlUseCase: CreateShortUrlUseCase,
-    val getUserInformationUseCase : GetUserInformationUseCase
+    val getUserInformationUseCase : GetUserInformationUseCase,
+    private val shortUrlRepositoryService: ShortUrlRepositoryService
 ) : UrlShortenerController {
 
     // Directly instantiate the QR Code use case implementation
-    private val generateQRCodeUseCase = GenerateQRCodeUseCaseImpl()
+    private val generateQRCodeUseCase = GenerateQRCodeUseCaseImpl( shortUrlRepositoryService )
 
     /**
      * Redirects and logs a short url identified by its [id].
@@ -134,12 +146,16 @@ class UrlShortenerControllerImpl(
             val url = linkTo<UrlShortenerControllerImpl> { redirectTo(hash, request) }.toUri()
             h.location = url
 
-            // Generate the QR code
-            val qrCode = generateQRCodeUseCase.generateQRCode(url.toString())
+            // Check if the QR code should be generated
+            val qrCode = if (data.generateQRCode == true) {
+                generateQRCodeUseCase.generateQRCode(url.toString(), hash).base64Image
+            } else {
+                null
+            }
 
             val response = ShortUrlDataOut(
                 url = url,
-                qrCode = qrCode.base64Image, // Assign the QR code here directly
+                qrCode = qrCode, // Assign the QR code if generated
                 properties = mapOf(
                     "safe" to mapOf(
                         "isSafe" to properties.safe?.isSafe,
@@ -152,6 +168,7 @@ class UrlShortenerControllerImpl(
             )
             ResponseEntity<ShortUrlDataOut>(response, h, HttpStatus.CREATED)
         }
+
 
     /**
      * This method is used to get the user information.
@@ -201,6 +218,24 @@ class UrlShortenerControllerImpl(
         )
     }
 
+    @GetMapping("/{id}/qr", produces = [MediaType.IMAGE_PNG_VALUE])
+    override fun getQRCode(@PathVariable id: String): ResponseEntity<ByteArray> {
+        val shortUrl = shortUrlRepositoryService.findByKey(id)
+            ?: return ResponseEntity(HttpStatus.NOT_FOUND)
+        //Show in the console the hash of the short URL
+        println("The hash of the short URL is: $id")
+        //Show in the console the value of the qrCode field
+        println("The value of the qrCode field is: ${shortUrl.properties.qrCode}")
+
+        // Check if the QR code is present
+        val qrCodeBase64 = shortUrl.properties.qrCode
+
+        // Decode the Base64 string into a byte array
+        val qrCodeImage = Base64.getDecoder().decode(qrCodeBase64)
+        return ResponseEntity.ok()
+            .contentType(MediaType.IMAGE_PNG)
+            .body(qrCodeImage)
+    }
 
 }
 

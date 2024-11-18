@@ -28,7 +28,8 @@ data class ShortUrl(
     val hash: String,
     val redirection: Redirection,
     val created: OffsetDateTime = OffsetDateTime.now(),
-    val properties: ShortUrlProperties = ShortUrlProperties()
+    val properties: ShortUrlProperties = ShortUrlProperties(),
+    //var qrCode: String  // Base64 representation of the QR code
 ) {
     /**
      * Generates a QR code image for this ShortUrl and saves it to the specified output path.
@@ -63,7 +64,8 @@ data class ShortUrlProperties(
     val owner: String? = null,
     val country: String? = null,
     val isBranded: Boolean? = null,
-    val name: String? = null
+    val name: String? = null,
+    val qrCode: String? = null
 )
 
 /**
@@ -101,8 +103,8 @@ data class User(
  */
 data class QRCode(
     val url: String,           // The URL for which the QR code is generated
-    val base64Image: String,   // The QR code image encoded in Base64 format
-    val size: Int              // The size of the QR code (e.g., 250x250 pixels)
+    val base64Image: String,  // The QR code image encoded in Base64 format
+    val size: Int             // The size of the QR code (e.g., 250x250 pixels)
 )
 
 /**
