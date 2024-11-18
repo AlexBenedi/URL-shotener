@@ -4,7 +4,7 @@ import com.google.common.hash.Hashing
 import es.unizar.urlshortener.core.HashService
 import es.unizar.urlshortener.core.ValidatorService
 import es.unizar.urlshortener.core.SafetyService
-import es.unizar.urlshortener.gateway.GoogleSafeBrowsingClient
+import es.unizar.urlshortener.springbootkafkaexample.service.KafkaProducerService
 import org.apache.commons.validator.routines.UrlValidator
 import org.springframework.stereotype.Service
 import java.nio.charset.StandardCharsets
@@ -55,13 +55,19 @@ class HashServiceImpl : HashService {
  */
 @Service
 class SafetyServiceImpl(
-    private val googleSafeBrowsingClient: GoogleSafeBrowsingClient
+    private val kafkaProducerService: KafkaProducerService
 ) : SafetyService {
+    companion object{
+        /**
+         * The kafka topic to check the safety of a URL.
+         */
+        const val CHECK_SAFETY_TOPIC = "check-safety"
+    }
     /**
      * Checks if the given URL is safe.
      *
      * @param url the URL to check
      * @return true if the URL is safe, false otherwise
      */
-    override fun isUrlSafe(url: String) = googleSafeBrowsingClient.isUrlSafe(url) 
+    override fun isUrlSafe(url: String) = kafkaProducerService.sendMessage(CHECK_SAFETY_TOPIC, url) 
 }
