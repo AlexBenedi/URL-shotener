@@ -41,6 +41,7 @@ class RedirectUseCaseImpl(
      */
     override fun redirectTo(key: String) : Redirection {
         val shortUrl = safeCall { shortUrlRepository.findByKey(key) }
+        println("Key: $key")
         if(shortUrl != null){
             val safetyResponse = shortUrl.properties.safe
             println(shortUrl)

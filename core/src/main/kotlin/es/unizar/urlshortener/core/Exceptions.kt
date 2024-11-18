@@ -52,6 +52,14 @@ class UnsafeUrlException(
 class UrlSafetyNotCheckedException : DomainException("The safety of the URL has not been checked")
 
 /**
+ * An exception indicating that a short URL could not be found.
+ * This exception is thrown when a specified short URL does not exist in the system.
+ *
+ * @param url The short URL that was not found.
+ */
+class ShortUrlNotFoundException(url: String) : DomainException("Short URL not found for [$url]")
+
+/**
  * An exception indicating that a redirection key could not be found.
  * This exception is thrown when a specified redirection key does not exist in the system.
  *
