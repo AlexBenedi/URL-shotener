@@ -29,6 +29,8 @@ import es.unizar.urlshortener.core.usecases.LogClickUseCase
 import es.unizar.urlshortener.core.usecases.CreateShortUrlUseCase
 import es.unizar.urlshortener.core.usecases.GenerateQRCodeUseCase
 import es.unizar.urlshortener.core.usecases.GenerateQRCodeUseCaseImpl
+import es.unizar.urlshortener.core.usecases.DeleteUserLinkUseCase
+import es.unizar.urlshortener.core.usecases.DeleteUserLinkUseCaseImpl
 
 
 import java.security.Principal;
@@ -90,7 +92,8 @@ class UrlShortenerControllerImpl(
     val redirectUseCase: RedirectUseCase,
     val logClickUseCase: LogClickUseCase,
     val createShortUrlUseCase: CreateShortUrlUseCase,
-    val getUserInformationUseCase : GetUserInformationUseCase
+    val getUserInformationUseCase : GetUserInformationUseCase,
+    val deleteUserLinkUseCase : DeleteUserLinkUseCase
 ) : UrlShortenerController {
 
     // Directly instantiate the QR Code use case implementation
@@ -171,6 +174,8 @@ class UrlShortenerControllerImpl(
         getUserInformationUseCase.processUser(user)
 
         val links = getUserInformationUseCase.getLinks(user)
+
+        //Insertar el link obtenido otra vez
 
         // Convertir los links en una representación adecuada (puede ser una lista de strings, JSON, etc.)
         val linkInfo = links.map { link ->

@@ -114,7 +114,6 @@ class GetUserInformationUseCaseImpl(
 
         // Guardar el link (esto debería guardar también click y shortUrl gracias a CascadeType.ALL)
         safeCall { linkRepository.save(link) }
-
     }
 
 

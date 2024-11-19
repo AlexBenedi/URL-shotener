@@ -4,6 +4,7 @@ package es.unizar.urlshortener.infrastructure.delivery
 import es.unizar.urlshortener.core.*
 import es.unizar.urlshortener.core.usecases.CreateShortUrlUseCase
 import es.unizar.urlshortener.core.usecases.GetUserInformationUseCase
+import es.unizar.urlshortener.core.usecases.DeleteUserLinkUseCase
 import es.unizar.urlshortener.core.usecases.LogClickUseCase
 import es.unizar.urlshortener.core.usecases.RedirectUseCase
 import org.mockito.BDDMockito.given
@@ -48,6 +49,9 @@ class UrlShortenerControllerTest {
     private lateinit var getUserInformationUseCase: GetUserInformationUseCase
 
     @MockBean
+    private lateinit var deleteUserLinkUseCase: DeleteUserLinkUseCase
+
+    @MockBean
     private lateinit var securityFilterChain: SecurityFilterChain
 
 
@@ -63,6 +67,8 @@ class UrlShortenerControllerTest {
         //Mock the behavior of securityFilterChain to return a SecurityFilterChain object
         given(securityFilterChain.toString()).willReturn("SecurityFilterChain")
 
+        //Mock the behavior of deleteUserLinkUseCase to return a DeleteUserLinkUseCase object
+        given(deleteUserLinkUseCase.toString()).willReturn("DeleteUserLinkUseCase")
 
         // Mock the behavior of redirectUseCase to return a redirection URL
         given(redirectUseCase.redirectTo("key")).willReturn(Redirection("http://example.com/"))

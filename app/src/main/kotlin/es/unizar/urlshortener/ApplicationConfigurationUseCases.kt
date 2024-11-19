@@ -16,6 +16,7 @@ import es.unizar.urlshortener.infrastructure.repositories.UserEntityRepository
 import es.unizar.urlshortener.infrastructure.repositories.UserRepositoryServiceImpl
 import es.unizar.urlshortener.infrastructure.repositories.LinkEntityRepository
 import es.unizar.urlshortener.infrastructure.repositories.LinkRepositoryServiceImpl
+import es.unizar.urlshortener.core.usecases.DeleteUserLinkUseCaseImpl
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -62,6 +63,15 @@ class ApplicationConfigurationUseCases(
     @Bean
     fun getUserInformationUseCase() = GetUserInformationUseCaseImpl(
         UserRepositoryServiceImpl(userEntityRepository),
+        LinkRepositoryServiceImpl(linkEntityRepository)
+    )
+
+    /**
+     * Provides an implementation of the DeleteUserLinkUseCase.
+     * @return an instance of DeleteUserLinkUseCaseImpl.
+     */
+    @Bean
+    fun deleteUserLinkUseCase() = DeleteUserLinkUseCaseImpl(
         LinkRepositoryServiceImpl(linkEntityRepository)
     )
 }

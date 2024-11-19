@@ -21,6 +21,11 @@ interface LinkRepositoryService {
      */
     fun findByUserId(user: User): List<Link>
 
+    /**
+        * Deletes a [Link] entity from the repository.
+     */
+    fun deleteById(idLink: Long)
+
 }
 
 /**

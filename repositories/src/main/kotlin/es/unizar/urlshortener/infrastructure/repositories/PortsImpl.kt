@@ -27,13 +27,19 @@ class LinkRepositoryServiceImpl(
     /**
      * Finds a [Link] entity by its user id.
      *
-     * @param userId The user id of the [Link] entity.
+     * @param user The user id of the [Link] entity.
      * @return The found [Link] entity or null if not found.
      */
     override fun findByUserId(user: User): List<Link> {
         return linkEntityRepository.findByUserId(user.toEntity()).map { it.toDomain() }
     }
 
+    /**
+     * Deletes a [Link] entity from the repository.
+     */
+    override fun deleteById(idLink: Long) {
+        linkEntityRepository.deleteById(idLink)
+    }
 }
 
 

@@ -36,6 +36,17 @@
             </div>
         </div>
     </div>
+    <div class="row">
+        <div class="col-lg-12 text-center">
+            <button id="userButton" class="btn btn-lg btn-success">Register/LogIn</button>
+        </div>
+    </div>
 </div>
+<script>
+    // Redirigir al usuario a /user al hacer clic en el botón
+    document.getElementById('userButton').addEventListener('click', function () {
+        window.location.href = '/user';
+    });
+</script>
 </body>
 </html>
