@@ -65,7 +65,7 @@ class CreateShortUrlUseCaseImpl(
                     throw InvalidNameBrandedUrl()
                 }
             }
-            safeCall { safetyService.isUrlSafe(url) } // post kafka message
+            safeCall { safetyService.isUrlSafe(UrlSafetyPetition(url, id)) } // post kafka message
             val su = ShortUrl(
                 hash = id,
                 redirection = Redirection(target = url),

@@ -38,6 +38,8 @@ dependencies {
 
     implementation("com.google.zxing:core:3.5.1")
     implementation("com.google.zxing:javase:3.5.1") // Required for MatrixToImageWriter
+    
+    implementation("com.google.code.gson:gson:2.8.8")
 
     // Include Kotlin Test as a test implementation dependency
     testImplementation(libs.kotlin.test)

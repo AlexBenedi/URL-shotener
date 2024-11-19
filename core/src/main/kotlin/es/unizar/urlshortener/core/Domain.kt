@@ -121,3 +121,23 @@ data class UrlSafetyResponse(
     val threatEntryType: String? = null, 
     val threatInfo: String? = null
 )
+
+/**
+ * Represents a petition to check the safety of a URL.
+ * @property url The URL to be checked.
+ * @property id The ID of the url to be checked.
+ */
+data class UrlSafetyPetition(
+    val url: String,
+    val id: String
+)
+
+/**
+ * Represents the result of checking the safety of a URL.
+ * @property id The ID of the URL.
+ * @property information The safety information of the URL.
+ */
+data class UrlSafetyChecked(
+    val id: String, 
+    val information: UrlSafetyResponse
+)
