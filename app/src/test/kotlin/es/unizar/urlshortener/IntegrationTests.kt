@@ -62,7 +62,6 @@ class HttpRequestTest {
     /**
      * Tests that the main page is accessible and contains the expected content.
      */
-    @Ignore("Temporaly disabled")
     @Test
     fun `main page works`() {
         val response = restTemplate.getForEntity("http://localhost:$port/", String::class.java)
@@ -73,11 +72,15 @@ class HttpRequestTest {
     /**
      * Tests that a redirect is returned when the key exists.
      */
-    @Ignore("Temporaly disabled")
     @Test
     fun `redirectTo returns a redirect when the key exists`() {
         val target = shortUrl("http://example.com/").headers.location
         require(target != null)
+
+        // Wait for Kafka to process the message and update the URL's field in the database
+        // this is not the best way to do it, but it works for now 
+        // it should be replaced with a better solution in the future! 
+        Thread.sleep(5000)
         val response = restTemplate.getForEntity(target, String::class.java)
         assertThat(response.statusCode).isEqualTo(HttpStatus.TEMPORARY_REDIRECT)
         assertThat(response.headers.location).isEqualTo(URI.create("http://example.com/"))
@@ -88,11 +91,11 @@ class HttpRequestTest {
     /**
      * Tests that a forbidden is returned when the key exists but url is unsafe.
      */
-    @Ignore("Temporaly disabled")
     @Test
-    fun `redirectTo returns a redirect when the key exists but url is unsafe`() {
+    fun `redirectTo returns a forbidden when the key exists but url is unsafe`() {
         val target = shortUrl("https://testsafebrowsing.appspot.com/s/malware.html").headers.location
         require(target != null)
+        Thread.sleep(5000)
         val response = restTemplate.getForEntity(target, String::class.java)
         assertThat(response.statusCode).isEqualTo(HttpStatus.FORBIDDEN)
 
@@ -100,11 +103,19 @@ class HttpRequestTest {
     }
 
     // TODO test unsafety not checked (400): Will be made when async verification is implemented
+    @Test
+    fun `redirectTo returns a bad request when the key exists but url safety is not checked yet`() {
+        val target = shortUrl("https://testsafebrowsing.appspot.com/s/malware.html").headers.location
+        require(target != null)
+        val response = restTemplate.getForEntity(target, String::class.java)
+        assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
+
+        assertThat(JdbcTestUtils.countRowsInTable(jdbcTemplate, "click")).isEqualTo(0)
+    }
 
     /**
      * Tests that a not found status is returned when the key does not exist.
      */
-    @Ignore("Temporaly disabled")
     @Test
     fun `redirectTo returns a not found when the key does not exist`() {
         val response = restTemplate.getForEntity("http://localhost:$port/f684a3c4", String::class.java)
@@ -116,7 +127,6 @@ class HttpRequestTest {
     /**
      * Tests that a basic redirect is created if a hash can be computed.
      */
-    @Ignore("Temporaly disabled")
     @Test
     fun `creates returns a basic redirect if it can compute a hash`() {
         val response = shortUrl("http://example.com/")
@@ -132,7 +142,6 @@ class HttpRequestTest {
     /**
      * Tests that a bad request status is returned if a hash cannot be computed.
      */
-    @Ignore("Temporaly disabled")
     @Test
     fun `creates returns bad request if it can't compute a hash`() {
         val headers = HttpHeaders()
