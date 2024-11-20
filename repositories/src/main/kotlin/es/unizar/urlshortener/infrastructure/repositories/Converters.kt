@@ -55,7 +55,8 @@ fun ShortUrlEntity.toDomain() = ShortUrl(
         ),
         ip = ip,
         country = country, 
-        isBranded = isBranded
+        isBranded = isBranded,
+        qrCode = qrCode
     )
 )
 
@@ -76,7 +77,8 @@ fun ShortUrl.toEntity() = ShortUrlEntity(
     threatInfo = properties.safe?.threatInfo,
     ip = properties.ip,
     country = properties.country,
-    isBranded = properties.isBranded
+    isBranded = properties.isBranded,
+    qrCode = properties.qrCode
 )
 
 /**
