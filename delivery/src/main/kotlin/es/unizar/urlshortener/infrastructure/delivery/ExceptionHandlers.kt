@@ -50,6 +50,9 @@ class RestResponseEntityExceptionHandler : ResponseEntityExceptionHandler() {
      * @param ex the UrlSafetyNotCheckedException thrown
      * @return an ErrorMessage containing the status code and exception message
      */
+    @ResponseBody
+    @ExceptionHandler(value = [UrlSafetyNotCheckedException::class])
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     fun urlSafetyNotcheked(ex: UrlSafetyNotCheckedException) = ErrorMessage(HttpStatus.BAD_REQUEST.value(), ex.message)
 
     /**

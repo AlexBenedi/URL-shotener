@@ -19,3 +19,5 @@ spring:
           google:
             client-id: 967313434685-bcfqtgn6tv5o2t8hlnjbqj7q195pv5i8.apps.googleusercontent.com
             client-secret: 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
+server:
+  port: 8080

@@ -21,6 +21,7 @@ dependencies {
 
     implementation(project(":gateway"))
 
+    implementation(project(":kafka"))
 
     // Include Spring Boot Starter Web as an implementation dependency
     implementation(libs.spring.boot.starter.web)
@@ -36,6 +37,8 @@ dependencies {
 
     implementation("com.google.zxing:core:3.5.1")
     implementation("com.google.zxing:javase:3.5.1") // Required for MatrixToImageWriter
+    
+    implementation("com.google.code.gson:gson:2.8.8")
 
     // Include Kotlin Test as a test implementation dependency
     testImplementation(libs.kotlin.test)
