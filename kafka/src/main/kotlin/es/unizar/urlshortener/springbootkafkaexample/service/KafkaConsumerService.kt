@@ -23,9 +23,13 @@ class KafkaConsumerService(
     @Autowired
     lateinit var kafkaProducerService: KafkaProducerService
 
+    var lastConsumedMessage: String? = null
+
+    // generic message
     @KafkaListener(topics = ["my_topic"], groupId = "group_id")
     fun consume(message: String) {
         println("Message received: $message")
+        lastConsumedMessage = message
     }
 
     /* this method will be modified when spring integration/camel is implemented */
@@ -38,7 +42,7 @@ class KafkaConsumerService(
         // deserialize the message to obtain the petition object
         val deserializedObject = Gson().fromJson(url, UrlSafetyPetition::class.java) 
         val res = googleSafeBrowsingClient.isUrlSafe(deserializedObject.url)
-        println("Safety check requested for: $url")
+        println("Safety check requested for: $url, $res")
         val checkedRes = UrlSafetyChecked(deserializedObject.id, res)
         println("Checked res: $checkedRes")
         // serialize the response and send it to the kafka topic
