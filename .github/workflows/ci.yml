@@ -19,9 +19,9 @@ jobs:
         uses: gradle/wrapper-validation-action@e6e38bacfdf1a337459f332974bb2327a31aaf4b
       - name: Install Docker Compose
         run: |
-          sudo apt-get update
-          sudo apt-get install -y docker.io
-          sudo apt-get install -y docker-compose
+          curl -fsSL https://get.docker.com -o get-docker.sh
+          sudo sh get-docker.sh
+          sudo usermod -aG docker $USER
       - name: Set up Kafka Docker Compose 
         run: docker-compose -f docker-compose.yml up -d
       - name: Build with Gradle
