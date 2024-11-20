@@ -21,7 +21,8 @@ class ClickEntity(
     val referrer: String?,
     val browser: String?,
     val platform: String?,
-    val country: String?
+    val country: String?,
+    val clicks : Int
 )
 
 /**

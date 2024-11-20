@@ -17,7 +17,8 @@ private const val QR_CODE_HEIGHT = 200
 data class Click(
     val hash: String,
     val properties: ClickProperties = ClickProperties(),
-    val created: OffsetDateTime = OffsetDateTime.now()
+    val created: OffsetDateTime = OffsetDateTime.now(),
+    val clicks : Int
 )
 
 /**

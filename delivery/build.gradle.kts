@@ -22,6 +22,7 @@ dependencies {
     implementation(project(":gateway"))
 
 
+
     // Include Spring Boot Starter Web as an implementation dependency
     implementation(libs.spring.boot.starter.web)
 

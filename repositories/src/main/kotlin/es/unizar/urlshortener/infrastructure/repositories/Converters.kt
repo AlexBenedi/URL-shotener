@@ -16,7 +16,8 @@ fun ClickEntity.toDomain() = Click(
         browser = browser,
         platform = platform,
         country = country
-    )
+    ),
+    clicks = clicks
 )
 
 /**
@@ -30,7 +31,8 @@ fun Click.toEntity() = ClickEntity(
     referrer = properties.referrer,
     browser = properties.browser,
     platform = properties.platform,
-    country = properties.country
+    country = properties.country,
+    clicks = 0
 )
 
 /**

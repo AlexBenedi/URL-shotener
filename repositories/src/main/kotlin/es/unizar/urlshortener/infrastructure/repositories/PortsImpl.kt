@@ -85,6 +85,10 @@ class ClickRepositoryServiceImpl(
      * @return The saved [Click] entity.
      */
     override fun save(cl: Click): Click = clickEntityRepository.save(cl.toEntity()).toDomain()
+
+    override fun findByHash(hash: String): Click?{
+        return clickEntityRepository.findByHash(hash)?.toDomain()
+    }
 }
 
 /**

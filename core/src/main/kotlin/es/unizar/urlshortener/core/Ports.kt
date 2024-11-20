@@ -63,6 +63,8 @@ interface ClickRepositoryService {
      */
     fun save(cl: Click): Click
 
+    fun findByHash(hash: String): Click?
+
 }
 
 /**
