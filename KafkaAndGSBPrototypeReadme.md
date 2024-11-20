@@ -1,0 +1,32 @@
+## Google Safe Browsing Integration 
+### Description of the PoC
+This feature is designed to ensure the safety of links shortened using the application. It checks each link against Google's Safe Browsing API to determine if it is safe. If a link is found to be unsafe, the feature provides detailed information to the user about the nature of the threat, such as phishing, malware, or other malicious activities. This helps users make informed decisions and avoid potentially harmful websites. 
+
+In this Proof of Concept, we integrate with the Google Safe Browsing API to ensure the safety of URLs. It only verifies if the URL is safe or unsafe (boolean), but does not provide additional information about why is unsafe. This is done in `gateway/src/main/kotlin/es/unizar/urlshortener/gateway/GoogleSafeBrowsingClient.kt`. We define the use case for checking URLs against the API and create unit tests to validate the integration and functionality, with a good URL and a malicious one. This is done in `gateway/src/test/kotlin/es/unizar/urlshortener/gateway/GoogleSafeBrowsingClientTest.kt`. 
+
+We have modified `core/src/main/kotlin/es/unizar/urlshortener/core/Ports.kt` to add the `SafetyService` port, added its implementation in `delivery/src/main/kotlin/es/unizar/urlshortener/infrastructure/delivery/PortsImpl.kt`, defined an `UnsafeUrlException` in `core/src/main/kotlin/es/unizar/urlshortener/core/Exceptions.kt`, and updated `core/src/main/kotlin/es/unizar/urlshortener/core/usecases/CreateShortUrlUseCase.kt` to verify if a URL is safe or not (using `SafetyService`). If it isn't, the exception is thrown and a warning is printed in the terminal, and then a handler returns `403 FORBIDDEN` HTTP code. 
+
+In the future, it won't work like this: The use case will return `201` and then post a message to a broker, setting the `safe` URL property to `null`. The `SafetyService` will then read the message and verify if the URL is safe or not. If someone tries to access the URL during verification, the URL property will be `null` and a `400` error will be returned. When the service finishes its verification, it will update the URL property: if it is safe, it will set it to `true`; otherwise, it will set it to `false`. If it is not safe, an additional property `Information` will be populated with the reason why it is not safe. Whenever a user tries to access the URL, a `403 FORBIDDEN` error will be returned with the information about why it is not safe. This is not difficult to implement: instead of throwing the exception when creating the URL, we just create the URL, set `safe` to `null`, and put the message in the Kafka broker. We need two Kafka listeners: one waiting for incoming URL verifications to launch `SafetyService`, and another waiting for incoming safety updates which modify `url.properties.safe` and `url.properties.information`.
+
+To integrate with Google Safe Browsing API, we have followed this guide: https://developers.google.com/safe-browsing/v4/get-started?hl=es-419 
+
+### Justification for the choice of any additional libraries or frameworks
+This feature has been implemented without the use of any additional libraries or frameworks. It operates on a simple request/response model with Google's API. Since it integrates with other services, the integration class has been placed in the "gateway" module.
+
+Our API key has been added directly in the code, which is not a recommended practice as it can be stolen. To ensure its security, in a real scenario, it should be added as an environment variable on the hosts used to implement, test and deploy this functionality. For CI tests to pass, it should also be added to GitHub Secrets. However, to make it easier for the instructor to review our project, we have not done this.
+
+### Challenged encountered and how they were addressed 
+The first challenge we faced was adding the new module 'gateway' to the modules that use it. It was very easy: we just needed to import it in the module's `settings.gradle.kts` file by adding the following line: `implementation(project(":gateway"))`. We addressed it by looking at other `settings.gradle.kts` files.
+
+Another challenge we faced was injecting `restTemplate` into `GoogleSafeBrowsingAPIClient` without violating Clean Architecture principles. Since this is just a PoC, we decided to build it inside the class if it is not provided. We are studying how to inject it in a better way.
+
+### Instructions to run the PoC
+To run this PoC, project should be built and passing the tests, essencialy `gateway/src/test/kotlin/es/unizar/urlshortener/gateway/GoogleSafeBrowsingClientTest.kt`, `creates returns unsafe URL exception if the URL is not safe` on `core/src/test/kotlin/es/unizar/urlshortener/core/CreateShortUrlUseCaseTest.kt` and `creates returns forbidden if the URL is not safe` on `app/src/test/kotlin/es/unizar/urlshortener/app/IntegrationTests.kt`. This can be achieved running `./gradlew build` (or `gradlew.bat build` on Windows) command. 
+
+To manually check this PoC's effectiveness, go to `http://localhost:8080` and try to shorten a safe URL (e.g., `http://www.unizar.es`). Everything will work as expected: the URL will be shortened. Then, try to shorten an unsafe one (you can find many at `http://testsafebrowsing.appspot.com/`). An ERROR will be returned, and if you check the server response, you'll see a 403 FORBIDDEN. In the terminal, "URL is not safe" will be printed.
+
+### Implemented Tests
+
+The tests validate the functionality by invoking the `isSafe()` function of the `GoogleSafeBrowsingClient`, which connects to the Google Safe Browsing API. The results are then compared with the expected outcomes. We use two test cases: a non-malicious website (www.unizar.es) and a malicious website (taken from an online database of malicious websites, https://testsafebrowsing.appspot.com/). This ensures that our implementation correctly identifies safe and unsafe URLs. This test is in  `gateway/src/test/kotlin/es/unizar/urlshortener/gateway/GoogleSafeBrowsingClientTest.kt` 
+
+We have also updated `core/src/test/kotlin/es/unizar/urlshortener/core/CreateShortUrlUseCaseTest.kt` with a new test `creates returns unsafe URL exception if the URL is not safe`, which verifies that `UnsafeUrlException` is thrown if the URL is not safe. Additionally, we updated `app/src/test/kotlin/es/unizar/urlshortener/app/IntegrationTests.kt` with a test `creates returns forbidden if the URL is not safe`, which checks that a 403 status code is returned if the URL is not safe.
