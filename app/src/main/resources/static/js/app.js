@@ -1,13 +1,30 @@
 $(document).ready(
     function () {
+        // Muestra/oculta el campo de texto para el nombre de la marca
+        $("#brandedCheckbox").change(function () {
+            if ($(this).prop('checked')) {
+                $("#brandedNameGroup").show(); // Muestra el campo de texto
+            } else {
+                $("#brandedNameGroup").hide(); // Oculta el campo de texto y lo limpia
+                $("#brandedName").val(''); // Borra el contenido
+            }
+        });
+
         // Configuración del formulario para acortar URLs
         $("#shortener").submit(
             function (event) {
                 event.preventDefault();
+                var formData = $(this).serialize();
+
+                // Verifica si se debe agregar el campo "isBranded" y "brandedName"
+                if ($("#brandedCheckbox").prop('checked')) {
+                    formData += "&isBranded=true&name=" + encodeURIComponent($("#brandedName").val());
+                }
+
                 $.ajax({
                     type: "POST",
                     url: "/api/link",
-                    data: $(this).serialize(),
+                    data: formData,
                     success: function (msg, status, request) {
                         var resultDiv = $("#result");
                         var shortenedUrl = request.getResponseHeader('Location');
