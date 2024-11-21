@@ -65,6 +65,10 @@ interface ClickRepositoryService {
 
     fun findByHash(hash: String): Click?
 
+    fun updateClicksByHash(hash: String, clicks: Int): Int
+
+    fun getTotalClicksByHash(hash: String): Int
+
 }
 
 /**

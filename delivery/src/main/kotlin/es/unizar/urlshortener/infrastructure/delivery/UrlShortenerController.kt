@@ -24,12 +24,13 @@ import es.unizar.urlshortener.core.User
 import es.unizar.urlshortener.core.Link
 import es.unizar.urlshortener.core.ShortUrl
 import es.unizar.urlshortener.core.Click
+import es.unizar.urlshortener.core.ClickRepositoryService
 
 /**
  * The specification of the controller.
  */
 interface UrlShortenerController {
-    
+
 
     /**
      * Redirects and logs a short url identified by its [id].
@@ -69,6 +70,8 @@ interface UrlShortenerController {
 
     fun getUserLinks(userId: String): ResponseEntity<List<Link>>
 
+    fun getClicksByHash(@PathVariable hash: String): ResponseEntity<Int>
+
 }
 
 /**
@@ -103,7 +106,8 @@ class UrlShortenerControllerImpl(
     val createShortUrlUseCase: CreateShortUrlUseCase,
     val getUserInformationUseCase : GetUserInformationUseCase,
     val deleteUserLinkUseCase : DeleteUserLinkUseCase,
-    private val shortUrlRepositoryService: ShortUrlRepositoryService
+    val shortUrlRepositoryService: ShortUrlRepositoryService,
+    val clickRepositoryService: ClickRepositoryService
 ) : UrlShortenerController {
 
     // Directly instantiate the QR Code use case implementation
@@ -235,7 +239,6 @@ class UrlShortenerControllerImpl(
         return ResponseEntity.ok(links)
     }
 
-
     @GetMapping("/user")
     @ResponseBody
     override fun user(token: OAuth2AuthenticationToken): ResponseEntity<String> {
@@ -254,6 +257,12 @@ class UrlShortenerControllerImpl(
         return ResponseEntity.ok()
             .header(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_HTML_VALUE)
             .body(htmlContent)
+    }
+
+    @GetMapping("/clicks/{hash}")
+    override fun getClicksByHash(@PathVariable hash: String): ResponseEntity<Int> {
+        val totalClicks = clickRepositoryService.getTotalClicksByHash(hash) ?: 0
+        return ResponseEntity.ok(totalClicks)
     }
 
 

@@ -33,12 +33,12 @@ class LogClickUseCaseImpl(
      */
     override fun logClick(key: String, data: ClickProperties) {
         var number = 0
-        if(clickRepository.findByHash(key) != null) {
-            val cl = clickRepository.findByHash(key)!!
-            number = cl.clicks
+        val clickSelected: Click? = clickRepository.findByHash(key)
+        if(clickSelected != null) {
+            number = clickSelected.clicks
             number++
-
-            clickRepository.update()
+            clickRepository.updateClicksByHash(key, number)
+            return
         }
         val cl = Click(
             hash = key,

@@ -1,6 +1,4 @@
-$(document).ready(
-
-function () {
+$(document).ready(function () {
     // Variable global para el userId (puedes setearlo desde el backend dinámicamente)
     var userId = $("#userIdValue").text(); // Suponiendo que tienes un input hidden con este ID en el HTML
     console.log("userId from ajax: " + userId);
@@ -57,12 +55,15 @@ function () {
                     var rowHtml = `
                         <tr>
                             <td>${link.shortUrl.redirection.target}</td>
-                            <td>${link.click.clicks}</td>
+                            <td id="clicks-count-${link.shortUrl.hash}">Cargando...</td>
                             <td>${qrCodeHtml}</td>
                             <td><a href="/${link.shortUrl.hash}" target="_blank">${window.location.origin}/${link.shortUrl.hash}</a></td>
                         </tr>
                     `;
                     tableBody.append(rowHtml);
+
+                    // Llamar al endpoint para obtener el número total de clics
+                    fetchClicksByHash(link.shortUrl.hash);
                 });
 
                 // Agregar funcionalidad al botón "Generate QR"
@@ -76,22 +77,39 @@ function () {
             }
         });
     }
+
+    // Función para obtener los clics totales por hash
+    function fetchClicksByHash(hash) {
+        $.ajax({
+            type: "GET",
+            url: `/clicks/${hash}`, // Endpoint para obtener los clics totales
+            success: function (totalClicks) {
+                console.log(`Total clicks for hash ${hash}: ${totalClicks}`);
+                // Actualizar la celda correspondiente con el total de clics
+                $(`#clicks-count-${hash}`).text(totalClicks);
+            },
+            error: function () {
+                alert(`Error fetching clicks for hash: ${hash}`);
+            }
+        });
+    }
+
     // Función para generar el QR Code
-        function generateQRCode(hash) {
-            // Solicitar el QR al backend
-            console.log("Generando QR para hash: " + hash);
-            $.ajax({
-                type: "GET",
-                url: `/${hash}/qr`,  // URL generada // Llamar al endpoint para obtener el QR
-                success: function(qrCodeImage) {
-                    // Convertir la imagen en base64 a una URL para mostrarla
-                    var qrImageUrl = URL.createObjectURL(new Blob([qrCodeImage], { type: 'image/png' }));
-                    // Mostrar el QR en la tabla
-                    $(`button[data-hash="${hash}"]`).replaceWith(`<img src="${qrImageUrl}" alt="QR Code" width="50">`);
-                },
-                error: function () {
-                    alert("Error generating QR Code.");
-                }
-            });
-        }
+    function generateQRCode(hash) {
+        // Solicitar el QR al backend
+        console.log("Generando QR para hash: " + hash);
+        $.ajax({
+            type: "GET",
+            url: `/${hash}/qr`,  // URL generada // Llamar al endpoint para obtener el QR
+            success: function (qrCodeImage) {
+                // Convertir la imagen en base64 a una URL para mostrarla
+                var qrImageUrl = URL.createObjectURL(new Blob([qrCodeImage], { type: 'image/png' }));
+                // Mostrar el QR en la tabla
+                $(`button[data-hash="${hash}"]`).replaceWith(`<img src="${qrImageUrl}" alt="QR Code" width="50">`);
+            },
+            error: function () {
+                alert("Error generating QR Code.");
+            }
+        });
+    }
 });

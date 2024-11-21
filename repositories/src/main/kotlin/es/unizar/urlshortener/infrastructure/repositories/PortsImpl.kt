@@ -8,6 +8,7 @@ import es.unizar.urlshortener.core.User
 import es.unizar.urlshortener.core.UserRepositoryService
 import es.unizar.urlshortener.core.Link
 import es.unizar.urlshortener.core.LinkRepositoryService
+import org.springframework.data.repository.query.Param
 
 
 /**
@@ -88,6 +89,14 @@ class ClickRepositoryServiceImpl(
 
     override fun findByHash(hash: String): Click?{
         return clickEntityRepository.findByHash(hash)?.toDomain()
+    }
+
+    override fun updateClicksByHash(hash: String, clicks: Int): Int{
+        return clickEntityRepository.updateClicksByHash(hash, clicks)
+    }
+
+    override fun getTotalClicksByHash(hash: String): Int{
+        return clickEntityRepository.getTotalClicksByHash(hash)
     }
 }
 

@@ -2,8 +2,10 @@ package es.unizar.urlshortener.infrastructure.repositories
 
 import es.unizar.urlshortener.core.Click
 import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param
+import org.springframework.transaction.annotation.Transactional
 
 
 /**
@@ -53,6 +55,14 @@ interface ShortUrlEntityRepository : JpaRepository<ShortUrlEntity, String> {
  */
 interface ClickEntityRepository : JpaRepository<ClickEntity, Long> {
     fun findByHash(hash: String): ClickEntity?
+
+    @Modifying
+    @Transactional
+    @Query("UPDATE ClickEntity c SET c.clicks = :clicks WHERE c.hash = :hash")
+    fun updateClicksByHash(hash: String, clicks: Int): Int
+
+    @Query("SELECT SUM(c.clicks) FROM ClickEntity c WHERE c.hash = :hash")
+    fun getTotalClicksByHash(hash: String): Int
 }
 
 
