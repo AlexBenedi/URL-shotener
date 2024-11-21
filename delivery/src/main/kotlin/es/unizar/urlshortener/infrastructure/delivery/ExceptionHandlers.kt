@@ -5,6 +5,7 @@ import es.unizar.urlshortener.core.RedirectionNotFound
 import es.unizar.urlshortener.core.UnsafeUrlException
 import es.unizar.urlshortener.core.UrlSafetyNotCheckedException
 import es.unizar.urlshortener.core.InvalidNameBrandedUrl
+import es.unizar.urlshortener.core.ShortUrlNotFoundException
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.ControllerAdvice
@@ -77,6 +78,17 @@ class RestResponseEntityExceptionHandler : ResponseEntityExceptionHandler() {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     fun invalidNameBrandedUrl(ex: InvalidNameBrandedUrl) = ErrorMessage(HttpStatus.BAD_REQUEST.value(), ex.message)
 
+    /**
+     * Handles ShortUrlNotFoundException and returns a INTERNAL_SERVER response.
+     * 
+     * @param ex the ShortUrlNotFoundException thrown
+     * @return an ErrorMessage containing the status code and exception message
+     */
+    @ResponseBody
+    @ExceptionHandler(value = [ShortUrlNotFoundException::class])
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    fun shortUrlNotFound(ex: ShortUrlNotFoundException) = 
+        ErrorMessage(HttpStatus.INTERNAL_SERVER_ERROR.value(), ex.message)
     /**
      * Handles InternalError and returns an INTERNAL_SERVER_ERROR response.
      *

@@ -15,7 +15,7 @@ interface UpdateUrlSafetyUseCase {
      * @param data The Safety data for the short URL.
      * @return The updated [ShortUrl] entity.
      */
-    fun updateUrlSafety(url: String, safety: UrlSafetyResponse) : ShortUrl
+    fun updateUrlSafety(url: String, safety: UrlSafetyResponse) : ShortUrl?
 }
 
 /**
@@ -29,16 +29,20 @@ class UpdateUrlSafetyUseCaseImpl(
      *
      * @param url The URL to be updated.
      * @param data The Safety data for the short URL.
-     * @return The updated [ShortUrl] entity.
-     * @throws ShortUrlNotFoundException if the short URL is not found.
+     * @return The updated [ShortUrl] entity, or null if the URL is not found.
      */
-    override fun updateUrlSafety(url: String, safety: UrlSafetyResponse) : ShortUrl {
-        val shortUrl = safeCall { shortUrlRepository.findByKey(url) }
-            ?: throw ShortUrlNotFoundException(url)
-
-        // update safe property with the new safety data
-        val updatedShortUrl = shortUrl.copy(properties = shortUrl.properties.copy(safe = safety))
-        println(updatedShortUrl)
-        return safeCall { shortUrlRepository.save(updatedShortUrl) }
+    override fun updateUrlSafety(url: String, safety: UrlSafetyResponse) : ShortUrl? {
+        return try {
+            val shortUrl = safeCall { shortUrlRepository.findByKey(url) }
+                ?: throw ShortUrlNotFoundException("Short URL not found for key: $url")
+    
+            // update safe property with the new safety data
+            val updatedShortUrl = shortUrl.copy(properties = shortUrl.properties.copy(safe = safety))
+            println(updatedShortUrl)
+            safeCall { shortUrlRepository.save(updatedShortUrl) }
+        } catch (e: ShortUrlNotFoundException) {
+            println("Database hasn't been updated yet! $e.message")
+            null
+        }
     }
-}
+}   

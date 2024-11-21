@@ -43,9 +43,9 @@ class UpdateUrlSafetyUseCaseTest {
         whenever(repository.findByKey("key")).thenReturn(null)
         val useCase = UpdateUrlSafetyUseCaseImpl(repository)
 
-        assertFailsWith<ShortUrlNotFoundException> {
-            useCase.updateUrlSafety("key", safety)
-        }
+        val updatedUrl = useCase.updateUrlSafety("key", safety)
+
+        assertEquals(null, updatedUrl)
     }
 
 }
