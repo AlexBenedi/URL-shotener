@@ -18,6 +18,7 @@ import es.unizar.urlshortener.core.usecases.DeleteUserLinkUseCase
 import org.springframework.core.io.ClassPathResource
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken
 import org.springframework.web.bind.annotation.*
+import java.time.Duration
 import java.time.OffsetDateTime
 
 /**
@@ -182,8 +183,17 @@ class UrlShortenerControllerImpl(
         System.out.println("URL from shortenerUser : ${data.url}")
 
         val user1 = userRepositoryService.findById(userId)
+
         if (user1 != null) {
-            val userRedirections = user1.redirections
+            val currentTime = OffsetDateTime.now()
+            val lastRedirectionTime = user1.lastRedirectionTimeStamp ?: OffsetDateTime.MIN
+            val timeElapsed = Duration.between(lastRedirectionTime, currentTime).toMinutes()
+
+            var userRedirections = user1.redirections
+            if (timeElapsed >= 60) {
+                userRedirections = 0 // Restablece las redirecciones cada 60 minutos
+            }
+
             System.out.println("User redirections from shortenerUser : $userRedirections")
             if (userRedirections > 5){
                 // Return 429 Too Many Requests
