@@ -49,7 +49,7 @@ $(document).ready(function () {
                 links.forEach(function (link) {
                     // Crear una fila por cada link
                     var qrCodeHtml = link.shortUrl.properties.qrCode
-                        ? `<img src="data:image/png;base64,${link.shortUrl.properties.qrCode}" alt="QR Code" width="50">`
+                        ? `<img src="data:image/png;base64,${link.shortUrl.properties.qrCode}" alt="QR Code" width="100">`
                         : `<button class="btn btn-primary generate-qr" data-hash="${link.shortUrl.hash}">Generate QR</button>`;
 
                     var rowHtml = `

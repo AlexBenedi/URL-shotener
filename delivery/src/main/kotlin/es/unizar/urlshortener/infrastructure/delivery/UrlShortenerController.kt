@@ -265,7 +265,6 @@ class UrlShortenerControllerImpl(
         return ResponseEntity.ok(totalClicks)
     }
 
-
     @GetMapping("/{id}/qr", produces = [MediaType.IMAGE_PNG_VALUE])
     override fun getQRCode(@PathVariable id: String): ResponseEntity<ByteArray> {
         val shortUrl = shortUrlRepositoryService.findByKey(id)
