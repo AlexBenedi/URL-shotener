@@ -194,7 +194,8 @@ class UrlShortenerControllerImpl(
                 sponsor = data.sponsor,
                 isBranded = data.isBranded,
                 name = data.name
-            )
+            ),
+            userId = userId
         )
 
         System.out.println("Short hash  : ${shortUrl.hash}")

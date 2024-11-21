@@ -22,7 +22,7 @@ interface CreateShortUrlUseCase {
      */
     fun create(url: String, data: ShortUrlProperties): ShortUrl
 
-    fun createAndDoNotSave(url: String, data: ShortUrlProperties): ShortUrl
+    fun createAndDoNotSave(url: String, data: ShortUrlProperties, userId : String): ShortUrl
 }
 
 /**
@@ -67,9 +67,6 @@ class CreateShortUrlUseCaseImpl(
                     throw InvalidNameBrandedUrl()
                 }
             }
-            //Creamos directamente el QR
-
-
             val safety = safeCall { safetyService.isUrlSafe(url) } // this must be async
             println(safety)
             val su = ShortUrl(
@@ -88,9 +85,8 @@ class CreateShortUrlUseCaseImpl(
         }
     }
 
-    override fun createAndDoNotSave(url: String, data: ShortUrlProperties): ShortUrl{
+    override fun createAndDoNotSave(url: String, data: ShortUrlProperties, userId : String): ShortUrl{
         // Get the user ID from the data (modify as needed to get the actual user ID)
-        val userId = data.sponsor ?: "anonymous" // or however you identify users
 
         // Check if the user has exceeded the limit
         val count = shortUrlRepository.countShortenedUrlsByUser(userId)
@@ -104,6 +100,8 @@ class CreateShortUrlUseCaseImpl(
                 throw UnsafeUrlException(url)
             }*/
             var id = safeCall { hashService.hasUrl(url) }
+            id += userId
+            System.out.println("ID de la url a insertar: " + id)
             if (data.isBranded == true ) {
                 if ( data.name != null ) {
                     id = data.name
