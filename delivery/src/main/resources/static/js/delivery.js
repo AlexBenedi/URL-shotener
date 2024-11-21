@@ -3,12 +3,28 @@ $(document).ready(function () {
     var userId = $("#userIdValue").text(); // Suponiendo que tienes un input hidden con este ID en el HTML
     console.log("userId from ajax: " + userId);
 
+    // Mostrar/ocultar el campo de texto para el nombre de la marca
+    $("#brandedCheckbox").change(function () {
+        if ($(this).prop('checked')) {
+            $("#brandedNameGroup").show(); // Muestra el campo de texto
+        } else {
+            $("#brandedNameGroup").hide(); // Oculta el campo de texto
+            $("#brandedName").val(''); // Borra el contenido
+        }
+    });
+
     // Manejar el formulario de creación de enlaces
     $("#shortener").submit(function (event) {
         console.log("Has pulsado el botón de acortar URL");
         event.preventDefault();
-        // Agregar userId a los datos enviados
+        
+        // Agregar userId y brandedName si es necesario
         var formData = $(this).serialize() + "&userId=" + userId;
+        
+        // Si el checkbox está marcado, incluir el nombre de la marca
+        if ($("#brandedCheckbox").prop('checked')) {
+            formData += "&isBranded=true&name=" + encodeURIComponent($("#brandedName").val());
+        }
 
         $.ajax({
             type: "POST",

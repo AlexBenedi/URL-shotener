@@ -36,6 +36,18 @@
                         <button class="btn btn-primary" type="submit">Short me!</button>
                     </span>
                 </div>
+                
+                <!-- Checkbox para agregar nombre de marca -->
+                <div class="checkbox col-sm-offset-4 col-sm-4">
+                    <label>
+                        <input type="checkbox" id="brandedCheckbox"> Is Branded?
+                    </label>
+                </div>
+
+                <!-- Campo para ingresar nombre de la marca, inicialmente oculto -->
+                <div class="input-group input-group-lg col-sm-offset-4 col-sm-4" id="brandedNameGroup" style="display: none;">
+                    <input class="form-control" id="brandedName" name="brandedName" placeholder="Enter branded name" type="text">
+                </div>
             </form>
         </div>
     </div>
@@ -66,11 +78,10 @@
         window.location.href = '/logout';
     });
 
-    // Aquí el servidor reemplazará {{userId}} con el valor real
+    // Si ya tienes un valor para userId, lo colocamos en el recuadro
     var userId = "{{userId}}";
     console.log("User ID from HTML:", userId); // Solo para verificar que se recibió correctamente
 
-    // Si ya tienes un valor para userId, lo colocamos en el recuadro
     if (userId) {
         document.getElementById('userIdValue').textContent = userId;
     }
