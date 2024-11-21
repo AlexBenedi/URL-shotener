@@ -34,7 +34,7 @@ $(document).ready(function () {
                     resultDiv.append(
                         "<img src='data:image/png;base64," + response.qrCode + "' alt='QR Code'>"
                     );
-                    var qrCodeDownloadUrl = "/" + response.split('/').pop() + "/qr";
+                    var qrCodeDownloadUrl = "/" + response.url.split('/').pop() + "/qr"; // Use response.url
                     resultDiv.append('<p><a href="' + qrCodeDownloadUrl + '" download="qrcode.png">Download QR Code</a></p>');
                     resultDiv.append('<p>' + window.location.origin + qrCodeDownloadUrl + '</p>');
                 }
