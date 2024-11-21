@@ -8,6 +8,8 @@ import es.unizar.urlshortener.gateway.GoogleSafeBrowsingClient
 import org.apache.commons.validator.routines.UrlValidator
 import org.springframework.stereotype.Service
 import java.nio.charset.StandardCharsets
+import java.time.Instant
+import java.util.concurrent.ConcurrentHashMap
 
 /**
  * Implementation of the port [ValidatorService].
@@ -64,4 +66,34 @@ class SafetyServiceImpl(
      * @return true if the URL is safe, false otherwise
      */
     override fun isUrlSafe(url: String) = googleSafeBrowsingClient.isUrlSafe(url) 
+}
+
+/**
+ * Service to check if a non-registered user can be redirected.
+ */
+@Service
+class NonRegisteredUserService {
+
+    private val ipRedirectionCount = ConcurrentHashMap<String, Pair<Int, Instant>>()
+    private val LIMIT = 5 // Limit of redirections
+    private val TIME_WINDOW = 3600L // 1 hour in seconds
+
+    fun canRedirect(ip: String): Boolean {
+        val currentTime = Instant.now()
+        val (count, timestamp) = ipRedirectionCount[ip] ?: Pair(0, currentTime)
+
+        // Check if the time window has expired
+        if (currentTime.epochSecond - timestamp.epochSecond > TIME_WINDOW) {
+            ipRedirectionCount[ip] = Pair(1, currentTime) // Reset count
+            return true
+        }
+
+        // Check if the redirection count exceeds the limit
+        return if (count < LIMIT) {
+            ipRedirectionCount[ip] = Pair(count + 1, timestamp)
+            true
+        } else {
+            false
+        }
+    }
 }

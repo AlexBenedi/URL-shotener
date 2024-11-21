@@ -20,6 +20,9 @@ import org.springframework.security.oauth2.client.authentication.OAuth2Authentic
 import org.springframework.web.bind.annotation.*
 import java.time.Duration
 import java.time.OffsetDateTime
+import java.time.Instant
+import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.TimeUnit
 
 /**
  * The specification of the controller.
@@ -86,7 +89,9 @@ data class ShortUrlDataIn(
 data class ShortUrlDataOut(
     val url: URI? = null,
     val qrCode: String? = null, // Add the QR code here as a separate field
-    val properties: Map<String, Any> = emptyMap()
+    val properties: Map<String, Any> = emptyMap(),
+    val error: String? = null
+
 )
 
 /**
@@ -108,6 +113,9 @@ class UrlShortenerControllerImpl(
 
 ) : UrlShortenerController {
 
+    private val ipRedirectionCounts = ConcurrentHashMap<String, Pair<Int, Instant>>()
+    private val REDIRECTION_LIMIT = 6
+    private val TIME_WINDOW_SECONDS = TimeUnit.HOURS.toSeconds(1)
 
     /**
      * Redirects and logs a short url identified by its [id].
@@ -133,11 +141,26 @@ class UrlShortenerControllerImpl(
      * @return a ResponseEntity with the created short url details
      */
     @PostMapping("/api/link", consumes = [MediaType.APPLICATION_FORM_URLENCODED_VALUE])
-    override fun shortener(data: ShortUrlDataIn, request: HttpServletRequest): ResponseEntity<ShortUrlDataOut> =
-        createShortUrlUseCase.create(
+    override fun shortener(data: ShortUrlDataIn, request: HttpServletRequest): ResponseEntity<ShortUrlDataOut> {
+        val ip = request.remoteAddr
+        val now = Instant.now()
+
+        val (currentCount, lastTimestamp) = ipRedirectionCounts[ip] ?: Pair(0, now)
+
+        // Check if the time window has expired
+        if (now.epochSecond - lastTimestamp.epochSecond > TIME_WINDOW_SECONDS) {
+            ipRedirectionCounts[ip] = Pair(1, now) // Reset the count
+        } else if (currentCount >= REDIRECTION_LIMIT) {
+            return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS)
+                .body(ShortUrlDataOut(error = "Too many requests from this IP. Try again later."))
+        } else {
+            ipRedirectionCounts[ip] = Pair(currentCount + 1, lastTimestamp) // Increment the count
+        }
+
+        return createShortUrlUseCase.create(
             url = data.url,
             data = ShortUrlProperties(
-                ip = request.remoteAddr,
+                ip = ip,
                 sponsor = data.sponsor,
                 isBranded = data.isBranded,
                 name = data.name
@@ -167,8 +190,9 @@ class UrlShortenerControllerImpl(
                     )
                 )
             )
-            ResponseEntity<ShortUrlDataOut>(response, h, HttpStatus.CREATED)
+            ResponseEntity(response, h, HttpStatus.CREATED)
         }
+    }
 
     /**
      * Creates a short url from details provided in [data].
@@ -195,7 +219,7 @@ class UrlShortenerControllerImpl(
             }
 
             System.out.println("User redirections from shortenerUser : $userRedirections")
-            if (userRedirections > 5){
+            if (userRedirections >= REDIRECTION_LIMIT){
                 // Return 429 Too Many Requests
                 return ResponseEntity
                     .status(HttpStatus.TOO_MANY_REQUESTS) // Set HTTP status to 429
