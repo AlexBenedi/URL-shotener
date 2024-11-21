@@ -1,7 +1,6 @@
 package es.unizar.urlshortener.infrastructure.delivery
 
-import es.unizar.urlshortener.core.ClickProperties
-import es.unizar.urlshortener.core.ShortUrlProperties
+import es.unizar.urlshortener.core.*
 import es.unizar.urlshortener.core.usecases.GetUserInformationUseCase
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.hateoas.server.mvc.linkTo
@@ -14,17 +13,12 @@ import java.util.Base64
 import es.unizar.urlshortener.core.usecases.RedirectUseCase
 import es.unizar.urlshortener.core.usecases.LogClickUseCase
 import es.unizar.urlshortener.core.usecases.CreateShortUrlUseCase
-import es.unizar.urlshortener.core.usecases.GenerateQRCodeUseCaseImpl
+import es.unizar.urlshortener.core.usecases.GenerateQRCodeUseCase
 import es.unizar.urlshortener.core.usecases.DeleteUserLinkUseCase
-import es.unizar.urlshortener.core.ShortUrlRepositoryService
 import org.springframework.core.io.ClassPathResource
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken
 import org.springframework.web.bind.annotation.*
-import es.unizar.urlshortener.core.User
-import es.unizar.urlshortener.core.Link
-import es.unizar.urlshortener.core.ShortUrl
-import es.unizar.urlshortener.core.Click
-import es.unizar.urlshortener.core.ClickRepositoryService
+import java.time.OffsetDateTime
 
 /**
  * The specification of the controller.
@@ -51,7 +45,7 @@ interface UrlShortenerController {
      *
      * **Note**: Delivery of use case [CreateShortUrlUseCase].
      */
-    fun shortenerUser(data: ShortUrlDataIn, request: HttpServletRequest,userId:String): ResponseEntity<ByteArray>
+    fun shortenerUser(data: ShortUrlDataIn, request: HttpServletRequest,userId:String): ResponseEntity<ShortUrlDataOut>
 
     /**
      * This method is used to get the user information.
@@ -107,11 +101,12 @@ class UrlShortenerControllerImpl(
     val getUserInformationUseCase : GetUserInformationUseCase,
     val deleteUserLinkUseCase : DeleteUserLinkUseCase,
     val shortUrlRepositoryService: ShortUrlRepositoryService,
-    val clickRepositoryService: ClickRepositoryService
+    val clickRepositoryService: ClickRepositoryService,
+    val userRepositoryService: UserRepositoryService,
+    val generateQRCodeUseCase : GenerateQRCodeUseCase
+
 ) : UrlShortenerController {
 
-    // Directly instantiate the QR Code use case implementation
-    private val generateQRCodeUseCase = GenerateQRCodeUseCaseImpl(shortUrlRepositoryService)
 
     /**
      * Redirects and logs a short url identified by its [id].
@@ -153,7 +148,7 @@ class UrlShortenerControllerImpl(
 
             // Check if the QR code should be generated
             val qrCode = if (data.generateQRCode == true) {
-                generateQRCodeUseCase.generateQRCode(url.toString(), hash).base64Image
+                generateQRCodeUseCase.generateQRCode(url.toString()).base64Image
             } else {
                 null
             }
@@ -182,67 +177,117 @@ class UrlShortenerControllerImpl(
      * @return a ResponseEntity with the created short url details
      */
     @PostMapping("/api/linkUser", consumes = [MediaType.APPLICATION_FORM_URLENCODED_VALUE])
-    override fun shortenerUser(data: ShortUrlDataIn, request: HttpServletRequest, @RequestParam userId:String): ResponseEntity<ByteArray> {
+    override fun shortenerUser(data: ShortUrlDataIn, request: HttpServletRequest, @RequestParam userId:String): ResponseEntity<ShortUrlDataOut> {
         System.out.println("UserId from shortenerUser : $userId")
         System.out.println("URL from shortenerUser : ${data.url}")
 
-        // Crear el ShortUrl con el use case
-        val shortUrl = createShortUrlUseCase.createAndDoNotSave(
-            url = data.url,
-            data = ShortUrlProperties(
-                ip = request.remoteAddr,
-                sponsor = data.sponsor,
-                isBranded = data.isBranded,
-                name = data.name
-            )
-        )
-
-        System.out.println("Short hash  : ${shortUrl.hash}")
-
-        // Crear el objeto Click (o recuperarlo si ya tienes la información en algún otro lugar)
-        val click = Click(
-            hash = shortUrl.hash,
-            properties = ClickProperties(
-                ip = request.remoteAddr,
-                referrer = request.getHeader("referer"),
-                browser = request.getHeader("user-agent"),
-                platform = request.getHeader("user-platform"),
-            ),  // Ajusta esto según tu lógica
-            created = shortUrl.created,
-            clicks = 0
-        )
-
-        // Crear el objeto Link usando el ShortUrl y el Click
-        val link = Link(
-            click = click,
-            shortUrl = shortUrl,
-            userId = userId
-        )
-
-        getUserInformationUseCase.saveLink(link)
-
-        generateQRCodeUseCase.generateQRCode(data.url, shortUrl.hash).base64Image
+        val user1 = userRepositoryService.findById(userId)
+        if (user1 != null) {
+            val userRedirections = user1.redirections
+            System.out.println("User redirections from shortenerUser : $userRedirections")
+            if (userRedirections > 5){
+                // Return 429 Too Many Requests
+                return ResponseEntity
+                    .status(HttpStatus.TOO_MANY_REQUESTS) // Set HTTP status to 429
+                    .body(
+                        ShortUrlDataOut(
+                            url = null,
+                            qrCode = null,
+                            properties = mapOf("error" to "Too many requests. Please try again later.")
+                        )
+                    )
+            } else {
+                val newRedirections = user1.redirections + 1
 
 
-        val message = "El enlace se creó y guardó correctamente."
-        return ResponseEntity.ok()
-            .header(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_PLAIN_VALUE) // Indicamos que el contenido es texto plano
-            .body(message.toByteArray(Charsets.UTF_8))
+                // Check if the QR code should be generated
+                val qrCode = if (data.generateQRCode == true) {
+                    generateQRCodeUseCase.generateQRCode(data.url).base64Image
+                } else {
+                    null
+                }
+
+                // Crear el ShortUrl con el use case
+                val shortUrl = createShortUrlUseCase.createAndDoNotSave(
+                    url = data.url,
+                    data = ShortUrlProperties(
+                        ip = request.remoteAddr,
+                        sponsor = data.sponsor,
+                        isBranded = data.isBranded,
+                        name = data.name,
+                        qrCode = qrCode
+                    )
+                )
+
+                val user = User(
+                    userId =userId,
+                    redirections = newRedirections,
+                    lastRedirectionTimeStamp = OffsetDateTime.now()
+                )
+
+                userRepositoryService.save(user)
+
+                System.out.println("Short hash  : ${shortUrl.hash}")
+
+                // Crear el objeto Click (o recuperarlo si ya tienes la información en algún otro lugar)
+                val click = Click(
+                    hash = shortUrl.hash,
+                    properties = ClickProperties(
+                        ip = request.remoteAddr,
+                        referrer = request.getHeader("referer"),
+                        browser = request.getHeader("user-agent"),
+                        platform = request.getHeader("user-platform"),
+                    ),  // Ajusta esto según tu lógica
+                    created = shortUrl.created,
+                    clicks = 0
+                )
+
+                // Crear el objeto Link usando el ShortUrl y el Click
+                val link = Link(
+                    click = click,
+                    shortUrl = shortUrl,
+                    user = user
+                )
+
+                getUserInformationUseCase.saveLink(link)
+
+
+                // Build the response
+                val shortenedUrl = "${request.scheme}://${request.serverName}:${request.serverPort}/${shortUrl.hash}"
+                val response = ShortUrlDataOut(
+                    url = URI.create(shortenedUrl), // Convert String to URI
+                    qrCode = qrCode,
+                    properties = mapOf("message" to "Link created successfully")
+                )
+                return ResponseEntity.ok(response)
+            }
+        } else {
+            // Return 404 Not Found
+            return ResponseEntity
+                .status(HttpStatus.NOT_FOUND) // Set HTTP status to 404
+                .body(
+                    ShortUrlDataOut(
+                        url = null,
+                        qrCode = null,
+                        properties = mapOf("error" to "User not found")
+                    )
+                )
+        }
     }
 
     @GetMapping("/api/getUserLink")
     @ResponseBody
     override fun getUserLinks(@RequestParam userId: String): ResponseEntity<List<Link>> {
         System.out.println("UserId from getUserLinks : $userId")
-        val user = User(userId)
-        val links = getUserInformationUseCase.getLinks(user)
+        val user = userRepositoryService.findById(userId)
+        val links = user?.let { getUserInformationUseCase.getLinks(it) }
         return ResponseEntity.ok(links)
     }
 
     @GetMapping("/user")
     @ResponseBody
     override fun user(token: OAuth2AuthenticationToken): ResponseEntity<String> {
-        val user = User(token.principal.attributes["sub"].toString())
+        val user = User(token.principal.attributes["sub"].toString(), redirections = 0, lastRedirectionTimeStamp = null)
         val userId = user.userId
         getUserInformationUseCase.processUser(user)
 

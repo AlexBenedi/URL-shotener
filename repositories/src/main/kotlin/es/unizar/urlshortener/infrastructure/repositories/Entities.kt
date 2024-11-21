@@ -3,6 +3,7 @@
 package es.unizar.urlshortener.infrastructure.repositories
 
 import jakarta.persistence.*
+import java.time.LocalDateTime
 import java.time.OffsetDateTime
 
 /**
@@ -69,7 +70,7 @@ class LinkEntity(
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    val userId: UserEntity
+    val user: UserEntity
 )
 
 @Entity
@@ -77,7 +78,10 @@ class LinkEntity(
 @Suppress("LongParameterList", "JpaObjectClassSignatureInspection")
 class UserEntity(
     @Id
-    val id: String
+    val id: String,
+    val redirections : Int,
+    val lastRedirectionTimeStamp : OffsetDateTime? = null
+
 )
 
 

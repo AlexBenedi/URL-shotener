@@ -86,14 +86,16 @@ data class ClickProperties(
 data class Link(
     val click: Click,
     val shortUrl: ShortUrl,
-    val userId: String
+    val user: User
 )
 
 /**
  * A [User] is the entity that represents a user of the application.
  */
 data class User(
-    val userId : String
+    val userId : String,
+    val redirections: Int,
+    val lastRedirectionTimeStamp: OffsetDateTime?
 )
 /**
  * A [QRCode] represents a generated QR code for a given URL.

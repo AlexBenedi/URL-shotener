@@ -16,6 +16,7 @@ import es.unizar.urlshortener.infrastructure.repositories.UserEntityRepository
 import es.unizar.urlshortener.infrastructure.repositories.UserRepositoryServiceImpl
 import es.unizar.urlshortener.infrastructure.repositories.LinkEntityRepository
 import es.unizar.urlshortener.infrastructure.repositories.LinkRepositoryServiceImpl
+import es.unizar.urlshortener.core.usecases.GenerateQRCodeUseCaseImpl
 import es.unizar.urlshortener.core.usecases.DeleteUserLinkUseCaseImpl
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
@@ -27,7 +28,7 @@ class ApplicationConfigurationUseCases(
     @Autowired val clickEntityRepository: ClickEntityRepository,
     @Autowired val userEntityRepository: UserEntityRepository,
     @Autowired val linkEntityRepository: LinkEntityRepository,
-    @Autowired val safetyServiceImpl: SafetyServiceImpl,
+    @Autowired val safetyServiceImpl: SafetyServiceImpl
 ){
 
     /**
@@ -74,4 +75,12 @@ class ApplicationConfigurationUseCases(
     fun deleteUserLinkUseCase() = DeleteUserLinkUseCaseImpl(
         LinkRepositoryServiceImpl(linkEntityRepository)
     )
+
+    /**
+     * Provude an implementation of GenerateQRCodeUseCase.
+     * @return an instance of GenerateQRCodeUseCaseImpl.
+     */
+    @Bean
+    fun generateQRCodeUseCase() = GenerateQRCodeUseCaseImpl()
+
 }

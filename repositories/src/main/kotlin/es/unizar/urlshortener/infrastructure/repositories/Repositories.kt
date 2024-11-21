@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional
  */
 interface LinkEntityRepository : JpaRepository<LinkEntity, Long>{
     // Encuentra todas las entidades LinkEntity que coinciden con el userId
-    @Query("SELECT l FROM LinkEntity l WHERE l.userId = :userId")
+    @Query("SELECT l FROM LinkEntity l WHERE l.user = :userId")
     fun findByUserId(@Param("userId") userId: UserEntity): List<LinkEntity>
 }
 
