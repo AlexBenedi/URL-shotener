@@ -29,6 +29,14 @@ jobs:
           docker-compose --version
       - name: Set up Kafka Docker Compose 
         run: docker-compose -f docker-compose.yml up -d
+      - name: Sanitize kafka I
+        run: ./gradlew build --no-daemon || true
+        env:
+          GOOGLE_SAFE_BROWSING_API_KEY: ${{ secrets.GOOGLE_API_SAFETY_KEY }}
+      - name: Sanitize kafka II
+        run: ./gradlew build --no-daemon || true
+        env:
+          GOOGLE_SAFE_BROWSING_API_KEY: ${{ secrets.GOOGLE_API_SAFETY_KEY }}
       - name: Build with Gradle
         run: ./gradlew build --no-daemon
         env:
