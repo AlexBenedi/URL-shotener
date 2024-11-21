@@ -80,7 +80,7 @@ class HttpRequestTest {
         // Wait for Kafka to process the message and update the URL's field in the database
         // this is not the best way to do it, but it works for now 
         // it should be replaced with a better solution in the future! 
-        Thread.sleep(5000)
+        Thread.sleep(15000)
         val response = restTemplate.getForEntity(target, String::class.java)
         assertThat(response.statusCode).isEqualTo(HttpStatus.TEMPORARY_REDIRECT)
         assertThat(response.headers.location).isEqualTo(URI.create("http://example.com/"))
@@ -95,7 +95,7 @@ class HttpRequestTest {
     fun `redirectTo returns a forbidden when the key exists but url is unsafe`() {
         val target = shortUrl("https://testsafebrowsing.appspot.com/s/malware.html").headers.location
         require(target != null)
-        Thread.sleep(5000)
+        Thread.sleep(15000)
         val response = restTemplate.getForEntity(target, String::class.java)
         assertThat(response.statusCode).isEqualTo(HttpStatus.FORBIDDEN)
 
