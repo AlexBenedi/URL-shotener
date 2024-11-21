@@ -86,7 +86,8 @@ data class ClickProperties(
 data class Link(
     val click: Click,
     val shortUrl: ShortUrl,
-    val userId: String
+    val userId: String,
+    val id : Long?
 )
 
 /**

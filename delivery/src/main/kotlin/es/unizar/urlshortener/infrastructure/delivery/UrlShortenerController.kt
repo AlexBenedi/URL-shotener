@@ -72,6 +72,7 @@ interface UrlShortenerController {
 
     fun getClicksByHash(@PathVariable hash: String): ResponseEntity<Int>
 
+    fun deleteLink(@PathVariable idLink: Long): ResponseEntity<String>
 }
 
 /**
@@ -217,7 +218,8 @@ class UrlShortenerControllerImpl(
         val link = Link(
             click = click,
             shortUrl = shortUrl,
-            userId = userId
+            userId = userId,
+            id = null
         )
 
         getUserInformationUseCase.saveLink(link)
@@ -264,6 +266,16 @@ class UrlShortenerControllerImpl(
     override fun getClicksByHash(@PathVariable hash: String): ResponseEntity<Int> {
         val totalClicks = clickRepositoryService.getTotalClicksByHash(hash) ?: 0
         return ResponseEntity.ok(totalClicks)
+    }
+
+    @DeleteMapping("/delete/{idLink}")
+    override fun deleteLink(@PathVariable idLink: Long): ResponseEntity<String> {
+        return try {
+            deleteUserLinkUseCase.deleteById(idLink)
+            ResponseEntity.ok("Link con id $idLink eliminado con éxito.")
+        } catch (ex: Exception) {
+            ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al eliminar el link: ${ex.message}")
+        }
     }
 
     @GetMapping("/{id}/qr", produces = [MediaType.IMAGE_PNG_VALUE])

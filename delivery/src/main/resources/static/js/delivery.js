@@ -51,38 +51,45 @@ $(document).ready(function () {
     fetchUserLinks();
 
     function fetchUserLinks() {
-        // Construir el formData con el userId
-        var formData = "userId=" + userId; // Construir la cadena con el userId
+        var formData = "userId=" + userId;
 
         $.ajax({
             type: "GET",
-            url: "/api/getUserLink", // URL del endpoint
-            data: formData, // Enviar el userId como parte de la cadena de consulta
+            url: "/api/getUserLink",
+            data: formData,
             success: function (links) {
                 var tableBody = $("#linksTable tbody");
                 tableBody.empty(); // Limpiar la tabla antes de llenarla
 
                 links.forEach(function (link) {
-                    // Crear una fila por cada link
                     var qrCodeHtml = link.shortUrl.properties.qrCode
                         ? `<img src="data:image/png;base64,${link.shortUrl.properties.qrCode}" alt="QR Code" width="100">`
                         : `<button class="btn btn-primary generate-qr" data-hash="${link.shortUrl.hash}">Generate QR</button>`;
 
+                    // Generar HTML de la fila
                     var rowHtml = `
-                        <tr>
+                        <tr id="link-row-${link.shortUrl.id}">
                             <td>${link.shortUrl.redirection.target}</td>
                             <td id="clicks-count-${link.shortUrl.hash}">Cargando...</td>
                             <td>${qrCodeHtml}</td>
                             <td><a href="/${link.shortUrl.hash}" target="_blank">${window.location.origin}/${link.shortUrl.hash}</a></td>
+                            <td>
+                                <button class="btn btn-danger delete-link" data-id="${link.id}" >Delete</button>
+                            </td>
                         </tr>
                     `;
                     tableBody.append(rowHtml);
 
-                    // Llamar al endpoint para obtener el número total de clics
                     fetchClicksByHash(link.shortUrl.hash);
                 });
 
-                // Agregar funcionalidad al botón "Generate QR"
+                // Asociar evento al botón de eliminar
+                $(".delete-link").click(function () {
+                    var id = $(this).data("id");
+                    deleteLink(id);
+                });
+
+                // Asociar evento al botón "Generate QR"
                 $(".generate-qr").click(function () {
                     var hash = $(this).data("hash");
                     generateQRCode(hash);
@@ -127,5 +134,21 @@ $(document).ready(function () {
                 alert("Error generating QR Code.");
             }
         });
+    }
+
+    function deleteLink(idLink) {
+        if (confirm("¿Estás seguro de que deseas eliminar este enlace?")) {
+            $.ajax({
+                type: "DELETE",
+                url: `/delete/${idLink}`,
+                success: function () {
+                    alert("Enlace eliminado con éxito.");
+                    location.reload(); // Recarga la página
+                },
+                error: function () {
+                    alert("Error al eliminar el enlace. Por favor, inténtalo de nuevo.");
+                }
+            });
+        }
     }
 });

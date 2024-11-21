@@ -89,7 +89,8 @@ fun ShortUrl.toEntity() = ShortUrlEntity(
 fun LinkEntity.toDomain() = Link(
     click = click.toDomain(),
     shortUrl = shortUrl.toDomain(),
-    userId = userId.toDomain().userId
+    userId = userId.toDomain().userId,
+    id = id
 )
 
 /**
