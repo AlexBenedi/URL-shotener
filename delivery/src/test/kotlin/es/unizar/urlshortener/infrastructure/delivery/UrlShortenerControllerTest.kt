@@ -24,7 +24,8 @@ import kotlin.test.Test
 @ContextConfiguration(
     classes = [
         UrlShortenerControllerImpl::class,
-        GenerateQRCodeUseCaseImpl::class
+        GenerateQRCodeUseCaseImpl::class,
+        RestResponseEntityExceptionHandler::class
     ]
 )
 class UrlShortenerControllerTest {
