@@ -2,12 +2,7 @@
 
 package es.unizar.urlshortener.infrastructure.delivery
 import es.unizar.urlshortener.core.*
-import es.unizar.urlshortener.core.usecases.CreateShortUrlUseCase
-import es.unizar.urlshortener.core.usecases.GetUserInformationUseCase
-import es.unizar.urlshortener.core.usecases.DeleteUserLinkUseCase
-import es.unizar.urlshortener.core.usecases.LogClickUseCase
-import es.unizar.urlshortener.core.usecases.RedirectUseCase
-import es.unizar.urlshortener.core.usecases.GenerateQRCodeUseCase
+import es.unizar.urlshortener.core.usecases.*
 import org.mockito.BDDMockito.given
 import org.mockito.BDDMockito.never
 import org.mockito.kotlin.verify
@@ -29,7 +24,7 @@ import kotlin.test.Test
 @ContextConfiguration(
     classes = [
         UrlShortenerControllerImpl::class,
-        RestResponseEntityExceptionHandler::class
+        GenerateQRCodeUseCaseImpl::class
     ]
 )
 class UrlShortenerControllerTest {
@@ -58,6 +53,21 @@ class UrlShortenerControllerTest {
     @MockBean 
     private lateinit var generateQRCodeUseCase: GenerateQRCodeUseCase
 
+    @MockBean
+    private lateinit var shortUrlRepositoryService: ShortUrlRepositoryService
+
+    @MockBean
+    private lateinit var userRepositoryService: UserRepositoryService
+
+    @MockBean
+    private lateinit var linkRepositoryService: LinkRepositoryService
+
+    @MockBean
+    private lateinit var clickRepositoryService: ClickRepositoryService
+
+    @MockBean
+    private lateinit var generateQRCodeUseCaseImpl: GenerateQRCodeUseCaseImpl
+
 
     /**
      * Tests that `redirectTo` returns a redirect when the key exists.
@@ -66,7 +76,7 @@ class UrlShortenerControllerTest {
     fun `redirectTo returns a redirect when the key exists`() {
 
         //Mock the behavior of getUserInformationUseCase to return a User object
-        given(getUserInformationUseCase.getLinks(User("1", 0, null))).willReturn(emptyList())
+        //given(getUserInformationUseCase.getLinks(User("1", 0, null))).willReturn(emptyList())
 
         //Mock the behavior of securityFilterChain to return a SecurityFilterChain object
         given(securityFilterChain.toString()).willReturn("SecurityFilterChain")

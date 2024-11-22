@@ -9,6 +9,7 @@ import es.unizar.urlshortener.core.UserRepositoryService
 import es.unizar.urlshortener.core.Link
 import es.unizar.urlshortener.core.LinkRepositoryService
 import org.springframework.data.repository.query.Param
+import org.springframework.stereotype.Service
 
 
 /**
@@ -103,6 +104,7 @@ class ClickRepositoryServiceImpl(
 /**
  * Implementation of the port [ShortUrlRepositoryService].
  */
+@Service
 class ShortUrlRepositoryServiceImpl(
     private val shortUrlEntityRepository: ShortUrlEntityRepository
 ) : ShortUrlRepositoryService {
