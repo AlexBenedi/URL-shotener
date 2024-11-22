@@ -25,6 +25,8 @@ The main challenges we faced once again revolved around understanding the projec
 To run the WP, you will need to open your terminal and navigate to the project's root directory. Once there, execute the command `./gradlew bootRun` to start the application. After the application is running, open your web browser and navigate to the application's UI. From there, click on the "Log In / Register" button to begin the authentication process. You will be prompted to log in or register, and once you complete the process, you can interact with the user interface to test the functionality, including link management and user registration. This approach allows you to verify the seamless integration of the core features through the UI.
 
 ### Implemented Tests
-In the file "UrlShortenerControllerTest.kt," new tests have been defined to verify the correct functioning of the users link-saving functionality. Tests were created for both: standard links and branded links. Additionally, "edge cases" related to branded links were also tested.
+This functionality is related to the rest of the application's features. For this reason, the tests were not only based on users but also combined with the branded links functionality, redirection limit, and QR features. For this reason, new tests have been implemented in the file `UrlShortenerControllerTest.kt` to cover all of this.
+
+Tests have been created for creating and deleting both branded and regular short URLs, as well as for QR generation and redirection limits. Additionally, edge cases have been tested.
 
 The tests from the previous delivery (POC) have been left untouched. This provided a solid foundation, speeding up the development process.
