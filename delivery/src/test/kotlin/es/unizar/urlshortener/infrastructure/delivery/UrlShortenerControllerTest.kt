@@ -29,6 +29,7 @@ import kotlin.test.Test
         RestResponseEntityExceptionHandler::class
     ]
 )
+@Suppress("UnusedPrivateProperty")
 class UrlShortenerControllerTest {
 
     @Autowired
