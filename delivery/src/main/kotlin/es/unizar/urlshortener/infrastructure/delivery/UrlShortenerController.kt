@@ -116,10 +116,10 @@ class UrlShortenerControllerImpl(
 ) : UrlShortenerController {
     private val ipRedirectionCounts = ConcurrentHashMap<String, Pair<Int, Instant>>()
     companion object {
-        private val REDIRECTION_LIMIT = 6
+        private const val REDIRECTION_LIMIT = 6 // Cambiada a const val
         private val TIME_WINDOW_SECONDS = TimeUnit.HOURS.toSeconds(1)
+        private const val MINUTES_LIMIT = 60
     }
-
     /**
      * Redirects and logs a short url identified by its [id].
      *
@@ -236,7 +236,7 @@ class UrlShortenerControllerImpl(
             val timeElapsed = Duration.between(lastRedirectionTime, currentTime).toMinutes()
 
             var userRedirections = user1.redirections
-            if (timeElapsed >= 60) {
+            if (timeElapsed >= MINUTES_LIMIT) {
                 userRedirections = 0 // Restablece las redirecciones cada 60 minutos
             }
 
