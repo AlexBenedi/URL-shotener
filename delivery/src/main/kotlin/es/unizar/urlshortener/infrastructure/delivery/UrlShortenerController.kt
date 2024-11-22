@@ -13,7 +13,7 @@ import java.util.Base64
 import es.unizar.urlshortener.core.usecases.RedirectUseCase
 import es.unizar.urlshortener.core.usecases.LogClickUseCase
 import es.unizar.urlshortener.core.usecases.CreateShortUrlUseCase
-import es.unizar.urlshortener.core.usecases.GenerateQRCodeUseCase
+import es.unizar.urlshortener.core.usecases.GenerateQRCodeUseCaseImpl
 import es.unizar.urlshortener.core.usecases.DeleteUserLinkUseCase
 import org.springframework.core.io.ClassPathResource
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken
@@ -110,10 +110,9 @@ class UrlShortenerControllerImpl(
     val shortUrlRepositoryService: ShortUrlRepositoryService,
     val clickRepositoryService: ClickRepositoryService,
     val userRepositoryService: UserRepositoryService,
-    val generateQRCodeUseCase : GenerateQRCodeUseCase
+    val generateQRCodeUseCase: GenerateQRCodeUseCaseImpl
 
 ) : UrlShortenerController {
-
     private val ipRedirectionCounts = ConcurrentHashMap<String, Pair<Int, Instant>>()
     private val REDIRECTION_LIMIT = 6
     private val TIME_WINDOW_SECONDS = TimeUnit.HOURS.toSeconds(1)
@@ -158,6 +157,7 @@ class UrlShortenerControllerImpl(
             ipRedirectionCounts[ip] = Pair(currentCount + 1, lastTimestamp) // Increment the count
         }
 
+
         return createShortUrlUseCase.create(
             url = data.url,
             data = ShortUrlProperties(
@@ -173,10 +173,22 @@ class UrlShortenerControllerImpl(
 
             // Check if the QR code should be generated
             val qrCode = if (data.generateQRCode == true) {
-                generateQRCodeUseCase.generateQRCode(url.toString()).base64Image
+                generateQRCodeUseCase.generateQRCode(data.url).base64Image
             } else {
                 null
             }
+
+            val shortUrl = shortUrlRepositoryService.findByKey(hash)
+                ?: throw UrlNotFoundException(data.url) // Throw exception if the URL is not found
+
+            // Update the ShortUrlProperties with the generated QR code
+            val updatedProperties = shortUrl.properties.copy(qrCode = qrCode)
+
+            // Create an updated ShortUrl with the new properties
+            val updatedShortUrl = shortUrl.copy(properties = updatedProperties)
+
+            // Save the updated ShortUrl
+            shortUrlRepositoryService.save(updatedShortUrl)
 
             val response = ShortUrlDataOut(
                 url = url,
@@ -243,7 +255,7 @@ class UrlShortenerControllerImpl(
                 }
 
                 // Crear el ShortUrl con el use case
-                val shortUrl = createShortUrlUseCase.createAndDoNotSave(
+                val shortUrlCreation = createShortUrlUseCase.createAndDoNotSave(
                     url = data.url,
                     data = ShortUrlProperties(
                         ip = request.remoteAddr,
@@ -255,6 +267,19 @@ class UrlShortenerControllerImpl(
                     userId = userId
                 )
 
+                val shortUrl = ShortUrl(
+                    hash = shortUrlCreation.hash,
+                    redirection = Redirection(target = data.url),
+                    created = OffsetDateTime.now(),
+                    properties = ShortUrlProperties(
+                        ip = request.remoteAddr,
+                        sponsor = data.sponsor,
+                        isBranded = data.isBranded,
+                        name = data.name,
+                        qrCode = qrCode
+                    )
+                )
+
                 val user = User(
                     userId =userId,
                     redirections = newRedirections,
@@ -263,11 +288,11 @@ class UrlShortenerControllerImpl(
 
                 userRepositoryService.save(user)
 
-                System.out.println("Short hash  : ${shortUrl.hash}")
+                System.out.println("Short hash  : ${shortUrlCreation.hash}")
 
                 // Crear el objeto Click (o recuperarlo si ya tienes la información en algún otro lugar)
                 val click = Click(
-                    hash = shortUrl.hash,
+                    hash = shortUrlCreation.hash,
                     properties = ClickProperties(
                         ip = request.remoteAddr,
                         referrer = request.getHeader("referer"),

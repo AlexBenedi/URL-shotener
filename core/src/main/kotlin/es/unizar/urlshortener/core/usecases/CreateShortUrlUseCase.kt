@@ -48,11 +48,6 @@ class CreateShortUrlUseCaseImpl(
         // Get the user ID from the data (modify as needed to get the actual user ID)
         val userId = data.sponsor ?: "anonymous" // or however you identify users
 
-        // Check if the user has exceeded the limit
-        val count = shortUrlRepository.countShortenedUrlsByUser(userId)
-        if (count >= MAX_SHORTENED_URLS) {
-            throw LimitExceededException("You have reached the limit of 5 shortened URLs. Please try again later.")
-        }
 
         if (safeCall { validatorService.isValid(url) }) {
             /*if (!safeCall { safetyService.isUrlSafe(url) }) {
@@ -87,12 +82,6 @@ class CreateShortUrlUseCaseImpl(
 
     override fun createAndDoNotSave(url: String, data: ShortUrlProperties, userId : String): ShortUrl{
         // Get the user ID from the data (modify as needed to get the actual user ID)
-
-        // Check if the user has exceeded the limit
-        val count = shortUrlRepository.countShortenedUrlsByUser(userId)
-        if (count >= MAX_SHORTENED_URLS) {
-            throw LimitExceededException("You have reached the limit of 5 shortened URLs. Please try again later.")
-        }
 
         if (safeCall { validatorService.isValid(url) }) {
             /*if (!safeCall { safetyService.isUrlSafe(url) }) {
