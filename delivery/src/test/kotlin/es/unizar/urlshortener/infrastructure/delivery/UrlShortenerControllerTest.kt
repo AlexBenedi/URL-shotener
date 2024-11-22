@@ -3,6 +3,7 @@
 package es.unizar.urlshortener.infrastructure.delivery
 import es.unizar.urlshortener.core.*
 import es.unizar.urlshortener.core.usecases.*
+import org.mockito.ArgumentMatchers.any
 import org.mockito.BDDMockito.given
 import org.mockito.BDDMockito.never
 import org.mockito.kotlin.verify
@@ -132,6 +133,9 @@ class UrlShortenerControllerTest {
             )
         ).willReturn(ShortUrl("f684a3c4", Redirection("http://example.com/")))
 
+        given(shortUrlRepositoryService.findByKey("f684a3c4"))
+            .willReturn(ShortUrl("f684a3c4", Redirection("http://example.com/")))
+
         // Perform a POST request and verify the response status, redirection URL, and JSON response
         mockMvc.perform(
             post("/api/link")
@@ -156,6 +160,8 @@ class UrlShortenerControllerTest {
                 data = ShortUrlProperties(ip = "127.0.0.1")
             )
         ).willAnswer { throw InvalidUrlException("ftp://example.com/") }
+
+        
 
         // Perform a POST request and verify the response status and error message
         mockMvc.perform(

@@ -178,7 +178,7 @@ class UrlShortenerControllerImpl(
             } else {
                 null
             }
-
+            println("Key hachis: $hash")
             val shortUrl = shortUrlRepositoryService.findByKey(hash)
                 ?: throw UrlNotFoundException(data.url) // Throw exception if the URL is not found
 
