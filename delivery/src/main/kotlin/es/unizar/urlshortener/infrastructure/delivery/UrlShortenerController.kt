@@ -248,13 +248,14 @@ class UrlShortenerControllerImpl(
             } else {
                 val newRedirections = user1.redirections + 1
 
-
+                println("Data: $data")
                 // Check if the QR code should be generated
                 val qrCode = if (data.generateQRCode == true) {
                     generateQRCodeUseCase.generateQRCode(data.url).base64Image
                 } else {
                     null
                 }
+                println("QR CODE: $qrCode")
 
                 // Crear el ShortUrl con el use case
                 val shortUrlCreation = createShortUrlUseCase.createAndDoNotSave(
@@ -392,7 +393,8 @@ class UrlShortenerControllerImpl(
         println("The value of the qrCode field is: ${shortUrl.properties.qrCode}")
 
         val qrCodeBase64 = shortUrl.properties.qrCode
-
+        
+        println("The value of the qrCodeBase64 field is: $qrCodeBase64")
         // Check if the QR code is present
         // Decode the Base64 string into a byte array
         try {

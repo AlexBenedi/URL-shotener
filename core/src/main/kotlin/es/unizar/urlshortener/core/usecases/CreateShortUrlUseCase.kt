@@ -71,7 +71,8 @@ class CreateShortUrlUseCaseImpl(
                     safe = safety,
                     ip = data.ip,
                     sponsor = data.sponsor,
-                    isBranded = data.isBranded != null && data.name != null
+                    isBranded = data.isBranded != null && data.name != null,
+                    qrCode = data.qrCode,
                 )
             )
             return safeCall { shortUrlRepository.save(su) }
@@ -100,6 +101,7 @@ class CreateShortUrlUseCaseImpl(
             }
             val safety = safeCall { safetyService.isUrlSafe(url) } // this must be async
             println("Safety checked: $safety")
+            println("Data dentro : $data")
             val su = ShortUrl(
                 hash = id,
                 redirection = Redirection(target = url),
@@ -107,7 +109,8 @@ class CreateShortUrlUseCaseImpl(
                     safe = safety,
                     ip = data.ip,
                     sponsor = data.sponsor,
-                    isBranded = data.isBranded != null && data.name != null
+                    isBranded = data.isBranded != null && data.name != null,
+                    qrCode = data.qrCode,
                 )
             )
             println("Short URL created: $su")
