@@ -45,13 +45,20 @@ class ApplicationConfiguration(
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         return http
-            .csrf { it.disable() } // Desactiva CSRF para simplificar el access
+            .csrf { it.disable() } // Desactiva CSRF para simplificar el acceso
             .authorizeHttpRequests { registry ->
-                registry.requestMatchers("/user").authenticated()
-                registry.anyRequest().permitAll()
+                registry.requestMatchers("/user").authenticated()  // Rutas autenticadas
+                registry.anyRequest().permitAll()  // Rutas públicas
             }
-            .oauth2Login(Customizer.withDefaults())
-            //.formLogin(Customizer.withDefaults())
+            .oauth2Login(Customizer.withDefaults())  // Configura OAuth2 Login
+            .logout { logout ->
+                logout
+                    .logoutUrl("/logout")  // Define la URL para hacer logout
+                    .logoutSuccessUrl("/")  // Redirige al inicio después de hacer logout
+                    .invalidateHttpSession(true)  // Invalida la sesión HTTP
+                    .clearAuthentication(true)  // Limpia el contexto de seguridad
+                    .deleteCookies("JSESSIONID")  // Elimina las cookies asociadas a la sesión
+            }
             .build()
     }
 

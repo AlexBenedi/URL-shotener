@@ -21,6 +21,11 @@ interface LinkRepositoryService {
      */
     fun findByUserId(user: User): List<Link>
 
+    /**
+        * Deletes a [Link] entity from the repository.
+     */
+    fun deleteById(idLink: Long)
+
 }
 
 /**
@@ -57,6 +62,12 @@ interface ClickRepositoryService {
      * @return The saved [Click] entity.
      */
     fun save(cl: Click): Click
+
+    fun findByHash(hash: String): Click?
+
+    fun updateClicksByHash(hash: String, clicks: Int): Int
+
+    fun getTotalClicksByHash(hash: String): Int
 
 }
 

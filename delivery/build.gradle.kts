@@ -23,6 +23,7 @@ dependencies {
 
     implementation(project(":kafka"))
 
+
     // Include Spring Boot Starter Web as an implementation dependency
     implementation(libs.spring.boot.starter.web)
 

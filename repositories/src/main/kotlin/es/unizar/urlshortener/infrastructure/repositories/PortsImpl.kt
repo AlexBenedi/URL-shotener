@@ -8,6 +8,8 @@ import es.unizar.urlshortener.core.User
 import es.unizar.urlshortener.core.UserRepositoryService
 import es.unizar.urlshortener.core.Link
 import es.unizar.urlshortener.core.LinkRepositoryService
+import org.springframework.data.repository.query.Param
+import org.springframework.stereotype.Service
 
 
 /**
@@ -27,13 +29,19 @@ class LinkRepositoryServiceImpl(
     /**
      * Finds a [Link] entity by its user id.
      *
-     * @param userId The user id of the [Link] entity.
+     * @param user The user id of the [Link] entity.
      * @return The found [Link] entity or null if not found.
      */
     override fun findByUserId(user: User): List<Link> {
         return linkEntityRepository.findByUserId(user.toEntity()).map { it.toDomain() }
     }
 
+    /**
+     * Deletes a [Link] entity from the repository.
+     */
+    override fun deleteById(idLink: Long) {
+        linkEntityRepository.deleteById(idLink)
+    }
 }
 
 
@@ -79,11 +87,24 @@ class ClickRepositoryServiceImpl(
      * @return The saved [Click] entity.
      */
     override fun save(cl: Click): Click = clickEntityRepository.save(cl.toEntity()).toDomain()
+
+    override fun findByHash(hash: String): Click?{
+        return clickEntityRepository.findByHash(hash)?.toDomain()
+    }
+
+    override fun updateClicksByHash(hash: String, clicks: Int): Int{
+        return clickEntityRepository.updateClicksByHash(hash, clicks)
+    }
+
+    override fun getTotalClicksByHash(hash: String): Int{
+        return clickEntityRepository.getTotalClicksByHash(hash)
+    }
 }
 
 /**
  * Implementation of the port [ShortUrlRepositoryService].
  */
+@Service
 class ShortUrlRepositoryServiceImpl(
     private val shortUrlEntityRepository: ShortUrlEntityRepository
 ) : ShortUrlRepositoryService {

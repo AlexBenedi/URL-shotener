@@ -28,6 +28,11 @@ interface GetUserInformationUseCase {
      *  @return The list of links of the user
      */
     fun getLinks(user: User): List<Link>
+
+    /**
+     * Save a link in the database
+     */
+    fun saveLink(link: Link)
 }
 
 /**
@@ -45,9 +50,10 @@ class GetUserInformationUseCaseImpl(
      * @return The created [User] entity.
      */
     override fun processUser(user: User) {
+        //If the user does not exist, it is saved
         if (safeCall {userRepository.findById(user.userId)} == null) {
             safeCall {userRepository.save(user)}
-            insertExampleLink(user, user.userId)
+            //insertExampleLink(user, user.userId)
         }
     }
 
@@ -81,7 +87,8 @@ class GetUserInformationUseCaseImpl(
         val click = Click(
             hash = hashUrl,
             properties = clickProperties,
-            created = OffsetDateTime.now()
+            created = OffsetDateTime.now(),
+            clicks = 1
         )
 
         // Datos del ShortUrl
@@ -109,12 +116,21 @@ class GetUserInformationUseCaseImpl(
         val link = Link(
             click = click,
             shortUrl = shortUrl,
-            userId = user.userId
+            id = null,
+            user = user
         )
 
         // Guardar el link (esto debería guardar también click y shortUrl gracias a CascadeType.ALL)
         safeCall { linkRepository.save(link) }
+    }
 
+    /**
+     * Save a link in the database
+     *
+     * @param link The link to be saved.
+     */
+    override fun saveLink(link: Link) {
+        safeCall { linkRepository.save(link) }
     }
 
 

@@ -1,8 +1,11 @@
 package es.unizar.urlshortener.infrastructure.repositories
 
+import es.unizar.urlshortener.core.Click
 import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param
+import org.springframework.transaction.annotation.Transactional
 
 
 /**
@@ -12,7 +15,7 @@ import org.springframework.data.repository.query.Param
  */
 interface LinkEntityRepository : JpaRepository<LinkEntity, Long>{
     // Encuentra todas las entidades LinkEntity que coinciden con el userId
-    @Query("SELECT l FROM LinkEntity l WHERE l.userId = :userId")
+    @Query("SELECT l FROM LinkEntity l WHERE l.user = :userId")
     fun findByUserId(@Param("userId") userId: UserEntity): List<LinkEntity>
 }
 
@@ -41,6 +44,8 @@ interface ShortUrlEntityRepository : JpaRepository<ShortUrlEntity, String> {
 
     @Query("SELECT COUNT(s) FROM ShortUrlEntity s WHERE s.owner = :userId")
     fun countByOwner(@Param("userId") userId: String): Int
+
+    fun findByTarget(target: String): ShortUrlEntity?
 }
 
 /**
@@ -48,4 +53,16 @@ interface ShortUrlEntityRepository : JpaRepository<ShortUrlEntity, String> {
  *
  * **Note**: Spring Boot is able to discover this [JpaRepository] without further configuration.
  */
-interface ClickEntityRepository : JpaRepository<ClickEntity, Long>
+interface ClickEntityRepository : JpaRepository<ClickEntity, Long> {
+    fun findByHash(hash: String): ClickEntity?
+
+    @Modifying
+    @Transactional
+    @Query("UPDATE ClickEntity c SET c.clicks = :clicks WHERE c.hash = :hash")
+    fun updateClicksByHash(hash: String, clicks: Int): Int
+
+    @Query("SELECT SUM(c.clicks) FROM ClickEntity c WHERE c.hash = :hash")
+    fun getTotalClicksByHash(hash: String): Int
+}
+
+

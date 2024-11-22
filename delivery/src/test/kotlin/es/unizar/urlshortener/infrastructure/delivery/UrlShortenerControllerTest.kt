@@ -2,10 +2,8 @@
 
 package es.unizar.urlshortener.infrastructure.delivery
 import es.unizar.urlshortener.core.*
-import es.unizar.urlshortener.core.usecases.CreateShortUrlUseCase
-import es.unizar.urlshortener.core.usecases.GetUserInformationUseCase
-import es.unizar.urlshortener.core.usecases.LogClickUseCase
-import es.unizar.urlshortener.core.usecases.RedirectUseCase
+import es.unizar.urlshortener.core.usecases.*
+import org.mockito.ArgumentMatchers.any
 import org.mockito.BDDMockito.given
 import org.mockito.BDDMockito.never
 import org.mockito.kotlin.verify
@@ -27,9 +25,11 @@ import kotlin.test.Test
 @ContextConfiguration(
     classes = [
         UrlShortenerControllerImpl::class,
+        GenerateQRCodeUseCaseImpl::class,
         RestResponseEntityExceptionHandler::class
     ]
 )
+@Suppress("UnusedPrivateProperty")
 class UrlShortenerControllerTest {
 
     @Autowired
@@ -48,7 +48,28 @@ class UrlShortenerControllerTest {
     private lateinit var getUserInformationUseCase: GetUserInformationUseCase
 
     @MockBean
+    private lateinit var deleteUserLinkUseCase: DeleteUserLinkUseCase
+
+    @MockBean
     private lateinit var securityFilterChain: SecurityFilterChain
+
+    @MockBean 
+    private lateinit var generateQRCodeUseCase: GenerateQRCodeUseCase
+
+    @MockBean
+    private lateinit var shortUrlRepositoryService: ShortUrlRepositoryService
+
+    @MockBean
+    private lateinit var userRepositoryService: UserRepositoryService
+
+    @MockBean
+    private lateinit var linkRepositoryService: LinkRepositoryService
+
+    @MockBean
+    private lateinit var clickRepositoryService: ClickRepositoryService
+
+    @MockBean
+    private lateinit var generateQRCodeUseCaseImpl: GenerateQRCodeUseCaseImpl
 
 
     /**
@@ -58,11 +79,13 @@ class UrlShortenerControllerTest {
     fun `redirectTo returns a redirect when the key exists`() {
 
         //Mock the behavior of getUserInformationUseCase to return a User object
-        given(getUserInformationUseCase.getLinks(User("1"))).willReturn(emptyList())
+        //given(getUserInformationUseCase.getLinks(User("1", 0, null))).willReturn(emptyList())
 
         //Mock the behavior of securityFilterChain to return a SecurityFilterChain object
         given(securityFilterChain.toString()).willReturn("SecurityFilterChain")
 
+        //Mock the behavior of deleteUserLinkUseCase to return a DeleteUserLinkUseCase object
+        given(deleteUserLinkUseCase.toString()).willReturn("DeleteUserLinkUseCase")
 
         // Mock the behavior of redirectUseCase to return a redirection URL
         given(redirectUseCase.redirectTo("key")).willReturn(Redirection("http://example.com/"))
@@ -100,6 +123,9 @@ class UrlShortenerControllerTest {
      */
     @Test
     fun `creates returns a basic redirect if it can compute a hash`() {
+
+        given(generateQRCodeUseCase.toString()).willReturn("GenerateQRCodeUseCase")
+        
         // Mock the behavior of createShortUrlUseCase to return a ShortUrl object
         given(
             createShortUrlUseCase.create(
@@ -107,6 +133,9 @@ class UrlShortenerControllerTest {
                 data = ShortUrlProperties(ip = "127.0.0.1")
             )
         ).willReturn(ShortUrl("f684a3c4", Redirection("http://example.com/")))
+
+        given(shortUrlRepositoryService.findByKey("f684a3c4"))
+            .willReturn(ShortUrl("f684a3c4", Redirection("http://example.com/")))
 
         // Perform a POST request and verify the response status, redirection URL, and JSON response
         mockMvc.perform(
@@ -133,6 +162,8 @@ class UrlShortenerControllerTest {
             )
         ).willAnswer { throw InvalidUrlException("ftp://example.com/") }
 
+        
+
         // Perform a POST request and verify the response status and error message
         mockMvc.perform(
             post("/api/link")
@@ -155,6 +186,9 @@ class UrlShortenerControllerTest {
                 data = ShortUrlProperties(ip = "127.0.0.1", name = "test", isBranded = true)
             )
         ).willReturn(ShortUrl("test", Redirection("http://example.com/")))
+
+        given(shortUrlRepositoryService.findByKey("test"))
+            .willReturn(ShortUrl("test", Redirection("http://example.com/")))
 
         // Perform a POST request and verify the response status, redirection URL, and JSON response
         mockMvc.perform(

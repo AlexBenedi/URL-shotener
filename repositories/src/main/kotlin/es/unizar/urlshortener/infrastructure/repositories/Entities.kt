@@ -3,6 +3,7 @@
 package es.unizar.urlshortener.infrastructure.repositories
 
 import jakarta.persistence.*
+import java.time.LocalDateTime
 import java.time.OffsetDateTime
 
 /**
@@ -21,7 +22,8 @@ class ClickEntity(
     val referrer: String?,
     val browser: String?,
     val platform: String?,
-    val country: String?
+    val country: String?,
+    val clicks : Int
 )
 
 /**
@@ -45,7 +47,9 @@ class ShortUrlEntity(
     val threatInfo: String? = null,
     val ip: String?,
     val country: String?,
-    val isBranded: Boolean?
+    val isBranded: Boolean?,
+    @Column(length = 65535)
+    val qrCode: String?
 )
 
 @Entity
@@ -66,7 +70,7 @@ class LinkEntity(
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    val userId: UserEntity
+    val user: UserEntity
 )
 
 @Entity
@@ -74,7 +78,10 @@ class LinkEntity(
 @Suppress("LongParameterList", "JpaObjectClassSignatureInspection")
 class UserEntity(
     @Id
-    val id: String
+    val id: String,
+    val redirections : Int,
+    val lastRedirectionTimeStamp : OffsetDateTime? = null
+
 )
 
 

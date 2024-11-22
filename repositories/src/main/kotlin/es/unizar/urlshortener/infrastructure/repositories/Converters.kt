@@ -16,7 +16,8 @@ fun ClickEntity.toDomain() = Click(
         browser = browser,
         platform = platform,
         country = country
-    )
+    ),
+    clicks = clicks
 )
 
 /**
@@ -30,7 +31,8 @@ fun Click.toEntity() = ClickEntity(
     referrer = properties.referrer,
     browser = properties.browser,
     platform = properties.platform,
-    country = properties.country
+    country = properties.country,
+    clicks = 0
 )
 
 /**
@@ -55,7 +57,8 @@ fun ShortUrlEntity.toDomain() = ShortUrl(
         ),
         ip = ip,
         country = country, 
-        isBranded = isBranded
+        isBranded = isBranded,
+        qrCode = qrCode
     )
 )
 
@@ -76,7 +79,8 @@ fun ShortUrl.toEntity() = ShortUrlEntity(
     threatInfo = properties.safe?.threatInfo,
     ip = properties.ip,
     country = properties.country,
-    isBranded = properties.isBranded
+    isBranded = properties.isBranded,
+    qrCode = properties.qrCode
 )
 
 /**
@@ -85,7 +89,8 @@ fun ShortUrl.toEntity() = ShortUrlEntity(
 fun LinkEntity.toDomain() = Link(
     click = click.toDomain(),
     shortUrl = shortUrl.toDomain(),
-    userId = userId.toDomain().userId
+    id = id,
+    user = user.toDomain()
 )
 
 /**
@@ -95,21 +100,25 @@ fun Link.toEntity() = LinkEntity(
     id = null,
     shortUrl = shortUrl.toEntity(),
     click = click.toEntity(),
-    userId = UserEntity(userId)
+    user = user.toEntity()
 )
 
 /**
  * Extension method to convert a [UserEntity] into a domain [User].
  */
 fun UserEntity.toDomain() = User(
-    userId = id
+    userId = id,
+    redirections = redirections,
+    lastRedirectionTimeStamp = lastRedirectionTimeStamp
 )
 
 /**
  * Extension method to convert a domain [User] into a [UserEntity].
  */
 fun User.toEntity() = UserEntity(
-    id = userId
+    id = userId,
+    redirections = redirections,
+    lastRedirectionTimeStamp = lastRedirectionTimeStamp
 )
 
 

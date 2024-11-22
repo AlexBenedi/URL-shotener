@@ -32,11 +32,20 @@ class LogClickUseCaseImpl(
      * @param data The properties of the click event.
      */
     override fun logClick(key: String, data: ClickProperties) {
+        var number = 0
+        val clickSelected: Click? = clickRepository.findByHash(key)
+        if(clickSelected != null) {
+            number = clickSelected.clicks
+            number++
+            clickRepository.updateClicksByHash(key, number)
+            return
+        }
         val cl = Click(
             hash = key,
             properties = ClickProperties(
                 ip = data.ip
-            )
+            ),
+            clicks = number
         )
         runCatching {
             clickRepository.save(cl)

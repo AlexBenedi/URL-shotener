@@ -92,3 +92,11 @@ inline fun <T> safeCall(
     onSuccess = { it },
     onFailure = { throw onFailure(it) }
 )
+
+/**
+ * An exception indicating that a Short URL for a given URL could not be found.
+ * This exception is thrown when attempting to retrieve a non-existent Short URL.
+ *
+ * @param url The URL that was not found.
+ */
+class UrlNotFoundException(url: String) : DomainException("Short URL not found for [$url]")

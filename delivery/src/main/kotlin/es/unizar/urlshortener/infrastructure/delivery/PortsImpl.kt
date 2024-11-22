@@ -10,6 +10,8 @@ import es.unizar.urlshortener.springbootkafkaexample.service.KafkaProducerServic
 import org.apache.commons.validator.routines.UrlValidator
 import org.springframework.stereotype.Service
 import java.nio.charset.StandardCharsets
+import java.time.Instant
+import java.util.concurrent.ConcurrentHashMap
 
 /**
  * Implementation of the port [ValidatorService].
@@ -75,4 +77,36 @@ class SafetyServiceImpl(
     override fun isUrlSafe(petition: UrlSafetyPetition) = 
         // need to serialize the object as kafka onlin accepts strings
         kafkaProducerService.sendMessage(CHECK_SAFETY_TOPIC, Gson().toJson(petition)) 
+}
+
+/**
+ * Service to check if a non-registered user can be redirected.
+ */
+@Service
+class NonRegisteredUserService {
+
+    private val ipRedirectionCount = ConcurrentHashMap<String, Pair<Int, Instant>>()
+    companion object {
+        private const val LIMIT = 5 // Limit of redirections
+        private const val TIME_WINDOW = 3600L // 1 hour in seconds
+    }
+
+    fun canRedirect(ip: String): Boolean {
+        val currentTime = Instant.now()
+        val (count, timestamp) = ipRedirectionCount[ip] ?: Pair(0, currentTime)
+
+        // Check if the time window has expired
+        if (currentTime.epochSecond - timestamp.epochSecond > TIME_WINDOW) {
+            ipRedirectionCount[ip] = Pair(1, currentTime) // Reset count
+            return true
+        }
+
+        // Check if the redirection count exceeds the limit
+        return if (count < LIMIT) {
+            ipRedirectionCount[ip] = Pair(count + 1, timestamp)
+            true
+        } else {
+            false
+        }
+    }
 }

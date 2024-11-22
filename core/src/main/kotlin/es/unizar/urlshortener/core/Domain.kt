@@ -17,7 +17,8 @@ private const val QR_CODE_HEIGHT = 200
 data class Click(
     val hash: String,
     val properties: ClickProperties = ClickProperties(),
-    val created: OffsetDateTime = OffsetDateTime.now()
+    val created: OffsetDateTime = OffsetDateTime.now(),
+    val clicks : Int
 )
 
 /**
@@ -28,7 +29,8 @@ data class ShortUrl(
     val hash: String,
     val redirection: Redirection,
     val created: OffsetDateTime = OffsetDateTime.now(),
-    val properties: ShortUrlProperties = ShortUrlProperties()
+    val properties: ShortUrlProperties = ShortUrlProperties(),
+    //var qrCode: String  // Base64 representation of the QR code
 ) {
     /**
      * Generates a QR code image for this ShortUrl and saves it to the specified output path.
@@ -63,7 +65,8 @@ data class ShortUrlProperties(
     val owner: String? = null,
     val country: String? = null,
     val isBranded: Boolean? = null,
-    val name: String? = null
+    val name: String? = null,
+    val qrCode: String? = null
 )
 
 /**
@@ -83,14 +86,17 @@ data class ClickProperties(
 data class Link(
     val click: Click,
     val shortUrl: ShortUrl,
-    val userId: String
+    val id : Long?,
+    val user: User
 )
 
 /**
  * A [User] is the entity that represents a user of the application.
  */
 data class User(
-    val userId : String
+    val userId : String,
+    val redirections: Int,
+    val lastRedirectionTimeStamp: OffsetDateTime?
 )
 /**
  * A [QRCode] represents a generated QR code for a given URL.
@@ -101,8 +107,8 @@ data class User(
  */
 data class QRCode(
     val url: String,           // The URL for which the QR code is generated
-    val base64Image: String,   // The QR code image encoded in Base64 format
-    val size: Int              // The size of the QR code (e.g., 250x250 pixels)
+    val base64Image: String,  // The QR code image encoded in Base64 format
+    val size: Int             // The size of the QR code (e.g., 250x250 pixels)
 )
 
 /**
