@@ -186,6 +186,9 @@ class UrlShortenerControllerTest {
             )
         ).willReturn(ShortUrl("test", Redirection("http://example.com/")))
 
+        given(shortUrlRepositoryService.findByKey("test"))
+            .willReturn(ShortUrl("test", Redirection("http://example.com/")))
+
         // Perform a POST request and verify the response status, redirection URL, and JSON response
         mockMvc.perform(
             post("/api/link")
