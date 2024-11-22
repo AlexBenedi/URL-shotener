@@ -207,17 +207,6 @@ class UrlShortenerControllerImpl(
         System.out.println("UserId from shortenerUser : $userId")
         System.out.println("URL from shortenerUser : ${data.url}")
 
-        // Crear el ShortUrl con el use case
-        val shortUrl = createShortUrlUseCase.createAndDoNotSave(
-            url = data.url,
-            data = ShortUrlProperties(
-                ip = request.remoteAddr,
-                sponsor = data.sponsor,
-                isBranded = data.isBranded,
-                name = data.name
-            ),
-            userId = userId
-        )
         val user1 = userRepositoryService.findById(userId)
 
         if (user1 != null) {
@@ -262,7 +251,8 @@ class UrlShortenerControllerImpl(
                         isBranded = data.isBranded,
                         name = data.name,
                         qrCode = qrCode
-                    )
+                    ),
+                    userId = userId
                 )
 
                 val user = User(
@@ -292,7 +282,8 @@ class UrlShortenerControllerImpl(
                 val link = Link(
                     click = click,
                     shortUrl = shortUrl,
-                    user = user
+                    user = user,
+                    id = null
                 )
 
                 getUserInformationUseCase.saveLink(link)
