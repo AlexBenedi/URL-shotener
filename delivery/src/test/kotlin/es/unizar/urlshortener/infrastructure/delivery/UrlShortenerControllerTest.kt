@@ -7,6 +7,7 @@ import es.unizar.urlshortener.core.usecases.GetUserInformationUseCase
 import es.unizar.urlshortener.core.usecases.DeleteUserLinkUseCase
 import es.unizar.urlshortener.core.usecases.LogClickUseCase
 import es.unizar.urlshortener.core.usecases.RedirectUseCase
+import es.unizar.urlshortener.core.usecases.GenerateQRCodeUseCase
 import org.mockito.BDDMockito.given
 import org.mockito.BDDMockito.never
 import org.mockito.kotlin.verify
@@ -54,6 +55,9 @@ class UrlShortenerControllerTest {
     @MockBean
     private lateinit var securityFilterChain: SecurityFilterChain
 
+    @MockBean 
+    private lateinit var generateQRCodeUseCase: GenerateQRCodeUseCase
+
 
     /**
      * Tests that `redirectTo` returns a redirect when the key exists.
@@ -62,7 +66,7 @@ class UrlShortenerControllerTest {
     fun `redirectTo returns a redirect when the key exists`() {
 
         //Mock the behavior of getUserInformationUseCase to return a User object
-        given(getUserInformationUseCase.getLinks(User("1"))).willReturn(emptyList())
+        given(getUserInformationUseCase.getLinks(User("1", 0, null))).willReturn(emptyList())
 
         //Mock the behavior of securityFilterChain to return a SecurityFilterChain object
         given(securityFilterChain.toString()).willReturn("SecurityFilterChain")
@@ -106,6 +110,9 @@ class UrlShortenerControllerTest {
      */
     @Test
     fun `creates returns a basic redirect if it can compute a hash`() {
+
+        given(generateQRCodeUseCase.toString()).willReturn("GenerateQRCodeUseCase")
+        
         // Mock the behavior of createShortUrlUseCase to return a ShortUrl object
         given(
             createShortUrlUseCase.create(
