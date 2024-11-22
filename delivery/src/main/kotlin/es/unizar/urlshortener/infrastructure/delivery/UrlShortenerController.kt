@@ -1,3 +1,4 @@
+@file:Suppress("LongParameterList", "LongMethod", "ReturnCount", "WildcardImport")
 package es.unizar.urlshortener.infrastructure.delivery
 
 import es.unizar.urlshortener.core.*
@@ -114,8 +115,10 @@ class UrlShortenerControllerImpl(
 
 ) : UrlShortenerController {
     private val ipRedirectionCounts = ConcurrentHashMap<String, Pair<Int, Instant>>()
-    private val REDIRECTION_LIMIT = 6
-    private val TIME_WINDOW_SECONDS = TimeUnit.HOURS.toSeconds(1)
+    companion object {
+        private val REDIRECTION_LIMIT = 6
+        private val TIME_WINDOW_SECONDS = TimeUnit.HOURS.toSeconds(1)
+    }
 
     /**
      * Redirects and logs a short url identified by its [id].
@@ -217,7 +220,11 @@ class UrlShortenerControllerImpl(
      * @return a ResponseEntity with the created short url details
      */
     @PostMapping("/api/linkUser", consumes = [MediaType.APPLICATION_FORM_URLENCODED_VALUE])
-    override fun shortenerUser(data: ShortUrlDataIn, request: HttpServletRequest, @RequestParam userId:String): ResponseEntity<ShortUrlDataOut> {
+    override fun shortenerUser(data: ShortUrlDataIn, 
+                              request: HttpServletRequest, 
+                              @RequestParam userId:String
+                              ): ResponseEntity<ShortUrlDataOut> 
+    {
         System.out.println("UserId from shortenerUser : $userId")
         System.out.println("URL from shortenerUser : ${data.url}")
 
@@ -378,8 +385,8 @@ class UrlShortenerControllerImpl(
         return try {
             deleteUserLinkUseCase.deleteById(idLink)
             ResponseEntity.ok("Link con id $idLink eliminado con éxito.")
-        } catch (ex: Exception) {
-            ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al eliminar el link: ${ex.message}")
+        } catch (ex: IllegalArgumentException) {
+            ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error al eliminar el link: ${ex.message}")
         }
     }
 

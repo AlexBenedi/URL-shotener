@@ -33,8 +33,7 @@ interface GenerateQRCodeUseCase {
 /**
  * Implementation of [GenerateQRCodeUseCase].
  */
-class GenerateQRCodeUseCaseImpl(
-): GenerateQRCodeUseCase {
+class GenerateQRCodeUseCaseImpl: GenerateQRCodeUseCase {
     override fun generateQRCode(url: String, size: Int): QRCode {
         if (!isValidUrl(url)) {
             throw InvalidUrlException(url)

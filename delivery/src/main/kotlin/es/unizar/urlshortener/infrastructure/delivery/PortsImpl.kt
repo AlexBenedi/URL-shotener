@@ -75,8 +75,10 @@ class SafetyServiceImpl(
 class NonRegisteredUserService {
 
     private val ipRedirectionCount = ConcurrentHashMap<String, Pair<Int, Instant>>()
-    private val LIMIT = 5 // Limit of redirections
-    private val TIME_WINDOW = 3600L // 1 hour in seconds
+    companion object {
+        private const val LIMIT = 5 // Limit of redirections
+        private const val TIME_WINDOW = 3600L // 1 hour in seconds
+    }
 
     fun canRedirect(ip: String): Boolean {
         val currentTime = Instant.now()
