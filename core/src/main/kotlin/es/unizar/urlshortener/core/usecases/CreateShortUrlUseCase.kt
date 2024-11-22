@@ -99,7 +99,7 @@ class CreateShortUrlUseCaseImpl(
                 }
             }
             val safety = safeCall { safetyService.isUrlSafe(url) } // this must be async
-            println(safety)
+            println("Safety checked: $safety")
             val su = ShortUrl(
                 hash = id,
                 redirection = Redirection(target = url),
@@ -110,6 +110,7 @@ class CreateShortUrlUseCaseImpl(
                     isBranded = data.isBranded != null && data.name != null
                 )
             )
+            println("Short URL created: $su")
             return su
         } else {
             throw InvalidUrlException(url)

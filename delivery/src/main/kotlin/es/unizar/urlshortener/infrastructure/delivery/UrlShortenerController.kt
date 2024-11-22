@@ -130,6 +130,7 @@ class UrlShortenerControllerImpl(
             logClickUseCase.logClick(id, ClickProperties(ip = request.remoteAddr))
             val h = HttpHeaders()
             h.location = URI.create(target)
+            println("Redirecting to: $target")
             ResponseEntity<Unit>(h, HttpStatus.valueOf(mode))
         }
 
@@ -203,6 +204,7 @@ class UrlShortenerControllerImpl(
                     )
                 )
             )
+            println(response)
             ResponseEntity(response, h, HttpStatus.CREATED)
         }
     }
@@ -266,19 +268,16 @@ class UrlShortenerControllerImpl(
                     ),
                     userId = userId
                 )
-
+                println("ShortUrlCreation: $shortUrlCreation")
+                println("ShortUrlCreation hash: ${shortUrlCreation.properties.safe}")
                 val shortUrl = ShortUrl(
                     hash = shortUrlCreation.hash,
                     redirection = Redirection(target = data.url),
                     created = OffsetDateTime.now(),
-                    properties = ShortUrlProperties(
-                        ip = request.remoteAddr,
-                        sponsor = data.sponsor,
-                        isBranded = data.isBranded,
-                        name = data.name,
-                        qrCode = qrCode
-                    )
+                    properties = shortUrlCreation.properties,
                 )
+
+                println("SHORTURL: $shortUrl")
 
                 val user = User(
                     userId =userId,
@@ -321,6 +320,7 @@ class UrlShortenerControllerImpl(
                     qrCode = qrCode,
                     properties = mapOf("message" to "Link created successfully")
                 )
+                println(response)
                 return ResponseEntity.ok(response)
             }
         } else {
