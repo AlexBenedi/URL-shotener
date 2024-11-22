@@ -89,8 +89,8 @@ fun ShortUrl.toEntity() = ShortUrlEntity(
 fun LinkEntity.toDomain() = Link(
     click = click.toDomain(),
     shortUrl = shortUrl.toDomain(),
-    userId = userId.toDomain().userId,
-    id = id
+    id = id,
+    user = user.toDomain()
 )
 
 /**
@@ -100,21 +100,25 @@ fun Link.toEntity() = LinkEntity(
     id = null,
     shortUrl = shortUrl.toEntity(),
     click = click.toEntity(),
-    userId = UserEntity(userId)
+    user = user.toEntity()
 )
 
 /**
  * Extension method to convert a [UserEntity] into a domain [User].
  */
 fun UserEntity.toDomain() = User(
-    userId = id
+    userId = id,
+    redirections = redirections,
+    lastRedirectionTimeStamp = lastRedirectionTimeStamp
 )
 
 /**
  * Extension method to convert a domain [User] into a [UserEntity].
  */
 fun User.toEntity() = UserEntity(
-    id = userId
+    id = userId,
+    redirections = redirections,
+    lastRedirectionTimeStamp = lastRedirectionTimeStamp
 )
 
 

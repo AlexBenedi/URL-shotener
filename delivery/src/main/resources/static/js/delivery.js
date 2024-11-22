@@ -30,13 +30,30 @@ $(document).ready(function () {
             type: "POST",
             url: "/api/linkUser",
             data: formData,
-            success: function (msg, status, request) {
+            success: function (response) {
                 var resultDiv = $("#result");
+
+                // Display the shortened URL
                 resultDiv.html(
-                    "<div class='alert alert-success lead'>"
-                    + "Mensaje del servidor: " + msg
-                    + "</div>"
+                    "<div class='alert alert-success lead'>" +
+                    "<a target='_blank' href='" +
+                    response.url +
+                    "'>" +
+                    response.url +
+                    "</a>" +
+                    "</div>"
                 );
+
+                // Display the QR code if it exists
+                if (response.qrCode) {
+                    resultDiv.append("<p>QR Code:</p>");
+                    resultDiv.append(
+                        "<img src='data:image/png;base64," + response.qrCode + "' alt='QR Code'>"
+                    );
+                    var qrCodeDownloadUrl = "/" + response.url.split('/').pop() + "/qr"; // Use response.url
+                    resultDiv.append('<p><a href="' + qrCodeDownloadUrl + '" download="qrcode.png">Download QR Code</a></p>');
+                    resultDiv.append('<p>' + window.location.origin + qrCodeDownloadUrl + '</p>');
+                }
                 fetchUserLinks(); // Actualizar la tabla
             },
             error: function () {

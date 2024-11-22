@@ -1,3 +1,4 @@
+@file:Suppress("WildcardImport")
 package es.unizar.urlshortener.core.usecases
 
 import com.google.zxing.BarcodeFormat
@@ -26,16 +27,15 @@ interface GenerateQRCodeUseCase {
      * @param size The size of the QR code (default is 250x250).
      * @return A [QRCode] data class containing the URL, the QR code image in Base64, and the size.
      */
-    fun generateQRCode(url: String, hash: String, size: Int = 250): QRCode
+    fun generateQRCode(url: String, size: Int = 250): QRCode
 }
 
 /**
  * Implementation of [GenerateQRCodeUseCase].
  */
 class GenerateQRCodeUseCaseImpl(
-    private val shortUrlRepositoryService: ShortUrlRepositoryService // Use the port here
 ): GenerateQRCodeUseCase {
-    override fun generateQRCode(url: String, hash: String, size: Int): QRCode {
+    override fun generateQRCode(url: String, size: Int): QRCode {
         if (!isValidUrl(url)) {
             throw InvalidUrlException(url)
         }
@@ -46,6 +46,7 @@ class GenerateQRCodeUseCaseImpl(
             val qrCodeBytes = outputStream.toByteArray()
             val base64Image = Base64.getEncoder().encodeToString(qrCodeBytes)
 
+            /*
             // Find the ShortUrl in the repository
             val shortUrl = shortUrlRepositoryService.findByKey(hash)
                 ?: throw UrlNotFoundException(url) // Throw exception if the URL is not found
@@ -57,7 +58,7 @@ class GenerateQRCodeUseCaseImpl(
             val updatedShortUrl = shortUrl.copy(properties = updatedProperties)
 
             // Save the updated ShortUrl
-            shortUrlRepositoryService.save(updatedShortUrl)
+            shortUrlRepositoryService.save(updatedShortUrl) */
 
             return QRCode(
                 url = url,

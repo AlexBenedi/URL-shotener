@@ -116,8 +116,8 @@ class GetUserInformationUseCaseImpl(
         val link = Link(
             click = click,
             shortUrl = shortUrl,
-            userId = user.userId,
-            id = null
+            id = null,
+            user = user
         )
 
         // Guardar el link (esto debería guardar también click y shortUrl gracias a CascadeType.ALL)
