@@ -29,7 +29,7 @@ class GetUserInformationUseCaseTest {
 
     @Test
     fun `should save user when it does not exist`() {
-        val user = User("123456")
+        val user = User("123456", 0, null)
 
         // Simular que el usuario no existe
         whenever(userRepository.findById(user.userId)).thenReturn(null)
@@ -46,12 +46,13 @@ class GetUserInformationUseCaseTest {
 
     @Test
     fun `getLinks returns links for a user`() {
-        val user = User("123456")
+        val user = User("123456", 0, null)
         val link = Link(
             click = Click(
                 hash = "kamalmola",
                 properties = ClickProperties("192.168.1.1", "http://example.com", "Chrome", "Windows", "US"),
-                created = OffsetDateTime.now()
+                created = OffsetDateTime.now(),
+                clicks = 0
             ),
             shortUrl = ShortUrl(
                 hash = "kamalmola",
@@ -59,7 +60,8 @@ class GetUserInformationUseCaseTest {
                 created = OffsetDateTime.now(),
                 properties = ShortUrlProperties("192.168.1.1", "Sponsor", UrlSafetyResponse(true), "OwnerName", "US")
             ),
-            userId = user.userId
+            user = user,
+            id = 1
         )
 
         // Simular que existen enlaces para el usuario
@@ -75,7 +77,7 @@ class GetUserInformationUseCaseTest {
 
     @Test
     fun `insertExampleLink saves link correctly`() {
-        val user = User("123456")
+        val user = User("123456", 0, null)
         val hashUrl = "examplehash"
 
         // Simular la llamada al método save del linkRepository
@@ -99,7 +101,7 @@ class GetUserInformationUseCaseTest {
 
     @Test
     fun `processUser does not save user if it exists`() {
-        val user = User("123456")
+        val user = User("123456", 0, null)
 
         // Simular que el usuario ya existe en la base de datos
         whenever(userRepository.findById(user.userId)).thenReturn(user)
@@ -113,7 +115,7 @@ class GetUserInformationUseCaseTest {
 
     @Test
     fun `getLinks returns empty list if no links exist for user`() {
-        val user = User("123456")
+        val user = User("123456", 0 , null)
 
         // Simular que no hay enlaces para el usuario
         whenever(linkRepository.findByUserId(user)).thenReturn(emptyList())
