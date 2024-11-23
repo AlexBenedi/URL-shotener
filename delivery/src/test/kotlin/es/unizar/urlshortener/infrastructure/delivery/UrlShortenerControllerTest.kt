@@ -19,6 +19,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers.print
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 import kotlin.test.Test
+import java.time.OffsetDateTime
 
 
 @WebMvcTest
@@ -228,4 +229,56 @@ class UrlShortenerControllerTest {
             .andExpect(jsonPath("$.statusCode").value(400))
     }
     
+    /**
+     * Tests that `creates` returns a basic redirect if it can create a branded linkk.
+     */
+    @Test
+    fun `creates returns a basic redirect if it can create a branded link in saving links`() {
+        // Mock the behavior of createShortUrlUseCase to return a ShortUrl object
+        given(
+            createShortUrlUseCase.create(
+                url = "http://example.com/",
+                data = ShortUrlProperties(ip = "127.0.0.1", name = "test", isBranded = true)
+            )
+        ).willReturn(ShortUrl("test", Redirection("http://example.com/")))
+
+        given(shortUrlRepositoryService.findByKey("test"))
+            .willReturn(ShortUrl("test", Redirection("http://example.com/")))
+
+        given(userRepositoryService.findById("1"))
+            .willReturn(User("1", 0, OffsetDateTime.now()))
+
+        given(linkRepositoryService.findByUserId(User("1", 0, null)))
+            .willReturn(emptyList())
+        
+        given(createShortUrlUseCase.createAndDoNotSave(
+            url = "http://example.com/",
+            data = ShortUrlProperties(ip = "127.0.0.1", name = "test", isBranded = true), 
+            userId = "1"))
+        .willReturn(ShortUrl("test", Redirection("http://example.com/")))
+
+        given(getUserInformationUseCase.saveLink(Link(
+            Click("test", ClickProperties(ip = "127.0.0.1"), clicks = 0), 
+            ShortUrl("test", Redirection("http://example.com/")),
+            null, // id
+            User("1", 0, null))))
+        .willReturn(Link(
+            Click("test", ClickProperties(ip = "127.0.0.1"), clicks = 0), 
+            ShortUrl("test", Redirection("http://example.com/")),
+            null, // id
+            User("1", 0, null)))
+
+        // Perform a POST request and verify the response status, redirection URL, and JSON response
+        mockMvc.perform(
+            post("/api/linkUser")
+                .param("url", "http://example.com/")
+                .param("name", "test")
+                .param("isBranded", "true")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+        )
+            .andDo(print())
+            .andExpect(status().isCreated)
+            .andExpect(redirectedUrl("http://localhost/test"))
+            .andExpect(jsonPath("$.url").value("http://localhost/test"))
+    }
 }
