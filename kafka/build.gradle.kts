@@ -16,14 +16,16 @@ dependencies {
     implementation(project(":gateway"))
     implementation(project(":core"))
     
-    implementation("org.springframework.boot:spring-boot-starter-web")
-    implementation("org.springframework.kafka:spring-kafka")
-    implementation("com.google.code.gson:gson:2.8.8")
+    implementation(libs.spring.boot.starter.web)
+    implementation(libs.spring.kafka)
+    implementation(libs.gson)
 
-    runtimeOnly("org.springframework.boot:spring-boot-devtools")
-    compileOnly("org.projectlombok:lombok")
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("org.springframework.kafka:spring-kafka-test")
+    runtimeOnly(libs.spring.boot.devtools)
+
+    compileOnly(libs.lombok)
+
+    testImplementation(libs.spring.boot.starter.test)
+    testImplementation(libs.spring.kafka.test)
 }
 
 dependencyManagement {

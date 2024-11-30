@@ -11,6 +11,9 @@ jquery = "3.6.1"  # jQuery version
 commonsValidator = "1.6"  # Apache Commons Validator version
 guava = "31.1-jre"  # Google Guava version
 googleApi = "1.33.0"
+zxing = "3.5.1"
+gson = "2.8.8"
+slf4jApi = "2.0.7"
 
 # Define plugins with their respective IDs and version references
 [plugins]
@@ -36,6 +39,8 @@ spring-boot-starter-hateoas = { module = "org.springframework.boot:spring-boot-s
 spring-boot-starter-jdbc = { module = "org.springframework.boot:spring-boot-starter-jdbc" }  # Spring Boot Starter JDBC
 spring-boot-starter-data-jpa = { module = "org.springframework.boot:spring-boot-starter-data-jpa" }  # Spring Boot Starter Data JPA
 spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test" }  # Spring Boot Starter Test
+spring-boot-starter-oauth2-client = { module = "org.springframework.boot:spring-boot-starter-oauth2-client" }
+spring-boot-devtools = { module = "org.springframework.boot:spring-boot-devtools"}
 junit-jupiter = { module = "org.junit.jupiter:junit-jupiter" }  # JUnit Jupiter
 junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher" }  # JUnit Platform Launcher
 httpclient5 = { module = "org.apache.httpcomponents.client5:httpclient5" }  # Apache HttpClient 5
@@ -47,6 +52,15 @@ jquery = { module = "org.webjars:jquery", version.ref = "jquery" }  # jQuery
 commons-validator = { module = "commons-validator:commons-validator", version.ref = "commonsValidator" }  # Apache Commons Validator
 guava = { module = "com.google.guava:guava", version.ref = "guava" }  # Google Guava
 mockito-kotlin =  { module = "org.mockito.kotlin:mockito-kotlin", version.ref = "mockitoKotlin" }  # Mockito Kotlin
+zxing-core = { module = "com.google.zxing:core", version.ref = "zxing" }
+zxing-javase = { module = "com.google.zxing:javase", version.ref = "zxing" }
+gson = { module = "com.google.code.gson:gson", version.ref = "gson"}
+slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "slf4jApi"}
+lombok = { module = "org.projectlombok:lombok" }
 
 # Google API dependencies
 google-api-client = { module = "com.google.api-client:google-api-client", version.ref = "googleApi" } # Google API 
+
+# Kafka dependencies
+spring-kafka = { module = "org.springframework.kafka:spring-kafka"}
+spring-kafka-test = { module = "org.springframework.kafka:spring-kafka-test" }

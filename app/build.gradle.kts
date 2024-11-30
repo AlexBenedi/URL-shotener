@@ -17,11 +17,14 @@ dependencies {
     // Adds the repositories project as an implementation dependency.
     implementation(project(":repositories"))
 
-    implementation("com.google.zxing:core:3.5.1")
-    implementation("com.google.zxing:javase:3.5.1") // Required for MatrixToImageWriter
+    // Required for MatrixToImageWriter
+    implementation(libs.zxing.core)
+    implementation(libs.zxing.javase)
 
     // Adds the Spring Boot starter as an implementation dependency.
     implementation(libs.spring.boot.starter)
+    // OAuth2 Client for authentication using OAuth2 & OpenID Connect
+    implementation(libs.spring.boot.starter.oauth2.client)
     // Adds Bootstrap as an implementation dependency.
     implementation(libs.bootstrap)
     // Adds jQuery as an implementation dependency.
@@ -48,10 +51,6 @@ dependencies {
     testImplementation(libs.junit.jupiter)
     // Adds JUnit Platform launcher as a test runtime-only dependency.
     testRuntimeOnly(libs.junit.platform.launcher)
-
-    // OAuth2 Client para autenticación con OAuth2 y OpenID Connect
-    implementation ("org.springframework.boot:spring-boot-starter-oauth2-client")
-
 }
 
 dependencyManagement {

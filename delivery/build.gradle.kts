@@ -30,16 +30,19 @@ dependencies {
     // Include Spring Boot Starter HATEOAS as an implementation dependency
     implementation(libs.spring.boot.starter.hateoas)
 
+    // OAuth2 Client to authenticate using OAuth2 y OpenID Connect
+    implementation(libs.spring.boot.starter.oauth2.client)
+
     // Include Apache Commons Validator as an implementation dependency
     implementation(libs.commons.validator)
 
     // Include Google Guava as an implementation dependency
     implementation(libs.guava)
 
-    implementation("com.google.zxing:core:3.5.1")
-    implementation("com.google.zxing:javase:3.5.1") // Required for MatrixToImageWriter
+    implementation(libs.zxing.core)
+    implementation(libs.zxing.javase) // Required for MatrixToImageWriter
     
-    implementation("com.google.code.gson:gson:2.8.8")
+    implementation(libs.gson)
 
     // Include Kotlin Test as a test implementation dependency
     testImplementation(libs.kotlin.test)
@@ -55,9 +58,6 @@ dependencies {
 
     // Include Spring Boot Starter Test as a test implementation dependency
     testImplementation(libs.spring.boot.starter.test)
-
-    // OAuth2 Client para autenticación con OAuth2 y OpenID Connect
-    implementation ("org.springframework.boot:spring-boot-starter-oauth2-client")
 }
 
 dependencyManagement {
