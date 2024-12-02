@@ -1,5 +1,9 @@
 ![CI](https://github.com/juanguppy/fractallink/actions/workflows/ci.yml/badge.svg)
 [![CodeScene general](https://codescene.io/images/analyzed-by-codescene-badge.svg)](https://codescene.io/projects/61628)
+[![CodeScene Code Health](https://codescene.io/projects/61628/status-badges/code-health)](https://codescene.io/projects/61628)
+[![CodeScene System Mastery](https://codescene.io/projects/61628/status-badges/system-mastery)](https://codescene.io/projects/61628)
+[![CodeScene Missed Goals](https://codescene.io/projects/61628/status-badges/missed-goals)](https://codescene.io/projects/61628)
+
 # URL Shortener project by FractalLink
 
 This repository is a modification of the `https://github.com/UNIZAR-30246-WebEngineering/urlshortener` project. Read its README to understand its architecture, requirements, and main functionalities.
