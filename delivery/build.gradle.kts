@@ -1,6 +1,7 @@
 plugins {
     // Apply the common conventions plugin for the project
     id("urlshortener-common-conventions")
+    id("org.sonarqube") version "6.0.1.5171"
 
     // Apply the Kotlin JPA plugin
     alias(libs.plugins.kotlin.jpa)
@@ -74,4 +75,12 @@ configurations.matching { it.name == "detekt" }.all {
             useVersion("1.9.23")
         }
     }
+}
+
+sonar {
+  properties {
+    property("sonar.projectKey", "fractallink_url-shortener-delivery")
+    property("sonar.organization", "fractallink")
+    property("sonar.host.url", "https://sonarcloud.io")
+  }
 }
