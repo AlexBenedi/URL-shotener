@@ -7,6 +7,8 @@ plugins {
     alias(libs.plugins.spring.boot)
     // Applies the Spring Dependency Management plugin using an alias from the version catalog.
     alias(libs.plugins.spring.dependency.management)
+    id("org.sonarqube") version "6.0.1.5171"
+    id("jacoco")
 }
 
 dependencies {
@@ -67,4 +69,32 @@ configurations.matching { it.name == "detekt" }.all {
             useVersion("1.9.23")
         }
     }
+}
+
+jacoco{
+    toolVersion = "0.8.7"
+}
+
+tasks.jacocoTestReport {
+    dependsOn(tasks.test) // Ensure tests are run before generating the report
+
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+    }
+}
+
+tasks.test {
+    finalizedBy(tasks.jacocoTestReport) // Generate the report after tests run
+}
+
+sonar {
+  properties {
+    property("sonar.projectKey", "fractallink_url-shortener-app")
+    property("sonar.organization", "fractallink")
+    property("sonar.host.url", "https://sonarcloud.io")
+    property("sonar.sources", "src/main/kotlin")
+    property("sonar.tests", "src/test/kotlin")
+    property("sonar.jacoco.reportPaths", "build/reports/jacoco/test/jacocoTestReport.xml")
+  }
 }

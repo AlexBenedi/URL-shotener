@@ -54,4 +54,4 @@ jobs:
           GOOGLE_SAFE_BROWSING_API_KEY: ${{ secrets.GOOGLE_API_SAFETY_KEY }}
           GOOGLE_CLIENT_ID_API_KEY: ${{ secrets.GOOGLE_CLIENT_ID_API_KEY }}
           GOOGLE_CLIENT_SECRET_API_KEY: ${{ secrets.GOOGLE_CLIENT_SECRET_API_KEY }}
-        run: ./gradlew build sonar --info
+        run: ./gradlew build test jacocoTestReport sonar --info

@@ -2,6 +2,7 @@ plugins {
     // Apply the common conventions plugin for the URL shortener project
     id("urlshortener-common-conventions")
     id("org.sonarqube") version "6.0.1.5171"
+    id("jacoco")
 }
 
 dependencies {
@@ -25,6 +26,23 @@ dependencies {
     implementation(libs.slf4j.api)
 }
 
+jacoco{
+    toolVersion = "0.8.7"
+}
+
+tasks.jacocoTestReport {
+    dependsOn(tasks.test) // Ensure tests are run before generating the report
+
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+    }
+}
+
+tasks.test {
+    finalizedBy(tasks.jacocoTestReport) // Generate the report after tests run
+}
+
 sonar {
   properties {
     property("sonar.projectKey", "fractallink_url-shortener-core")
@@ -32,5 +50,6 @@ sonar {
     property("sonar.host.url", "https://sonarcloud.io")
     property("sonar.sources", "src/main/kotlin")
     property("sonar.tests", "src/test/kotlin")
+    property("sonar.jacoco.reportPaths", "build/reports/jacoco/test/jacocoTestReport.xml")
   }
 }
