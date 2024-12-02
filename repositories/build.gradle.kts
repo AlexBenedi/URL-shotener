@@ -39,7 +39,7 @@ configurations.matching { it.name == "detekt" }.all {
 
 sonar {
   properties {
-    property("sonar.projectKey", "fractallink_url-shortener")
+    property("sonar.projectKey", "fractallink_url-shortener-repositories")
     property("sonar.organization", "fractallink")
     property("sonar.host.url", "https://sonarcloud.io")
   }

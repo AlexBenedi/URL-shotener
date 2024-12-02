@@ -27,8 +27,10 @@ dependencies {
 
 sonar {
   properties {
-    property("sonar.projectKey", "fractallink_url-shortener")
+    property("sonar.projectKey", "fractallink_url-shortener-core")
     property("sonar.organization", "fractallink")
     property("sonar.host.url", "https://sonarcloud.io")
+    property("sonar.sources", "src/main/kotlin")
+    property("sonar.tests", "src/test/kotlin")
   }
 }
