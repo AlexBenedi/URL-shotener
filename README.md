@@ -1,8 +1,10 @@
 ![CI](https://github.com/juanguppy/fractallink/actions/workflows/ci.yml/badge.svg)
+
 [![CodeScene general](https://codescene.io/images/analyzed-by-codescene-badge.svg)](https://codescene.io/projects/61628)
 [![CodeScene Code Health](https://codescene.io/projects/61628/status-badges/code-health)](https://codescene.io/projects/61628)
 [![CodeScene System Mastery](https://codescene.io/projects/61628/status-badges/system-mastery)](https://codescene.io/projects/61628)
 <!-- [![CodeScene Missed Goals](https://codescene.io/projects/61628/status-badges/missed-goals)](https://codescene.io/projects/61628) badge not needed -->
+
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=fractallink_url-shortener-repositories&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=fractallink_url-shortener-repositories)
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=fractallink_url-shortener-repositories&metric=bugs)](https://sonarcloud.io/summary/new_code?id=fractallink_url-shortener-repositories)
 [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=fractallink_url-shortener-repositories&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=fractallink_url-shortener-repositories)
@@ -13,6 +15,8 @@
 [![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=fractallink_url-shortener-repositories&metric=sqale_index)](https://sonarcloud.io/summary/new_code?id=fractallink_url-shortener-repositories)
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=fractallink_url-shortener-repositories&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=fractallink_url-shortener-repositories)
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=fractallink_url-shortener-repositories&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=fractallink_url-shortener-repositories)
+
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=fractallink_url-shortener-repositories&metric=coverage)](https://sonarcloud.io/summary/new_code?id=fractallink_url-shortener-repositories)
 
 # URL Shortener project by FractalLink
 
