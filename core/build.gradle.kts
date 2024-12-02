@@ -1,6 +1,7 @@
 plugins {
     // Apply the common conventions plugin for the URL shortener project
     id("urlshortener-common-conventions")
+    id("org.sonarqube") version "6.0.1.5171"
 }
 
 dependencies {
@@ -22,4 +23,12 @@ dependencies {
 
     // Add this for SLF4J API
     implementation(libs.slf4j.api)
+}
+
+sonar {
+  properties {
+    property("sonar.projectKey", "fractallink_url-shortener")
+    property("sonar.organization", "fractallink")
+    property("sonar.host.url", "https://sonarcloud.io")
+  }
 }
