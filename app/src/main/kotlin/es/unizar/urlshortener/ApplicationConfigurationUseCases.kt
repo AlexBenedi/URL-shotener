@@ -9,6 +9,7 @@ import es.unizar.urlshortener.ApplicationConfiguration
 import es.unizar.urlshortener.infrastructure.delivery.HashServiceImpl
 import es.unizar.urlshortener.infrastructure.delivery.ValidatorServiceImpl
 import es.unizar.urlshortener.infrastructure.delivery.SafetyServiceImpl
+import es.unizar.urlshortener.infrastructure.delivery.IntegrationServiceImpl
 import es.unizar.urlshortener.infrastructure.repositories.ClickEntityRepository
 import es.unizar.urlshortener.infrastructure.repositories.ClickRepositoryServiceImpl
 import es.unizar.urlshortener.infrastructure.repositories.ShortUrlEntityRepository
@@ -30,7 +31,7 @@ class ApplicationConfigurationUseCases(
     @Autowired val userEntityRepository: UserEntityRepository,
     @Autowired val linkEntityRepository: LinkEntityRepository,
     @Autowired val safetyServiceImpl: SafetyServiceImpl,
-    @Autowired val integrationServiceImpl: IntegrationsService
+    @Autowired val integrationServiceImpl: IntegrationServiceImpl
 ){
 
     /**

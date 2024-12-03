@@ -19,6 +19,8 @@ dependencies {
     // Adds the repositories project as an implementation dependency.
     implementation(project(":repositories"))
 
+    implementation(project(":integration"))
+
     // Required for MatrixToImageWriter
     implementation(libs.zxing.core)
     implementation(libs.zxing.javase)

@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service
 import java.nio.charset.StandardCharsets
 import java.time.Instant
 import java.util.concurrent.ConcurrentHashMap
+import es.unizar.urlshortener.integration.api.PubSubMessageSender
 
 /**
  * Implementation of the port [ValidatorService].

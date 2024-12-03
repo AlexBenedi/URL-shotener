@@ -3,8 +3,13 @@ package es.unizar.urlshortener.integration.api
 import org.springframework.integration.support.MessageBuilder
 import org.springframework.messaging.MessageChannel
 import org.springframework.stereotype.Component
+import org.springframework.context.annotation.Bean
+import org.springframework.stereotype.Service
 
-@Component
+import org.springframework.integration.channel.PublishSubscribeChannel
+
+
+@Service
 class PubSubMessageSender(private val pubSubChannel: MessageChannel) {
 
     fun sendQrMessage(payload: Any) {
