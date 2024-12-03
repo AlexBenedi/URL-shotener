@@ -29,7 +29,8 @@ class ApplicationConfigurationUseCases(
     @Autowired val clickEntityRepository: ClickEntityRepository,
     @Autowired val userEntityRepository: UserEntityRepository,
     @Autowired val linkEntityRepository: LinkEntityRepository,
-    @Autowired val safetyServiceImpl: SafetyServiceImpl
+    @Autowired val safetyServiceImpl: SafetyServiceImpl,
+    @Autowired val integrationServiceImpl: IntegrationsService
 ){
 
     /**
@@ -56,6 +57,7 @@ class ApplicationConfigurationUseCases(
             ValidatorServiceImpl(),
             HashServiceImpl(),
             safetyServiceImpl,
+            integrationServiceImpl
         )
 
     /**
