@@ -29,12 +29,6 @@ import es.unizar.urlshortener.integration.api.PubSubMessageSender
 @EnableScheduling // Permute activar triggers temporales.
 open class IntegrationConfig {
 
-    /*
-    @Bean
-    open fun pubSubChannel(): PublishSubscribeChannel {
-        return MessageChannels.publishSubscribe().get()
-    }
-    */
     @Bean
     open fun pubSubChannel(): PublishSubscribeChannelSpec<*> = MessageChannels.publishSubscribe()
 
