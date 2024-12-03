@@ -153,3 +153,25 @@ interface SafetyService {
      */
     fun isUrlSafe(petition: UrlSafetyPetition)
 }
+
+
+/**
+ * [IntegrationService] is the port to the service that sends messages to spring integration channels.
+ * 
+ * **Note**: It is a design decision to create this port. It could be part of the core.
+ */
+interface IntegrationService {
+    /**
+     * Sends a message to the QR channel.
+     * 
+     * @param data The data to be sent.
+     */
+    fun sendQrMessage(data: Any)
+
+    /**
+     * Sends a message to the Branded channel.
+     * 
+     * @param data The data to be sent.
+     */
+    fun sendBrandedMessage(data: Any)
+}
