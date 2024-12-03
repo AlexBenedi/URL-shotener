@@ -6,6 +6,7 @@ import es.unizar.urlshortener.core.HashService
 import es.unizar.urlshortener.core.ValidatorService
 import es.unizar.urlshortener.core.SafetyService
 import es.unizar.urlshortener.core.UrlSafetyPetition
+import es.unizar.urlshortener.core.IntegrationService
 import es.unizar.urlshortener.springbootkafkaexample.service.KafkaProducerService
 import org.apache.commons.validator.routines.UrlValidator
 import org.springframework.stereotype.Service
@@ -108,5 +109,19 @@ class NonRegisteredUserService {
         } else {
             false
         }
+    }
+}
+
+@Service
+class IntegrationServiceImpl(
+    private val pubSubMessageSender: PubSubMessageSender
+) : IntegrationService {
+
+    override fun sendBrandedMessage(data: Any) {
+        pubSubMessageSender.sendBrandedMessage(data)
+    }
+
+    override fun sendQrMessage(data: Any) {
+        pubSubMessageSender.sendQrMessage(data)
     }
 }
