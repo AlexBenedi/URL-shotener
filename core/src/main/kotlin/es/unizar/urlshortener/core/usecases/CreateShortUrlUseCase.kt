@@ -31,6 +31,7 @@ class CreateShortUrlUseCaseImpl(
     private val validatorService: ValidatorService,
     private val hashService: HashService,
     private val safetyService: SafetyService,
+    private val integrationService: IntegrationService
 ) : CreateShortUrlUseCase {
     /**
      * Creates a short URL for the given URL and optional data.
@@ -56,6 +57,7 @@ class CreateShortUrlUseCaseImpl(
             if (data.isBranded == true ) {
                 if ( data.name != null ) {
                     id = data.name
+                    integrationService.sendBrandedMessage(data)
                 } else {
                     throw InvalidNameBrandedUrl()
                 }
