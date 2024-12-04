@@ -118,11 +118,11 @@ class IntegrationServiceImpl(
     private val pubSubMessageSender: PubSubMessageSender
 ) : IntegrationService {
 
-    override fun sendBrandedMessage(data: Any) {
+    override fun sendBrandedMessage(data: String) {
         pubSubMessageSender.sendBrandedMessage(data)
     }
 
-    override fun sendQrMessage(data: Any) {
+    override fun sendQrMessage(data: String) {
         pubSubMessageSender.sendQrMessage(data)
     }
 }
