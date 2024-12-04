@@ -166,12 +166,12 @@ interface IntegrationService {
      * 
      * @param data The data to be sent.
      */
-    fun sendQrMessage(data: Any)
+    fun sendQrMessage(data: String)
 
     /**
      * Sends a message to the Branded channel.
      * 
      * @param data The data to be sent.
      */
-    fun sendBrandedMessage(data: Any)
+    fun sendBrandedMessage(data: String)
 }
