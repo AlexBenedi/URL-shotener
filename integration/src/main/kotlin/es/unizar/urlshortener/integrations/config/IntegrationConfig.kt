@@ -46,39 +46,38 @@ open class IntegrationConfig {
     }
     */
     
-
+    
     @Bean
-    open fun routerFlow(direct: DirectChannel): IntegrationFlow = integrationFlow(
-        source = { direct }
-    ) {
+    open fun routerFlow(direct: DirectChannel): IntegrationFlow = integrationFlow(direct) {
         route { message: Message<*> ->
+            println("Message: ${message}")
             val type = message.headers["type"] as? String
             when (type) {
-                //"qr" -> "qrFlow"
-                "branded" -> "brandedFlow.input"
-                //else -> "defaultFlow"
+                "branded" -> "brandedChannel"
+                "qr" -> "qrChannel"
+                else -> "defaultChannel"
             }
-        } 
+        }
+
+        //handle { payload: Any, headers: Map<String, Any> -> println("Prueba received: $payload") }
     }
 
-    /*
+    
     @Bean
-    open fun qrFlow(): IntegrationFlow = integrationFlow("qrFlow") {
+    open fun qrFlow(): IntegrationFlow = integrationFlow("qrChannel") {
         handle { payload: Any, headers: Map<String, Any> -> println("QR Consumer received: $payload") }
     }
-    */
 
     @Bean
-    open fun brandedFlow(): IntegrationFlow = integrationFlow("brandedFlow") {
-        handle { payload: Any, headers: Map<String, Any> -> println("Branded Consumer received: $payload") }
+    open fun brandedFlow(): IntegrationFlow = integrationFlow("brandedChannel") {
+        handle { payload: Any, headers: Map<String, Any> -> println("Llega") }
     }
 
-    /*
     @Bean
-    open fun defaultFlow(): IntegrationFlow = integrationFlow("defaultFlow") {
+    open fun defaultFlow(): IntegrationFlow = integrationFlow("defaultChannel") {
         handle { payload: Any, headers: Map<String, Any> -> println("Default Consumer received: $payload") }
     }
-    */
+    
 
     /*
     @Bean
@@ -93,6 +92,7 @@ open class IntegrationConfig {
         handle { payload: Any, headers: Map<String, Any> -> println("Branded Consumer received: $payload") }
     }
     */
+    
 
     /*
     @Bean
