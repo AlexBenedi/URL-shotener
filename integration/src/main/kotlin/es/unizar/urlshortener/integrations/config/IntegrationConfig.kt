@@ -25,6 +25,9 @@ import java.util.Random
 import java.util.concurrent.atomic.AtomicInteger
 import org.springframework.integration.channel.DirectChannel
 import es.unizar.urlshortener.integration.api.PubSubMessageSender
+import org.springframework.context.ApplicationContext
+import org.springframework.messaging.MessageChannel
+import org.springframework.messaging.Message
 
 @Configuration
 @EnableIntegration // Inicia el sustena de gestion de flujos
@@ -49,8 +52,8 @@ open class IntegrationConfig {
     
     @Bean
     open fun routerFlow(direct: DirectChannel): IntegrationFlow = integrationFlow(direct) {
-        route { message: Message<*> ->
-            println("Message: ${message}")
+
+        route<Message<*>> { message ->
             val type = message.headers["type"] as? String
             when (type) {
                 "branded" -> "brandedChannel"
@@ -58,8 +61,6 @@ open class IntegrationConfig {
                 else -> "defaultChannel"
             }
         }
-
-        //handle { payload: Any, headers: Map<String, Any> -> println("Prueba received: $payload") }
     }
 
     
@@ -93,33 +94,4 @@ open class IntegrationConfig {
     }
     */
     
-
-    /*
-    @Bean
-    fun qrFlow(pubSubChannel: PublishSubscribeChannel) = IntegrationFlows
-        .from(pubSubChannel)
-        .filter { message -> 
-            message.headers["type"] == "qr" 
-        }
-        .handle { payload, headers ->
-            println("QR Consumer received: $payload")
-        }
-        .get()
-
-    @Bean
-    fun brandedFlow(pubSubChannel: PublishSubscribeChannel) = IntegrationFlows
-        .from(pubSubChannel)
-        .filter { message -> 
-            message.headers["type"] == "branded"
-        }
-        .handle { payload, headers ->
-            println("Branded Consumer received: $payload")
-        }
-        .get()
-    */
 }
-
-data class Message<T>(
-    val payload: T, 
-    val headers: Map<String, Any>
-)
