@@ -31,7 +31,6 @@ class PubSubMessageSender(private val pubSubChannel: MessageChannel) {
 */
 
 
-
 @Service
 class PubSubMessageSender(private val direct: MessageChannel) {
 
