@@ -57,7 +57,7 @@ class CreateShortUrlUseCaseImpl(
             if (data.isBranded == true ) {
                 if ( data.name != null ) {
                     id = data.name
-                    integrationService.sendBrandedMessage(data)
+                    integrationService.sendBrandedMessage(url)
                 } else {
                     throw InvalidNameBrandedUrl()
                 }
