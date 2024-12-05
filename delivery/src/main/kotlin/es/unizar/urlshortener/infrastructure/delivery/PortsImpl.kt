@@ -126,7 +126,7 @@ class BrandedServiceImpl(
      * @param id The id to be validated.
      * @return True if the id is valid, false otherwise.
      */
-    override fun isValidBrandedUrl(id: String?) {
-        kafkaProducerService.sendMessage(BRANDED_TOPIC, Gson().toJson(id)) 
+    override fun isValidBrandedUrl(id: String) {
+        kafkaProducerService.sendMessage(BRANDED_TOPIC, id) 
     }
 }

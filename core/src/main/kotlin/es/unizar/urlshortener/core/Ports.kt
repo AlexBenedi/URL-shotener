@@ -156,5 +156,5 @@ interface BrandedService {
      * @param id The id to be validated.
      * @return True if the id is valid, false otherwise.
      */
-    fun isValidBrandedUrl(id: String?)
+    fun isValidBrandedUrl(id: String)
 }
