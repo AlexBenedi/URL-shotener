@@ -6,6 +6,7 @@ import com.google.gson.Gson
 import es.unizar.urlshortener.core.UrlSafetyResponse
 import es.unizar.urlshortener.core.UrlSafetyPetition
 import es.unizar.urlshortener.core.UrlSafetyChecked
+import es.unizar.urlshortener.core.usecases.UpdateUrlBrandedUseCase
 import es.unizar.urlshortener.springbootkafkaexample.service.KafkaConsumerService
 import es.unizar.urlshortener.springbootkafkaexample.service.KafkaProducerService
 import es.unizar.urlshortener.gateway.GoogleSafeBrowsingClient
@@ -29,6 +30,9 @@ class KafkaServiceTest {
 
     @MockBean
     private lateinit var updateUrlSafetyUseCase: UpdateUrlSafetyUseCase
+
+    @MockBean
+    private lateinit var updateBrandedUseCase: UpdateUrlBrandedUseCase    
 
     @MockBean
     private lateinit var googleSafeBrowsingClient: GoogleSafeBrowsingClient

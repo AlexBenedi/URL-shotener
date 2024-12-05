@@ -11,7 +11,6 @@ import es.unizar.urlshortener.core.ShortUrl
 import es.unizar.urlshortener.core.ShortUrlProperties
 import es.unizar.urlshortener.core.ShortUrlRepositoryService
 import es.unizar.urlshortener.core.ValidatorService
-import es.unizar.urlshortener.core.IntegrationService
 import es.unizar.urlshortener.core.BrandedService
 import org.mockito.Mockito.mock
 import org.mockito.kotlin.any
