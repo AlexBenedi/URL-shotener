@@ -5,10 +5,12 @@ import es.unizar.urlshortener.core.usecases.GetUserInformationUseCaseImpl
 import es.unizar.urlshortener.core.usecases.LogClickUseCaseImpl
 import es.unizar.urlshortener.core.usecases.RedirectUseCaseImpl
 import es.unizar.urlshortener.core.usecases.UpdateUrlSafetyUseCaseImpl
+import es.unizar.urlshortener.core.usecases.UpdateUrlBrandedUseCaseImpl
 import es.unizar.urlshortener.ApplicationConfiguration
 import es.unizar.urlshortener.infrastructure.delivery.HashServiceImpl
 import es.unizar.urlshortener.infrastructure.delivery.ValidatorServiceImpl
 import es.unizar.urlshortener.infrastructure.delivery.SafetyServiceImpl
+import es.unizar.urlshortener.infrastructure.delivery.BrandedServiceImpl
 import es.unizar.urlshortener.infrastructure.repositories.ClickEntityRepository
 import es.unizar.urlshortener.infrastructure.repositories.ClickRepositoryServiceImpl
 import es.unizar.urlshortener.infrastructure.repositories.ShortUrlEntityRepository
@@ -29,7 +31,8 @@ class ApplicationConfigurationUseCases(
     @Autowired val clickEntityRepository: ClickEntityRepository,
     @Autowired val userEntityRepository: UserEntityRepository,
     @Autowired val linkEntityRepository: LinkEntityRepository,
-    @Autowired val safetyServiceImpl: SafetyServiceImpl
+    @Autowired val safetyServiceImpl: SafetyServiceImpl,
+    @Autowired val brandedServiceImpl: BrandedServiceImpl
 ){
 
     /**
@@ -46,6 +49,7 @@ class ApplicationConfigurationUseCases(
     @Bean
     fun logClickUseCase() = LogClickUseCaseImpl(ClickRepositoryServiceImpl(clickEntityRepository))
 
+
     /**
      * Provides an implementation of the CreateShortUrlUseCase.
      * @return an instance of CreateShortUrlUseCaseImpl.
@@ -56,6 +60,7 @@ class ApplicationConfigurationUseCases(
             ValidatorServiceImpl(),
             HashServiceImpl(),
             safetyServiceImpl,
+            brandedServiceImpl
         )
 
     /**
@@ -93,5 +98,14 @@ class ApplicationConfigurationUseCases(
      */
     @Bean
     fun generateQRCodeUseCase() = GenerateQRCodeUseCaseImpl()
+
+    /**
+     * Provides an implementation of the UpdateUrlBrandedUseCase.
+     * @return an instance of UpdateUrlBrandedUseCaseImpl.
+     */
+    @Bean
+    fun updateUrlBrandedUseCase() = UpdateUrlBrandedUseCaseImpl(
+        ShortUrlRepositoryServiceImpl(shortUrlEntityRepository)
+    )
 
 }

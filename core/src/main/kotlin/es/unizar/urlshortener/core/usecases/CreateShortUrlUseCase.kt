@@ -31,6 +31,7 @@ class CreateShortUrlUseCaseImpl(
     private val validatorService: ValidatorService,
     private val hashService: HashService,
     private val safetyService: SafetyService,
+    private val brandedService: BrandedService
 ) : CreateShortUrlUseCase {
     /**
      * Creates a short URL for the given URL and optional data.
@@ -55,6 +56,7 @@ class CreateShortUrlUseCaseImpl(
             var id = safeCall { hashService.hasUrl(url) }
             if (data.isBranded == true ) {
                 if ( data.name != null ) {
+                    //brandedService.isValidBrandedUrl(id)
                     id = data.name
                 } else {
                     throw InvalidNameBrandedUrl()
@@ -72,7 +74,15 @@ class CreateShortUrlUseCaseImpl(
                     qrCode = data.qrCode,
                 )
             )
-            return safeCall { shortUrlRepository.save(su) }
+            val short = safeCall { shortUrlRepository.save(su) }
+            if (data.isBranded == true ) {
+                if ( data.name != null ) {
+                    brandedService.isValidBrandedUrl(id)
+                } else {
+                    throw InvalidNameBrandedUrl()
+                }
+            }
+            return short
         } else {
             throw InvalidUrlException(url)
         }

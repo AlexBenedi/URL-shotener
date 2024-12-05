@@ -65,6 +65,7 @@ data class ShortUrlProperties(
     val owner: String? = null,
     val country: String? = null,
     val isBranded: Boolean? = null,
+    val validBranded: Boolean? = null,
     val name: String? = null,
     val qrCode: String? = null
 )

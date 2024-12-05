@@ -9,13 +9,15 @@ import es.unizar.urlshortener.core.UrlSafetyResponse
 import es.unizar.urlshortener.core.UrlSafetyPetition
 import es.unizar.urlshortener.core.UrlSafetyChecked
 import es.unizar.urlshortener.core.usecases.UpdateUrlSafetyUseCase
+import es.unizar.urlshortener.core.usecases.UpdateUrlBrandedUseCase
 
 // quizá esta clase irá en core? o en otro paquete?
 // no le acabo de ver sentido a tenerla separada es una clase con mucho acoplamiento
 // con otras pero no logro ver donde habrá q meterla, tengo q darle una vuelta más
 @Service
 class KafkaConsumerService(
-    private val updateUrlSafetyUseCase: UpdateUrlSafetyUseCase
+    private val updateUrlSafetyUseCase: UpdateUrlSafetyUseCase,
+    private val updateUrlBrandedUseCase: UpdateUrlBrandedUseCase
 ) {
     @Autowired 
     lateinit var googleSafeBrowsingClient: GoogleSafeBrowsingClient
@@ -61,5 +63,19 @@ class KafkaConsumerService(
         // THIS WILL BE DONE USING WEBSOCKETS INSTEAD OF JUST CALLING THE FUNCTION DIRECTLY
         // send the safety check result to the client
         updateUrlSafetyUseCase.updateUrlSafety(deserializedObject.id, deserializedObject.information)
+    }
+
+    /* this method will be modified when spring integration/camel is implemented */
+    @KafkaListener(topics = ["branded"], groupId = "group_id")
+    fun consumeBranded(message: String) {
+        // habrá que ver como desacoplar esto....
+        println("Serielized branded received: $message")
+        // deserialize the message to obtain the safety check result object
+        //val deserializedObject = Gson().fromJson(message, UrlSafetyChecked::class.java)
+        //println("Safety check result received: $deserializedObject")
+        // THIS WILL BE DONE USING WEBSOCKETS INSTEAD OF JUST CALLING THE FUNCTION DIRECTLY
+        // send the safety check result to the client
+        //updateUrlSafetyUseCase.updateUrlSafety(deserializedObject.id, deserializedObject.information)
+        updateUrlBrandedUseCase.updateUrlBranded(message, true)
     }
 }
