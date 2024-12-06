@@ -9,6 +9,7 @@ import es.unizar.urlshortener.core.ValidatorService
 import es.unizar.urlshortener.core.SafetyService
 import es.unizar.urlshortener.core.UrlSafetyPetition
 import es.unizar.urlshortener.core.BrandedService
+import es.unizar.urlshortener.core.QrService
 import es.unizar.urlshortener.springbootkafkaexample.service.KafkaProducerService
 import org.apache.commons.validator.routines.UrlValidator
 import org.springframework.stereotype.Service
@@ -128,5 +129,26 @@ class BrandedServiceImpl(
      */
     override fun isValidBrandedUrl(id: String?) {
         kafkaProducerService.sendMessage(BRANDED_TOPIC, Gson().toJson(id)) 
+    }
+}
+
+@Service
+class QrServiceImpl(
+    private val kafkaProducerService: KafkaProducerService
+) : QrService {
+
+    companion object{
+        /**
+         * The QR code topic to check the validation of the id.
+         */
+        const val QR_TOPIC = "qr"
+    }
+        /**
+        * Generates a QR code for the given id.
+        *
+        * @param id The id to generate the QR code.
+        */
+    override fun generateQr(id: String?) {
+        kafkaProducerService.sendMessage(QR_TOPIC, Gson().toJson(id))
     }
 }

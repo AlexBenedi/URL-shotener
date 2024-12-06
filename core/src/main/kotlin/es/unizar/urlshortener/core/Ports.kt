@@ -158,3 +158,16 @@ interface BrandedService {
      */
     fun isValidBrandedUrl(id: String?)
 }
+
+/**
+ * [QrService] is the port to the service that generates a QR code.
+ */
+interface QrService {
+    /**
+     * Generates a QR code for the given URL.
+     *
+     * @param url The URL to generate the QR code.
+     * @return The QR code.
+     */
+    fun generateQr(url: String?)
+}

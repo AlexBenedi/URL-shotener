@@ -1,6 +1,7 @@
 package es.unizar.urlshortener.springbootkafkaexample.service
 
 import com.google.gson.Gson
+import es.unizar.urlshortener.core.UrlNotFoundException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.kafka.annotation.KafkaListener
 import org.springframework.stereotype.Service
@@ -8,8 +9,11 @@ import es.unizar.urlshortener.gateway.GoogleSafeBrowsingClient
 import es.unizar.urlshortener.core.UrlSafetyResponse
 import es.unizar.urlshortener.core.UrlSafetyPetition
 import es.unizar.urlshortener.core.UrlSafetyChecked
+import es.unizar.urlshortener.core.usecases.GenerateQRCodeUseCase
 import es.unizar.urlshortener.core.usecases.UpdateUrlSafetyUseCase
 import es.unizar.urlshortener.core.usecases.UpdateUrlBrandedUseCase
+import es.unizar.urlshortener.core.usecases.StoreQRUseCase
+
 
 // quizá esta clase irá en core? o en otro paquete?
 // no le acabo de ver sentido a tenerla separada es una clase con mucho acoplamiento
@@ -17,7 +21,10 @@ import es.unizar.urlshortener.core.usecases.UpdateUrlBrandedUseCase
 @Service
 class KafkaConsumerService(
     private val updateUrlSafetyUseCase: UpdateUrlSafetyUseCase,
-    private val updateUrlBrandedUseCase: UpdateUrlBrandedUseCase
+    private val updateUrlBrandedUseCase: UpdateUrlBrandedUseCase,
+    private val storeQRUseCase: StoreQRUseCase,
+    private val generateQRCodeUseCase: GenerateQRCodeUseCase
+
 ) {
     @Autowired 
     lateinit var googleSafeBrowsingClient: GoogleSafeBrowsingClient
@@ -77,5 +84,17 @@ class KafkaConsumerService(
         // send the safety check result to the client
         //updateUrlSafetyUseCase.updateUrlSafety(deserializedObject.id, deserializedObject.information)
         updateUrlBrandedUseCase.updateUrlBranded(message, true)
+    }
+
+    @KafkaListener(topics = ["qr"], groupId = "group_id")
+    fun consumeQr(message: String) {
+
+        println("Url for the Qr received: $message")
+        // Generate the QR code
+        val qrCode = generateQRCodeUseCase.generateQRCode(message).base64Image
+        println("QR code generated: $qrCode")
+        // Store the QR code in the database
+        storeQRUseCase.storeQR(message, qrCode)
+        // Send the QR code to the client VIA WEB SOCKETS
     }
 }
