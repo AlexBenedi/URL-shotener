@@ -90,7 +90,7 @@ data class ShortUrlDataIn(
  */
 data class ShortUrlDataOut(
     val url: URI? = null,
-    val qrCode: String? = null, // Add the QR code here as a separate field
+    //val qrCode: String? = null, // Add the QR code here as a separate field
     val properties: Map<String, Any> = emptyMap(),
     val error: String? = null
 
@@ -168,6 +168,7 @@ class UrlShortenerControllerImpl(
                 ip = ip,
                 sponsor = data.sponsor,
                 isBranded = data.isBranded,
+                generateQrCode = data.generateQRCode,
                 name = data.name
             )
         ).run {
@@ -175,28 +176,11 @@ class UrlShortenerControllerImpl(
             val url = linkTo<UrlShortenerControllerImpl> { redirectTo(hash, request) }.toUri()
             h.location = url
 
-            // Check if the QR code should be generated
-            val qrCode = if (data.generateQRCode == true) {
-                generateQRCodeUseCase.generateQRCode(data.url).base64Image
-            } else {
-                null
-            }
             println("Key hachis: $hash")
-            val shortUrl = shortUrlRepositoryService.findByKey(hash)
-                ?: throw UrlNotFoundException(data.url) // Throw exception if the URL is not found
-
-            // Update the ShortUrlProperties with the generated QR code
-            val updatedProperties = shortUrl.properties.copy(qrCode = qrCode)
-
-            // Create an updated ShortUrl with the new properties
-            val updatedShortUrl = shortUrl.copy(properties = updatedProperties)
-
-            // Save the updated ShortUrl
-            shortUrlRepositoryService.save(updatedShortUrl)
 
             val response = ShortUrlDataOut(
                 url = url,
-                qrCode = qrCode, // Assign the QR code if generated
+                //qrCode = qrCode, // Assign the QR code if generated
                 properties = mapOf(
                     "safe" to mapOf(
                         "isSafe" to properties.safe?.isSafe,
@@ -248,7 +232,7 @@ class UrlShortenerControllerImpl(
                     .body(
                         ShortUrlDataOut(
                             url = null,
-                            qrCode = null,
+                            //qrCode = null,
                             properties = mapOf("error" to "Too many requests. Please try again later.")
                         )
                     )
@@ -256,13 +240,6 @@ class UrlShortenerControllerImpl(
                 val newRedirections = user1.redirections + 1
 
                 println("Data: $data")
-                // Check if the QR code should be generated
-                val qrCode = if (data.generateQRCode == true) {
-                    generateQRCodeUseCase.generateQRCode(data.url).base64Image
-                } else {
-                    null
-                }
-                println("QR CODE: $qrCode")
 
                 // Crear el ShortUrl con el use case
                 val shortUrlCreation = createShortUrlUseCase.createAndDoNotSave(
@@ -271,8 +248,8 @@ class UrlShortenerControllerImpl(
                         ip = request.remoteAddr,
                         sponsor = data.sponsor,
                         isBranded = data.isBranded,
-                        name = data.name,
-                        qrCode = qrCode
+                        generateQrCode = data.generateQRCode,
+                        name = data.name
                     ),
                     userId = userId
                 )
@@ -282,7 +259,7 @@ class UrlShortenerControllerImpl(
                     hash = shortUrlCreation.hash,
                     redirection = Redirection(target = data.url),
                     created = OffsetDateTime.now(),
-                    properties = shortUrlCreation.properties,
+                    properties = shortUrlCreation.properties
                 )
 
                 println("SHORTURL: $shortUrl")
@@ -325,7 +302,7 @@ class UrlShortenerControllerImpl(
                 val shortenedUrl = "${request.scheme}://${request.serverName}:${request.serverPort}/${shortUrl.hash}"
                 val response = ShortUrlDataOut(
                     url = URI.create(shortenedUrl), // Convert String to URI
-                    qrCode = qrCode,
+                    //qrCode = qrCode,
                     properties = mapOf("message" to "Link created successfully")
                 )
                 println(response)
@@ -338,7 +315,7 @@ class UrlShortenerControllerImpl(
                 .body(
                     ShortUrlDataOut(
                         url = null,
-                        qrCode = null,
+                        //qrCode = null,
                         properties = mapOf("error" to "User not found")
                     )
                 )
@@ -397,9 +374,9 @@ class UrlShortenerControllerImpl(
         //Show in the console the hash of the short URL
         println("The hash of the short URL is: $id")
         //Show in the console the value of the qrCode field
-        println("The value of the qrCode field is: ${shortUrl.properties.qrCode}")
+        println("The value of the qrCode field is: ${shortUrl.qrCode}")
 
-        val qrCodeBase64 = shortUrl.properties.qrCode
+        val qrCodeBase64 = shortUrl.qrCode
         
         println("The value of the qrCodeBase64 field is: $qrCodeBase64")
         // Check if the QR code is present

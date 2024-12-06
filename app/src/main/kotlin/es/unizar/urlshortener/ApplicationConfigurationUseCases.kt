@@ -11,6 +11,7 @@ import es.unizar.urlshortener.infrastructure.delivery.HashServiceImpl
 import es.unizar.urlshortener.infrastructure.delivery.ValidatorServiceImpl
 import es.unizar.urlshortener.infrastructure.delivery.SafetyServiceImpl
 import es.unizar.urlshortener.infrastructure.delivery.BrandedServiceImpl
+import es.unizar.urlshortener.infrastructure.delivery.QrServiceImpl
 import es.unizar.urlshortener.infrastructure.repositories.ClickEntityRepository
 import es.unizar.urlshortener.infrastructure.repositories.ClickRepositoryServiceImpl
 import es.unizar.urlshortener.infrastructure.repositories.ShortUrlEntityRepository
@@ -21,6 +22,7 @@ import es.unizar.urlshortener.infrastructure.repositories.LinkEntityRepository
 import es.unizar.urlshortener.infrastructure.repositories.LinkRepositoryServiceImpl
 import es.unizar.urlshortener.core.usecases.GenerateQRCodeUseCaseImpl
 import es.unizar.urlshortener.core.usecases.DeleteUserLinkUseCaseImpl
+import es.unizar.urlshortener.core.usecases.StoreQRUseCaseImpl
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -32,7 +34,8 @@ class ApplicationConfigurationUseCases(
     @Autowired val userEntityRepository: UserEntityRepository,
     @Autowired val linkEntityRepository: LinkEntityRepository,
     @Autowired val safetyServiceImpl: SafetyServiceImpl,
-    @Autowired val brandedServiceImpl: BrandedServiceImpl
+    @Autowired val brandedServiceImpl: BrandedServiceImpl,
+    @Autowired val qrServiceImpl: QrServiceImpl
 ){
 
     /**
@@ -60,7 +63,8 @@ class ApplicationConfigurationUseCases(
             ValidatorServiceImpl(),
             HashServiceImpl(),
             safetyServiceImpl,
-            brandedServiceImpl
+            brandedServiceImpl,
+            qrServiceImpl
         )
 
     /**
@@ -93,7 +97,7 @@ class ApplicationConfigurationUseCases(
     )
 
     /**
-     * Provude an implementation of GenerateQRCodeUseCase.
+     * Provides an implementation of GenerateQRCodeUseCase.
      * @return an instance of GenerateQRCodeUseCaseImpl.
      */
     @Bean
@@ -105,6 +109,15 @@ class ApplicationConfigurationUseCases(
      */
     @Bean
     fun updateUrlBrandedUseCase() = UpdateUrlBrandedUseCaseImpl(
+        ShortUrlRepositoryServiceImpl(shortUrlEntityRepository)
+    )
+
+    /**
+     * Provides an implementation of the storeQRUseCase.
+     * @return an instance of StoreQRUseCaseImpl.
+     */
+    @Bean
+    fun storeQRUseCase() = StoreQRUseCaseImpl(
         ShortUrlRepositoryServiceImpl(shortUrlEntityRepository)
     )
 
