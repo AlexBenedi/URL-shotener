@@ -148,3 +148,8 @@ data class UrlSafetyChecked(
     val id: String, 
     val information: UrlSafetyResponse
 )
+
+data class UrlForQr(
+    val url: String,
+    val id: String
+)

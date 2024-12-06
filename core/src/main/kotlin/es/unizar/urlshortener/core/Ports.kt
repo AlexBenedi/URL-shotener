@@ -169,5 +169,5 @@ interface QrService {
      * @param url The URL to generate the QR code.
      * @return The QR code.
      */
-    fun generateQr(url: String?)
+    fun generateQr(url: UrlForQr?)
 }

@@ -1,14 +1,11 @@
 package es.unizar.urlshortener.springbootkafkaexample.service
 
 import com.google.gson.Gson
-import es.unizar.urlshortener.core.UrlNotFoundException
+import es.unizar.urlshortener.core.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.kafka.annotation.KafkaListener
 import org.springframework.stereotype.Service
 import es.unizar.urlshortener.gateway.GoogleSafeBrowsingClient
-import es.unizar.urlshortener.core.UrlSafetyResponse
-import es.unizar.urlshortener.core.UrlSafetyPetition
-import es.unizar.urlshortener.core.UrlSafetyChecked
 import es.unizar.urlshortener.core.usecases.GenerateQRCodeUseCase
 import es.unizar.urlshortener.core.usecases.UpdateUrlSafetyUseCase
 import es.unizar.urlshortener.core.usecases.UpdateUrlBrandedUseCase
@@ -87,14 +84,16 @@ class KafkaConsumerService(
     }
 
     @KafkaListener(topics = ["qr"], groupId = "group_id")
-    fun consumeQr(message: String) {
-
-        println("Url for the Qr received: $message")
+    fun consumeQr(url: String) {
+        println("Serielized QR received: $url")
+        val deserializedObject = Gson().fromJson(url, UrlForQr::class.java)
+        println("Url for the Qr received in Kafka: $deserializedObject.url")
         // Generate the QR code
-        val qrCode = generateQRCodeUseCase.generateQRCode(message).base64Image
+        val qrCode = generateQRCodeUseCase.generateQRCode(deserializedObject.url).base64Image
         println("QR code generated: $qrCode")
         // Store the QR code in the database
-        storeQRUseCase.storeQR(message, qrCode)
+        storeQRUseCase.storeQR(deserializedObject.id, qrCode)
+        println("QR code stored in the database")
         // Send the QR code to the client VIA WEB SOCKETS
     }
 }

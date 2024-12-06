@@ -56,9 +56,6 @@ class CreateShortUrlUseCaseImpl(
             }*/
             var id = safeCall { hashService.hasUrl(url) }
 
-            if (data.generateQrCode == true) {
-                qrService.generateQr(id)
-            }
 
             if (data.isBranded == true ) {
                 if ( data.name != null ) {
@@ -67,6 +64,10 @@ class CreateShortUrlUseCaseImpl(
                 } else {
                     throw InvalidNameBrandedUrl()
                 }
+            }
+
+            if (data.generateQrCode == true) {
+                qrService.generateQr(UrlForQr(url, id))
             }
 
             safeCall { safetyService.isUrlSafe(UrlSafetyPetition(url, id)) } // post kafka message
@@ -107,9 +108,7 @@ class CreateShortUrlUseCaseImpl(
             id += userId
             System.out.println("ID de la url a insertar: " + id)
 
-            if (data.generateQrCode == true) {
-                qrService.generateQr(id)
-            }
+
 
             if (data.isBranded == true ) {
                 if ( data.name != null ) {
@@ -117,6 +116,10 @@ class CreateShortUrlUseCaseImpl(
                 } else {
                     throw InvalidNameBrandedUrl()
                 }
+            }
+
+            if (data.generateQrCode == true) {
+                qrService.generateQr(UrlForQr(url, id))
             }
             safeCall { safetyService.isUrlSafe(UrlSafetyPetition(url, id)) }// this must be async
             println("Data dentro : $data")
