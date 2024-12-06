@@ -6,7 +6,7 @@ import es.unizar.urlshortener.core.*
 
 
 /**
- * Given an url and a [QR] updates the state of the short URL.
+ * Given an url and a [QRCode] updates the state of the short URL.
  */
 interface StoreQRUseCase {
     /**
