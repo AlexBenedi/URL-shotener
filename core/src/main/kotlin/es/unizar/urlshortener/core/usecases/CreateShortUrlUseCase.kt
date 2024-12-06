@@ -61,7 +61,7 @@ class CreateShortUrlUseCaseImpl(
                 if ( data.name != null ) {
                     id = data.name
                 } else {
-                    throw InvalidNameBrandedUrl()
+                    throw EmptyNameBrandedUrl()
                 }
             }
 
@@ -110,7 +110,7 @@ class CreateShortUrlUseCaseImpl(
                 if ( data.name != null ) {
                     id = data.name
                 } else {
-                    throw InvalidNameBrandedUrl()
+                    throw EmptyNameBrandedUrl()
                 }
             }
 

@@ -4,8 +4,10 @@ import es.unizar.urlshortener.core.InvalidUrlException
 import es.unizar.urlshortener.core.RedirectionNotFound
 import es.unizar.urlshortener.core.UnsafeUrlException
 import es.unizar.urlshortener.core.UrlSafetyNotCheckedException
-import es.unizar.urlshortener.core.InvalidNameBrandedUrl
 import es.unizar.urlshortener.core.ShortUrlNotFoundException
+import es.unizar.urlshortener.core.BrandedNotCheckedException
+import es.unizar.urlshortener.core.EmptyNameBrandedUrl
+import es.unizar.urlshortener.core.InvalidNameBrandedUrl
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.ControllerAdvice
@@ -68,15 +70,37 @@ class RestResponseEntityExceptionHandler : ResponseEntityExceptionHandler() {
     fun redirectionNotFound(ex: RedirectionNotFound) = ErrorMessage(HttpStatus.NOT_FOUND.value(), ex.message)
 
     /**
-     * Handles InvalidNameBrandedUrl exception and returns a BAD_REQUEST response.
+     * Handles emptyNameBrandedUrl exception and returns a BAD_REQUEST response.
+     *
+     * @param ex the EmptyNameBrandedUrl exception thrown
+     * @return an ErrorMessage containing the status code and exception message
+     */
+    @ResponseBody
+    @ExceptionHandler(value = [EmptyNameBrandedUrl::class])
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    fun emptyNameBrandedUrl(ex: EmptyNameBrandedUrl) = ErrorMessage(HttpStatus.BAD_REQUEST.value(), ex.message)
+
+        /**
+     * Handles InvalidNameBrandedUrl exception and returns a NOT_FOUND response.
      *
      * @param ex the InvalidNameBrandedUrl exception thrown
      * @return an ErrorMessage containing the status code and exception message
      */
     @ResponseBody
     @ExceptionHandler(value = [InvalidNameBrandedUrl::class])
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    fun invalidNameBrandedUrl(ex: EmptyNameBrandedUrl) = ErrorMessage(HttpStatus.BAD_REQUEST.value(), ex.message)
+
+    /**
+     * Handles BrandedNotChecked exception and returns a BAD_REQUEST response.
+     *
+     * @param ex the BrandedNotCheckedException exception thrown
+     * @return an ErrorMessage containing the status code and exception message
+     */
+    @ResponseBody
+    @ExceptionHandler(value = [BrandedNotCheckedException::class])
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    fun invalidNameBrandedUrl(ex: InvalidNameBrandedUrl) = ErrorMessage(HttpStatus.BAD_REQUEST.value(), ex.message)
+    fun brandedNotChecked(ex: BrandedNotCheckedException) = ErrorMessage(HttpStatus.BAD_REQUEST.value(), ex.message)
 
     /**
      * Handles ShortUrlNotFoundException and returns a INTERNAL_SERVER response.
