@@ -9,6 +9,8 @@ import es.unizar.urlshortener.core.ShortUrlRepositoryService
 import es.unizar.urlshortener.core.UrlSafetyResponse
 import es.unizar.urlshortener.core.UrlSafetyNotCheckedException
 import es.unizar.urlshortener.core.UnsafeUrlException
+import es.unizar.urlshortener.core.BrandedNotCheckedException
+import es.unizar.urlshortener.core.InvalidNameBrandedUrl
 import org.mockito.Mockito.mock
 import org.mockito.kotlin.whenever
 import kotlin.test.Test
@@ -65,7 +67,6 @@ class RedirectUseCaseTest {
         assertFailsWith<UrlSafetyNotCheckedException> {
             useCase.redirectTo("key")
         }
-
     } 
 
     @Test
@@ -81,7 +82,44 @@ class RedirectUseCaseTest {
         assertFailsWith<UnsafeUrlException> {
             useCase.redirectTo("key")
         }
+    }
 
+    @Test
+    fun `redirectTo returns branded not checked when url is branded and not checked`(){
+        val repository = mock<ShortUrlRepositoryService> ()
+        val redirection = mock<Redirection>()
+        val properties = mock<ShortUrlProperties>()
+        val safety = mock<UrlSafetyResponse>()
+        whenever(safety.isSafe).thenReturn(true)
+        whenever(properties.isBranded).thenReturn(true)
+        whenever(properties.validBranded).thenReturn(null)
+        whenever(properties.safe).thenReturn(safety)
+        val shortUrl = ShortUrl("key", redirection, properties = properties)
+        whenever(repository.findByKey("key")).thenReturn(shortUrl)
+        val useCase = RedirectUseCaseImpl(repository)
+
+        assertFailsWith<BrandedNotCheckedException> {
+            useCase.redirectTo("key")
+        }
+    }
+
+    @Test
+    fun `redirectTo returns branded invalid when url is branded is checked and invalid`(){
+        val repository = mock<ShortUrlRepositoryService> ()
+        val redirection = mock<Redirection>()
+        val properties = mock<ShortUrlProperties>()
+        val safety = mock<UrlSafetyResponse>()
+        whenever(safety.isSafe).thenReturn(true)
+        whenever(properties.isBranded).thenReturn(true)
+        whenever(properties.validBranded).thenReturn(false)
+        whenever(properties.safe).thenReturn(safety)
+        val shortUrl = ShortUrl("key", redirection, properties = properties)
+        whenever(repository.findByKey("key")).thenReturn(shortUrl)
+        val useCase = RedirectUseCaseImpl(repository)
+
+        assertFailsWith<InvalidNameBrandedUrl> {
+            useCase.redirectTo("key")
+        }
     }
 }
 
