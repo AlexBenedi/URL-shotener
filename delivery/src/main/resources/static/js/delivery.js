@@ -79,8 +79,8 @@ $(document).ready(function () {
                 tableBody.empty(); // Limpiar la tabla antes de llenarla
 
                 links.forEach(function (link) {
-                    var qrCodeHtml = link.shortUrl.properties.qrCode
-                        ? `<img src="data:image/png;base64,${link.shortUrl.properties.qrCode}" alt="QR Code" width="100">`
+                    var qrCodeHtml = link.shortUrl.qrCode
+                        ? `<img src="data:image/png;base64,${link.shortUrl.qrCode}" alt="QR Code" width="100">`
                         : `<button class="btn btn-primary generate-qr" data-hash="${link.shortUrl.hash}">Generate QR</button>`;
 
                     // Generar HTML de la fila
