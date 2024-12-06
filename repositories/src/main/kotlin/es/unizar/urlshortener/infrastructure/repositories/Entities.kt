@@ -49,6 +49,7 @@ class ShortUrlEntity(
     val country: String?,
     val isBranded: Boolean?,
     val validBranded: Boolean?,
+    val generateQr: Boolean?,
     @Column(length = 65535)
     val qrCode: String?
 )

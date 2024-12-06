@@ -13,7 +13,7 @@ interface StoreQRUseCase {
      * Updates the safety of a short URL.
      *
      * @param url The URL to be updated.
-     * @param isValid State of the short URL.
+     * @param qrCode The QR code of the short URL.
      * @return The updated [ShortUrl] entity.
      */
     fun storeQR(url: String, qrCode: String) : ShortUrl?
