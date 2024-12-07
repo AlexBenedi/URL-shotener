@@ -22,6 +22,7 @@ import org.springframework.context.annotation.Profile
 import org.springframework.security.config.Customizer
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.web.SecurityFilterChain
+import es.unizar.urlshortener.websockets.SocketHandler
 
 /**
  * Wires use cases with service implementations, and services implementations with repositories.
@@ -103,4 +104,10 @@ class ApplicationConfiguration(
      */
     @Bean
     fun hashService() = HashServiceImpl()
+
+    /**
+     * Provides an implementation of the socket
+     */
+    @Bean
+    fun socketHandler() = SocketHandler()
 }

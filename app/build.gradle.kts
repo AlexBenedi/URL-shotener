@@ -18,6 +18,8 @@ dependencies {
     implementation(project(":delivery"))
     // Adds the repositories project as an implementation dependency.
     implementation(project(":repositories"))
+    // Adds the sockets project as an implementation dependency.
+    implementation(project(":WebSockets"))
 
     // Required for MatrixToImageWriter
     implementation(libs.zxing.core)
