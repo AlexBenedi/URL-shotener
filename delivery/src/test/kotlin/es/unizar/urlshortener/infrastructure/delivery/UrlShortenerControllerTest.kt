@@ -215,7 +215,7 @@ class UrlShortenerControllerTest {
                 url = "http://example.com/",
                 data = ShortUrlProperties(ip = "127.0.0.1", isBranded = true)
             )
-        ).willAnswer { throw InvalidNameBrandedUrl() }
+        ).willAnswer { throw EmptyNameBrandedUrl() }
 
         // Perform a POST request and verify the response status and error message
         mockMvc.perform(

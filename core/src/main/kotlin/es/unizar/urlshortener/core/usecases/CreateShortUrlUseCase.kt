@@ -59,10 +59,9 @@ class CreateShortUrlUseCaseImpl(
 
             if (data.isBranded == true ) {
                 if ( data.name != null ) {
-                    //brandedService.isValidBrandedUrl(id)
                     id = data.name
                 } else {
-                    throw InvalidNameBrandedUrl()
+                    throw EmptyNameBrandedUrl()
                 }
             }
 
@@ -83,12 +82,9 @@ class CreateShortUrlUseCaseImpl(
                 )
             )
             val short = safeCall { shortUrlRepository.save(su) }
+            println("Short URL created: $short")
             if (data.isBranded == true ) {
-                if ( data.name != null ) {
-                    brandedService.isValidBrandedUrl(id)
-                } else {
-                    throw InvalidNameBrandedUrl()
-                }
+                brandedService.isValidBrandedUrl(id)
             }
             return short
         } else {
@@ -114,7 +110,7 @@ class CreateShortUrlUseCaseImpl(
                 if ( data.name != null ) {
                     id = data.name
                 } else {
-                    throw InvalidNameBrandedUrl()
+                    throw EmptyNameBrandedUrl()
                 }
             }
 

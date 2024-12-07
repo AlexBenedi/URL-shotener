@@ -7,6 +7,7 @@ import es.unizar.urlshortener.core.InvalidUrlException
 import es.unizar.urlshortener.core.UnsafeUrlException
 import es.unizar.urlshortener.core.SafetyService
 import es.unizar.urlshortener.core.InvalidNameBrandedUrl
+import es.unizar.urlshortener.core.EmptyNameBrandedUrl
 import es.unizar.urlshortener.core.ShortUrl
 import es.unizar.urlshortener.core.ShortUrlProperties
 import es.unizar.urlshortener.core.ShortUrlRepositoryService
@@ -217,7 +218,7 @@ class CreateShortUrlUseCaseTest {
                 brandedService,
                 qrService
             )
-        assertFailsWith<InvalidNameBrandedUrl> {
+        assertFailsWith<EmptyNameBrandedUrl> {
             createShortUrlUseCase.create("http://example.com/", ShortUrlProperties(isBranded = true))
         }
     }

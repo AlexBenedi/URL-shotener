@@ -71,18 +71,12 @@ class KafkaConsumerService(
         updateUrlSafetyUseCase.updateUrlSafety(deserializedObject.id, deserializedObject.information)
     }
 
-    /* this method will be modified when spring integration/camel is implemented */
     @KafkaListener(topics = ["branded"], groupId = "group_id")
     fun consumeBranded(message: String) {
-        // habrá que ver como desacoplar esto....
         println("Serielized branded received: $message")
-        // deserialize the message to obtain the safety check result object
-        //val deserializedObject = Gson().fromJson(message, UrlSafetyChecked::class.java)
-        //println("Safety check result received: $deserializedObject")
-        // THIS WILL BE DONE USING WEBSOCKETS INSTEAD OF JUST CALLING THE FUNCTION DIRECTLY
-        // send the safety check result to the client
-        //updateUrlSafetyUseCase.updateUrlSafety(deserializedObject.id, deserializedObject.information)
-        updateUrlBrandedUseCase.updateUrlBranded(message, true)
+        val valid = true 
+        //Comprobacion
+        updateUrlBrandedUseCase.updateUrlBranded(message, valid)
     }
 
     @KafkaListener(topics = ["qr"], groupId = "group_id")

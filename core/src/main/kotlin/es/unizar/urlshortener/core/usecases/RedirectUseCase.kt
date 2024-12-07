@@ -6,6 +6,8 @@ import es.unizar.urlshortener.core.ShortUrlRepositoryService
 import es.unizar.urlshortener.core.safeCall
 import es.unizar.urlshortener.core.UnsafeUrlException
 import es.unizar.urlshortener.core.UrlSafetyNotCheckedException
+import es.unizar.urlshortener.core.BrandedNotCheckedException
+import es.unizar.urlshortener.core.InvalidNameBrandedUrl
 
 /**
  * Given a key returns a [Redirection] that contains a [URI target][Redirection.target]
@@ -45,10 +47,13 @@ class RedirectUseCaseImpl(
         println("Key: $key")
         if(shortUrl != null){
             val safetyResponse = shortUrl.properties.safe
+            val isBranded = shortUrl.properties.isBranded
+            val validBranded = shortUrl.properties.validBranded
             println(shortUrl)
             if(safetyResponse == null || safetyResponse.isSafe == null){ // safety not checked yet
                 throw UrlSafetyNotCheckedException()
-            } else if(safetyResponse.isSafe == false){ // url is unsafe
+            } 
+            else if (safetyResponse.isSafe == false) { // url is unsafe
                 throw UnsafeUrlException(
                     safetyResponse.threatType ?: "Unknown",
                     safetyResponse.platformType ?: "Unknown",
@@ -56,6 +61,13 @@ class RedirectUseCaseImpl(
                     safetyResponse.threatInfo ?: "Unknown"
                 )
             }
+            else if  (isBranded == true && validBranded == null) {
+                throw BrandedNotCheckedException()
+            }
+            else if (isBranded == true && validBranded == false) {
+                throw InvalidNameBrandedUrl()
+            }
+
             return shortUrl.redirection ?: throw RedirectionNotFound(key) // url is safe
         } else {
             throw RedirectionNotFound(key)
