@@ -11,7 +11,7 @@ import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry
 open class WebSocketConfig : WebSocketConfigurer {
 
     override fun registerWebSocketHandlers(registry: WebSocketHandlerRegistry) {
-        registry.addHandler(webSocketHandler(), "/ws-endpoint")
+        registry.addHandler(webSocketHandler(), "/ws-endpoint") // endpoint WebSocket al que los clientes pueden conectarse
             .setAllowedOrigins("*") // Permitir conexiones desde cualquier origen
     }
 

@@ -151,5 +151,6 @@ data class UrlSafetyChecked(
 
 data class UrlForQr(
     val url: String,
-    val id: String
+    val id: String,
+    val userId: String
 )

@@ -1,15 +1,47 @@
 $(document).ready(function () {
-    // Variable global para el userId (puedes setearlo desde el backend dinámicamente)
-    var userId = $("#userIdValue").text(); // Suponiendo que tienes un input hidden con este ID en el HTML
-    console.log("userId from ajax: " + userId);
+    // Variable global para el userId
+    var userId = $("#userIdValue").text(); // Supone que hay un elemento en el HTML con este ID
+    console.log("userId from AJAX: " + userId);
+
+    // Establecer la conexión WebSocket con el userIp como identificador
+    socket = new WebSocket("ws://" + window.location.host + "/ws-endpoint?userId=" + userIp);
+
+    // Eventos del WebSocket
+    socket.onopen = function () {
+        console.log("WebSocket conectado para el usuario: " + userId);
+    };
+
+    // Cuando se recibe un mensaje del servidor
+    socket.onmessage = function (event) {
+        var qrCode = event.data; // El contenido del mensaje recibido (el QR generado)
+        console.log("QR recibido:", qrCode);
+
+        // Mostrar el QR en la página
+        var resultDiv = $("#result");
+        resultDiv.append('<p>QR Code:</p>');
+        resultDiv.append('<img src="data:image/png;base64,' + qrCode + '" alt="QR Code">');
+        var qrCodeDownloadUrl = "/" + shortenedUrl.split('/').pop() + "/qr";
+        resultDiv.append('<p><a href="' + qrCodeDownloadUrl + '" download="qrcode.png">Download QR Code</a></p>');
+        resultDiv.append('<p>' + window.location.origin + qrCodeDownloadUrl + '</p>');
+    };
+
+    // Manejar el cierre de la conexión WebSocket
+    socket.onclose = function () {
+        console.log("Conexión WebSocket cerrada");
+    };
+
+    // Manejar errores en la conexión WebSocket
+    socket.onerror = function (error) {
+        console.error("Error en la conexión WebSocket:", error);
+    };
 
     // Mostrar/ocultar el campo de texto para el nombre de la marca
     $("#brandedCheckbox").change(function () {
         if ($(this).prop('checked')) {
-            $("#brandedNameGroup").show(); // Muestra el campo de texto
+            $("#brandedNameGroup").show();
         } else {
-            $("#brandedNameGroup").hide(); // Oculta el campo de texto
-            $("#brandedName").val(''); // Borra el contenido
+            $("#brandedNameGroup").hide();
+            $("#brandedName").val('');
         }
     });
 
@@ -17,11 +49,10 @@ $(document).ready(function () {
     $("#shortener").submit(function (event) {
         console.log("Has pulsado el botón de acortar URL");
         event.preventDefault();
-        
+
         // Agregar userId y brandedName si es necesario
         var formData = $(this).serialize() + "&userId=" + userId;
-        
-        // Si el checkbox está marcado, incluir el nombre de la marca
+
         if ($("#brandedCheckbox").prop('checked')) {
             formData += "&isBranded=true&name=" + encodeURIComponent($("#brandedName").val());
         }
@@ -45,15 +76,15 @@ $(document).ready(function () {
                 );
 
                 // Display the QR code if it exists
-                if (response.qrCode) {
+                /*if (response.qrCode) {
                     resultDiv.append("<p>QR Code:</p>");
                     resultDiv.append(
                         "<img src='data:image/png;base64," + response.qrCode + "' alt='QR Code'>"
                     );
-                    var qrCodeDownloadUrl = "/" + response.url.split('/').pop() + "/qr"; // Use response.url
+                    var qrCodeDownloadUrl = "/" + response.url.split('/').pop() + "/qr";
                     resultDiv.append('<p><a href="' + qrCodeDownloadUrl + '" download="qrcode.png">Download QR Code</a></p>');
                     resultDiv.append('<p>' + window.location.origin + qrCodeDownloadUrl + '</p>');
-                }
+                }*/
                 fetchUserLinks(); // Actualizar la tabla
             },
             error: function () {
@@ -76,14 +107,13 @@ $(document).ready(function () {
             data: formData,
             success: function (links) {
                 var tableBody = $("#linksTable tbody");
-                tableBody.empty(); // Limpiar la tabla antes de llenarla
+                tableBody.empty();
 
                 links.forEach(function (link) {
                     var qrCodeHtml = link.shortUrl.qrCode
                         ? `<img src="data:image/png;base64,${link.shortUrl.qrCode}" alt="QR Code" width="100">`
                         : `<button class="btn btn-primary generate-qr" data-hash="${link.shortUrl.hash}">Generate QR</button>`;
 
-                    // Generar HTML de la fila
                     var rowHtml = `
                         <tr id="link-row-${link.shortUrl.id}">
                             <td>${link.shortUrl.redirection.target}</td>
@@ -100,13 +130,11 @@ $(document).ready(function () {
                     fetchClicksByHash(link.shortUrl.hash);
                 });
 
-                // Asociar evento al botón de eliminar
                 $(".delete-link").click(function () {
                     var id = $(this).data("id");
                     deleteLink(id);
                 });
 
-                // Asociar evento al botón "Generate QR"
                 $(".generate-qr").click(function () {
                     var hash = $(this).data("hash");
                     generateQRCode(hash);
@@ -118,14 +146,11 @@ $(document).ready(function () {
         });
     }
 
-    // Función para obtener los clics totales por hash
     function fetchClicksByHash(hash) {
         $.ajax({
             type: "GET",
-            url: `/clicks/${hash}`, // Endpoint para obtener los clics totales
+            url: `/clicks/${hash}`,
             success: function (totalClicks) {
-                console.log(`Total clicks for hash ${hash}: ${totalClicks}`);
-                // Actualizar la celda correspondiente con el total de clics
                 $(`#clicks-count-${hash}`).text(totalClicks);
             },
             error: function () {
@@ -134,17 +159,12 @@ $(document).ready(function () {
         });
     }
 
-    // Función para generar el QR Code
     function generateQRCode(hash) {
-        // Solicitar el QR al backend
-        console.log("Generando QR para hash: " + hash);
         $.ajax({
             type: "GET",
-            url: `/${hash}/qr`,  // URL generada // Llamar al endpoint para obtener el QR
+            url: `/${hash}/qr`,
             success: function (qrCodeImage) {
-                // Convertir la imagen en base64 a una URL para mostrarla
                 var qrImageUrl = URL.createObjectURL(new Blob([qrCodeImage], { type: 'image/png' }));
-                // Mostrar el QR en la tabla
                 $(`button[data-hash="${hash}"]`).replaceWith(`<img src="${qrImageUrl}" alt="QR Code" width="50">`);
             },
             error: function () {
@@ -160,7 +180,7 @@ $(document).ready(function () {
                 url: `/delete/${idLink}`,
                 success: function () {
                     alert("Enlace eliminado con éxito.");
-                    location.reload(); // Recarga la página
+                    location.reload();
                 },
                 error: function () {
                     alert("Error al eliminar el enlace. Por favor, inténtalo de nuevo.");

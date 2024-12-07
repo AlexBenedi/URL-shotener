@@ -331,6 +331,12 @@ class UrlShortenerControllerImpl(
         return ResponseEntity.ok(links)
     }
 
+    @GetMapping("/api/ip")
+    fun getClientIp(request: HttpServletRequest): ResponseEntity<String> {
+        val ip = request.remoteAddr
+        return ResponseEntity.ok(ip)
+    }
+
     @GetMapping("/user")
     @ResponseBody
     override fun user(token: OAuth2AuthenticationToken): ResponseEntity<String> {

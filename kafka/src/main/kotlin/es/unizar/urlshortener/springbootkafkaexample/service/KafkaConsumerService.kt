@@ -89,7 +89,7 @@ class KafkaConsumerService(
         println("QR code generated: $qrCode")
 
         // Enviar mensaje al WebSocket del usuario
-        socketHandler.sendMessageToUser(user, qrCode)
+        socketHandler.sendMessageToUser(deserializedObject.userId, qrCode)
         // Store the QR code in the database
         storeQRUseCase.storeQR(deserializedObject.id, qrCode)
         println("QR code stored in the database")

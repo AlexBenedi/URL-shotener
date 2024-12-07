@@ -13,19 +13,18 @@ class SocketHandler : TextWebSocketHandler() {
     override fun afterConnectionEstablished(session: WebSocketSession) {
         val user = session.principal?.name
         if (user != null) {
-            sessions[user] = session // Mapea el usuario a la sesión WebSocket
+            sessions[user] = session // Vincula al usuario con la sesión WebSocket
             println("Conexión establecida para el usuario: $user")
         }
     }
 
-    override fun handleTextMessage(session: WebSocketSession, message: TextMessage) {
-
-        println("Mensaje recibido: ${message.payload}")
-    }
-
     fun sendMessageToUser(user: String, message: String) {
         val session = sessions[user]
-        session?.sendMessage(TextMessage(message))
+        if (session != null && session.isOpen) {
+            session.sendMessage(TextMessage(message))
+        } else {
+            println("No hay sesión activa para el usuario: $user")
+        }
     }
 
     override fun afterConnectionClosed(session: WebSocketSession, status: org.springframework.web.socket.CloseStatus) {

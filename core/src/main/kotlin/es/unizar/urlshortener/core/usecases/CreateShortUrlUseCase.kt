@@ -65,8 +65,14 @@ class CreateShortUrlUseCaseImpl(
                 }
             }
 
+            val idName = if(data.ip == null){
+                            "1.1.1.1"
+                            }
+                            else{
+                                data.ip
+                            }
             if (data.generateQrCode == true) {
-                qrService.generateQr(UrlForQr(url, id))
+                qrService.generateQr(UrlForQr(url, id, idName))
             }
 
             safeCall { safetyService.isUrlSafe(UrlSafetyPetition(url, id)) } // post kafka message
@@ -115,7 +121,7 @@ class CreateShortUrlUseCaseImpl(
             }
 
             if (data.generateQrCode == true) {
-                qrService.generateQr(UrlForQr(url, id))
+                qrService.generateQr(UrlForQr(url, id, userId))
             }
             safeCall { safetyService.isUrlSafe(UrlSafetyPetition(url, id)) }// this must be async
             println("Data dentro : $data")
