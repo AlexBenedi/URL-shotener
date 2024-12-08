@@ -98,7 +98,7 @@ class KafkaServiceTest {
         assertEquals(message, kafkaConsumerService.lastConsumedMessage)
     }
 
-        // Test the KafkaConsumerService, which consumes a message from Kafka
+    // Test the KafkaConsumerService, which consumes a message from Kafka
     @Test
     fun `test safety checking process works`() {
         // Arrange
