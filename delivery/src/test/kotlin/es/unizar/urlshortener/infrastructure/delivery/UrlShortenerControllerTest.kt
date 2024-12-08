@@ -3,15 +3,21 @@
 package es.unizar.urlshortener.infrastructure.delivery
 import es.unizar.urlshortener.core.*
 import es.unizar.urlshortener.core.usecases.*
+import org.hamcrest.CoreMatchers.containsString
 import org.mockito.BDDMockito.given
 import org.mockito.BDDMockito.never
 import org.mockito.Mockito.doThrow
+import org.mockito.Mockito.`when`
+import org.mockito.kotlin.any
 import org.mockito.kotlin.doNothing
 import org.mockito.kotlin.verify
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.MediaType
+import org.springframework.security.core.authority.SimpleGrantedAuthority
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken
+import org.springframework.security.oauth2.core.user.DefaultOAuth2User
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.web.servlet.MockMvc
@@ -57,7 +63,31 @@ class UrlShortenerControllerTest {
     @MockBean 
     private lateinit var generateQRCodeUseCase: GenerateQRCodeUseCase
 
+    @Test
+    fun `should allow access to protected routes with authentication`() {
+        // Simulamos un OAuth2Principal con un atributo "sub" que es el user ID
+        val attributes = mapOf<String, Any>("sub" to "mock-user-id")
+        val principal = DefaultOAuth2User(
+            listOf(SimpleGrantedAuthority("ROLE_USER")), // Simulamos los roles del usuario
+            attributes,
+            "sub" // El nombre del atributo que contiene el user ID
+        )
 
+        // Creamos el OAuth2AuthenticationToken manualmente
+        val authenticationToken = OAuth2AuthenticationToken(principal, principal.authorities,
+            "google")
+
+        // Realizamos la solicitud con MockMvc usando el token simulado
+        mockMvc.perform(get("/user")
+            .principal(authenticationToken))  // Pasamos el token como principal
+            .andExpect(status().isOk)
+            .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
+            .andExpect(content().string(containsString("mock-user-id")))
+    }
+
+    /**
+     * Test that verifies that the `shortenerUser` method returns a shortened link successfully.
+     */
     @Test
     fun `shortenerUser creates and returns shortened link successfully`() {
         val user = User(
