@@ -3,8 +3,6 @@
 package es.unizar.urlshortener.infrastructure.delivery
 import es.unizar.urlshortener.core.*
 import es.unizar.urlshortener.core.usecases.*
-import org.mockito.ArgumentMatchers.any
-import org.mockito.ArgumentMatchers.anyString
 import org.mockito.BDDMockito.given
 import org.mockito.BDDMockito.never
 import org.mockito.Mockito.doThrow
@@ -77,7 +75,8 @@ class UrlShortenerControllerTest {
         given(getUserInformationUseCase.findById("user123")).willReturn(user)
         given(createShortUrlUseCase.save(shortUrl)).willReturn(shortUrl)
         given(createShortUrlUseCase.create("http://example.com", shortUrl.properties)).willReturn(shortUrl)
-        given(createShortUrlUseCase.createAndDoNotSave("http://example.com", shortUrl.properties, "user123")).willReturn(shortUrl)
+        given(createShortUrlUseCase.createAndDoNotSave("http://example.com", shortUrl.properties, "user123"))
+            .willReturn(shortUrl)
 
         mockMvc.perform(
             post("/api/linkUser")
@@ -109,7 +108,8 @@ class UrlShortenerControllerTest {
     }
 
     /**
-     * Test that verifies that the `shortenerUser` method returns a 429 when the user has exceeded the limit of redirections.
+     * Test that verifies that the `shortenerUser` method returns a 429 when the user has exceeded the limit
+     * of redirections.
      */
     @Test
     fun `shortenerUser returns 429 Too Many Requests when redirection limit is exceeded`() {
@@ -127,7 +127,8 @@ class UrlShortenerControllerTest {
                 .param("url", "http://example.com")
         )
             .andExpect(status().isTooManyRequests)
-            .andExpect(jsonPath("$.properties.error").value("Too many requests. Please try again later."))
+            .andExpect(jsonPath("$.properties.error").value("Too many requests. " +
+                    "Please try again later."))
     }
 
 
@@ -155,7 +156,8 @@ class UrlShortenerControllerTest {
     @Test
     fun `deleteLink returns bad request when an invalid id is provided`() {
         // Stub para lanzar IllegalArgumentException
-        doThrow(IllegalArgumentException("El ID proporcionado no es válido.")).`when`(deleteUserLinkUseCase).deleteById(1L)
+        doThrow(IllegalArgumentException("El ID proporcionado no es válido.")).`when`(deleteUserLinkUseCase)
+            .deleteById(1L)
 
         // Realiza la petición DELETE y verifica la respuesta
         mockMvc.perform(delete("/delete/{idLink}", 1L))
