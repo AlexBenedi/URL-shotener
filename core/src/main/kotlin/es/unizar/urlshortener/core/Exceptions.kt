@@ -100,3 +100,6 @@ inline fun <T> safeCall(
  * @param url The URL that was not found.
  */
 class UrlNotFoundException(url: String) : DomainException("Short URL not found for [$url]")
+
+class LinkNotFoundException(key: String) : RuntimeException("Link not found for key: $key")
+

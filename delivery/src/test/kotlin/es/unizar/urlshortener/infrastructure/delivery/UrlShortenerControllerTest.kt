@@ -6,6 +6,8 @@ import es.unizar.urlshortener.core.usecases.*
 import org.mockito.ArgumentMatchers.any
 import org.mockito.BDDMockito.given
 import org.mockito.BDDMockito.never
+import org.mockito.Mockito.doThrow
+import org.mockito.kotlin.doNothing
 import org.mockito.kotlin.verify
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
@@ -14,8 +16,7 @@ import org.springframework.http.MediaType
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers.print
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 import kotlin.test.Test
@@ -56,6 +57,39 @@ class UrlShortenerControllerTest {
     @MockBean 
     private lateinit var generateQRCodeUseCase: GenerateQRCodeUseCase
 
+    /**
+     * Test that verifies that the `getLink` method returns a link when the id exists.
+     */
+    @Test
+    fun `deleteLink removes the link when the id exists`() {
+        // Stub para que el método no haga nada
+        doNothing().`when`(deleteUserLinkUseCase).deleteById(1L)
+
+        // Realiza la petición DELETE y verifica la respuesta
+        mockMvc.perform(delete("/delete/{idLink}", 1L))
+            .andExpect(status().isOk)
+            .andExpect(content().string("Link con id 1 eliminado con éxito."))
+
+        // Verifica que se llamó al método deleteById
+        verify(deleteUserLinkUseCase).deleteById(1L)
+    }
+
+    /**
+    * Test that verifies that the deleteLink method returns a bad request when an invalid id is provided.
+    */
+    @Test
+    fun `deleteLink returns bad request when an invalid id is provided`() {
+        // Stub para lanzar IllegalArgumentException
+        doThrow(IllegalArgumentException("El ID proporcionado no es válido.")).`when`(deleteUserLinkUseCase).deleteById(1L)
+
+        // Realiza la petición DELETE y verifica la respuesta
+        mockMvc.perform(delete("/delete/{idLink}", 1L))
+            .andExpect(status().isBadRequest)
+            .andExpect(content().string("Error al eliminar el link: El ID proporcionado no es válido."))
+
+        // Verifica que se llamó al método deleteById
+        verify(deleteUserLinkUseCase).deleteById(1L)
+    }
 
 
     /**
@@ -64,14 +98,11 @@ class UrlShortenerControllerTest {
     @Test
     fun `redirectTo returns a redirect when the key exists`() {
 
-        //Mock the behavior of getUserInformationUseCase to return a User object
-        //given(getUserInformationUseCase.getLinks(User("1", 0, null))).willReturn(emptyList())
-
         //Mock the behavior of securityFilterChain to return a SecurityFilterChain object
-        given(securityFilterChain.toString()).willReturn("SecurityFilterChain")
+        //given(securityFilterChain.toString()).willReturn("SecurityFilterChain")
 
         //Mock the behavior of deleteUserLinkUseCase to return a DeleteUserLinkUseCase object
-        given(deleteUserLinkUseCase.toString()).willReturn("DeleteUserLinkUseCase")
+        //given(deleteUserLinkUseCase.toString()).willReturn("DeleteUserLinkUseCase")
 
         // Mock the behavior of redirectUseCase to return a redirection URL
         given(redirectUseCase.redirectTo("key")).willReturn(Redirection("http://example.com/"))
