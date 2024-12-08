@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.kafka.core.KafkaTemplate
+import es.unizar.urlshortener.core.WebSocketsService
 import java.util.concurrent.TimeUnit
 
 @SpringBootTest(classes=[KafkaProducerService::class, KafkaConsumerService::class])
@@ -44,7 +45,6 @@ class KafkaServiceTest {
 
     @MockBean
     private lateinit var generateQRCodeUseCase: GenerateQRCodeUseCase
-
 
     @Autowired
     private lateinit var kafkaProducerService: KafkaProducerService

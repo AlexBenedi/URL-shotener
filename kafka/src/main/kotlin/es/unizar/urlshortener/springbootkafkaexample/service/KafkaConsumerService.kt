@@ -11,7 +11,8 @@ import es.unizar.urlshortener.core.usecases.GenerateQRCodeUseCase
 import es.unizar.urlshortener.core.usecases.UpdateUrlSafetyUseCase
 import es.unizar.urlshortener.core.usecases.UpdateUrlBrandedUseCase
 import es.unizar.urlshortener.core.usecases.StoreQRUseCase
-import es.unizar.urlshortener.core.WebSocketsService
+import es.unizar.urlshortener.websockets.MyWebSocketClient
+import java.net.URI
 
 
 
@@ -25,8 +26,6 @@ class KafkaConsumerService(
     private val updateUrlBrandedUseCase: UpdateUrlBrandedUseCase,
     private val storeQRUseCase: StoreQRUseCase,
     private val generateQRCodeUseCase: GenerateQRCodeUseCase,
-    private  val webSocketService: WebSocketsService
-
 ) {
     @Autowired 
     lateinit var googleSafeBrowsingClient: GoogleSafeBrowsingClient
@@ -96,7 +95,14 @@ class KafkaConsumerService(
 
         // Enviar mensaje al WebSocket del usuario
         // Enviar el mensaje al WebSocket del usuario
-        webSocketService.sendMessageToUser(deserializedObject.userId, qrCode)
+        println("User id kafka: ${deserializedObject.userId}")
+        val serverUri = URI("ws://localhost:8080/ws-endpoint")
+        val webSocketClient = MyWebSocketClient(serverUri)
+        webSocketClient.connectBlocking()
+        val usrAndQr = Pair(deserializedObject.userId, qrCode)
+        val usrAndQrJson = Gson().toJson(usrAndQr)
+        webSocketClient.send(usrAndQrJson)
+        webSocketClient.close()
         // Store the QR code in the database
         storeQRUseCase.storeQR(deserializedObject.id, qrCode)
         println("QR code stored in the database")

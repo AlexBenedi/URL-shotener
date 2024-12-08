@@ -1,5 +1,7 @@
 package es.unizar.urlshortener.websockets
 
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import jakarta.websocket.CloseReason
 import jakarta.websocket.CloseReason.CloseCodes
 import jakarta.websocket.OnClose
@@ -18,6 +20,7 @@ import org.springframework.web.socket.server.standard.ServerEndpointExporter
 import java.util.Locale
 import java.util.Scanner
 import java.util.concurrent.ConcurrentHashMap
+import java.lang.reflect.Type
 
 @Configuration(proxyBeanMethods = false)
 open class WebSocketConfig {
@@ -43,6 +46,7 @@ fun RemoteEndpoint.Basic.sendTextSafe(message: String) {
 class WebSocketsServer {
     companion object {
         var instanceCount = 0
+        val sessions = ConcurrentHashMap<String, Session>()
     }
 
     init {
@@ -51,7 +55,6 @@ class WebSocketsServer {
     }
 
     // Mapa para almacenar las sesiones de los usuarios por su userId
-    private val sessions = ConcurrentHashMap<String, Session>()
 
     @OnOpen
     fun onOpen(session: Session) {
@@ -70,13 +73,23 @@ class WebSocketsServer {
         } else {
             println("No se proporcionó userId en la URL")
         }
+        println("Sesiones activas: ${sessions}")
     }
 
     @OnMessage
     fun onMessage(message: String, session: Session) {
         println("Mensaje recibido: $message")
+        val gson = Gson()
+        val tupleType: Type = object : TypeToken<Pair<String, String>>() {}.type
+        val userQrCode: Pair<String, String> = gson.fromJson(message, tupleType)
+
+        println("User ID: ${userQrCode.first}")
+        println("QR Code: ${userQrCode.second}")
+        
         // Aquí puedes realizar la lógica para enviar la respuesta con el QR
-        sendMessageToUser("userIdEjemplo", "Aquí está tu QR: [QR_CODE]")
+        println("Instancias activas kafka: $instanceCount")
+        println("Sesiones activas: ${sessions}")
+        sendMessageToUser(userQrCode.first, userQrCode.second)
         session.basicRemote.sendText("Respuesta desde el servidor: $message")
     }
 

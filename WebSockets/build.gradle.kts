@@ -24,6 +24,8 @@ dependencies {
 
     // Dependencia para la API de Jakarta WebSocket
     implementation("jakarta.websocket:jakarta.websocket-api:2.1.0")
+    implementation("org.java-websocket:Java-WebSocket:1.5.2")
+    implementation(libs.gson)
 
     runtimeOnly(libs.spring.boot.devtools)
 
