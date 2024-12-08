@@ -14,7 +14,7 @@ import java.util.Base64
 import es.unizar.urlshortener.core.usecases.RedirectUseCase
 import es.unizar.urlshortener.core.usecases.LogClickUseCase
 import es.unizar.urlshortener.core.usecases.CreateShortUrlUseCase
-import es.unizar.urlshortener.core.usecases.GenerateQRCodeUseCaseImpl
+import es.unizar.urlshortener.core.usecases.GenerateQRCodeUseCase
 import es.unizar.urlshortener.core.usecases.DeleteUserLinkUseCase
 import org.springframework.core.io.ClassPathResource
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken
@@ -108,10 +108,7 @@ class UrlShortenerControllerImpl(
     val createShortUrlUseCase: CreateShortUrlUseCase,
     val getUserInformationUseCase : GetUserInformationUseCase,
     val deleteUserLinkUseCase : DeleteUserLinkUseCase,
-    val shortUrlRepositoryService: ShortUrlRepositoryService,
-    val clickRepositoryService: ClickRepositoryService,
-    val userRepositoryService: UserRepositoryService,
-    val generateQRCodeUseCase: GenerateQRCodeUseCaseImpl
+    val generateQRCodeUseCase: GenerateQRCodeUseCase
 
 ) : UrlShortenerController {
     private val ipRedirectionCounts = ConcurrentHashMap<String, Pair<Int, Instant>>()
@@ -182,7 +179,7 @@ class UrlShortenerControllerImpl(
                 null
             }
             println("Key hachis: $hash")
-            val shortUrl = shortUrlRepositoryService.findByKey(hash)
+            val shortUrl = createShortUrlUseCase.findByKey(hash)
                 ?: throw UrlNotFoundException(data.url) // Throw exception if the URL is not found
 
             // Update the ShortUrlProperties with the generated QR code
@@ -192,7 +189,7 @@ class UrlShortenerControllerImpl(
             val updatedShortUrl = shortUrl.copy(properties = updatedProperties)
 
             // Save the updated ShortUrl
-            shortUrlRepositoryService.save(updatedShortUrl)
+            createShortUrlUseCase.save(updatedShortUrl)
 
             val response = ShortUrlDataOut(
                 url = url,
@@ -228,7 +225,7 @@ class UrlShortenerControllerImpl(
         System.out.println("UserId from shortenerUser : $userId")
         System.out.println("URL from shortenerUser : ${data.url}")
 
-        val user1 = userRepositoryService.findById(userId)
+        val user1 = getUserInformationUseCase.findById(userId)
 
         if (user1 != null) {
             val currentTime = OffsetDateTime.now()
@@ -293,7 +290,7 @@ class UrlShortenerControllerImpl(
                     lastRedirectionTimeStamp = OffsetDateTime.now()
                 )
 
-                userRepositoryService.save(user)
+                getUserInformationUseCase.save(user)
 
                 System.out.println("Short hash  : ${shortUrlCreation.hash}")
 
@@ -349,7 +346,7 @@ class UrlShortenerControllerImpl(
     @ResponseBody
     override fun getUserLinks(@RequestParam userId: String): ResponseEntity<List<Link>> {
         System.out.println("UserId from getUserLinks : $userId")
-        val user = userRepositoryService.findById(userId)
+        val user = getUserInformationUseCase.findById(userId)
         val links = user?.let { getUserInformationUseCase.getLinks(it) }
         return ResponseEntity.ok(links)
     }
@@ -376,7 +373,7 @@ class UrlShortenerControllerImpl(
 
     @GetMapping("/clicks/{hash}")
     override fun getClicksByHash(@PathVariable hash: String): ResponseEntity<Int> {
-        val totalClicks = clickRepositoryService.getTotalClicksByHash(hash) ?: 0
+        val totalClicks = logClickUseCase.getTotalClicksByHash(hash) ?: 0
         return ResponseEntity.ok(totalClicks)
     }
 
@@ -392,7 +389,7 @@ class UrlShortenerControllerImpl(
 
     @GetMapping("/{id}/qr", produces = [MediaType.IMAGE_PNG_VALUE])
     override fun getQRCode(@PathVariable id: String): ResponseEntity<ByteArray> {
-        val shortUrl = shortUrlRepositoryService.findByKey(id)
+        val shortUrl = createShortUrlUseCase.findByKey(id)
             ?: return ResponseEntity(HttpStatus.NOT_FOUND)
         //Show in the console the hash of the short URL
         println("The hash of the short URL is: $id")

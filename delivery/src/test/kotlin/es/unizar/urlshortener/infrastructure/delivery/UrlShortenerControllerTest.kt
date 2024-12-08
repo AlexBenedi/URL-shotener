@@ -56,20 +56,6 @@ class UrlShortenerControllerTest {
     @MockBean 
     private lateinit var generateQRCodeUseCase: GenerateQRCodeUseCase
 
-    @MockBean
-    private lateinit var shortUrlRepositoryService: ShortUrlRepositoryService
-
-    @MockBean
-    private lateinit var userRepositoryService: UserRepositoryService
-
-    @MockBean
-    private lateinit var linkRepositoryService: LinkRepositoryService
-
-    @MockBean
-    private lateinit var clickRepositoryService: ClickRepositoryService
-
-    @MockBean
-    private lateinit var generateQRCodeUseCaseImpl: GenerateQRCodeUseCaseImpl
 
 
     /**
@@ -134,7 +120,7 @@ class UrlShortenerControllerTest {
             )
         ).willReturn(ShortUrl("f684a3c4", Redirection("http://example.com/")))
 
-        given(shortUrlRepositoryService.findByKey("f684a3c4"))
+        given(createShortUrlUseCase.findByKey("f684a3c4"))
             .willReturn(ShortUrl("f684a3c4", Redirection("http://example.com/")))
 
         // Perform a POST request and verify the response status, redirection URL, and JSON response
@@ -187,7 +173,7 @@ class UrlShortenerControllerTest {
             )
         ).willReturn(ShortUrl("test", Redirection("http://example.com/")))
 
-        given(shortUrlRepositoryService.findByKey("test"))
+        given(createShortUrlUseCase.findByKey("test"))
             .willReturn(ShortUrl("test", Redirection("http://example.com/")))
 
         // Perform a POST request and verify the response status, redirection URL, and JSON response

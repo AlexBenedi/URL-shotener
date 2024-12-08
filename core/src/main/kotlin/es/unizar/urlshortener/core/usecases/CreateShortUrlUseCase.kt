@@ -21,6 +21,10 @@ interface CreateShortUrlUseCase {
     fun create(url: String, data: ShortUrlProperties): ShortUrl
 
     fun createAndDoNotSave(url: String, data: ShortUrlProperties, userId : String): ShortUrl
+
+    fun findByKey(key: String): ShortUrl?
+
+    fun save(shortUrl: ShortUrl): ShortUrl
 }
 
 /**
@@ -114,5 +118,13 @@ class CreateShortUrlUseCaseImpl(
         } else {
             throw InvalidUrlException(url)
         }
+    }
+
+    override fun findByKey(key: String): ShortUrl? {
+        return safeCall { shortUrlRepository.findByKey(key) }
+    }
+
+    override fun save(shortUrl: ShortUrl): ShortUrl {
+        return safeCall { shortUrlRepository.save(shortUrl) }
     }
 }

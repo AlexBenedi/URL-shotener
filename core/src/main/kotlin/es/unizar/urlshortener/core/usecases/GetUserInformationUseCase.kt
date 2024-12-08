@@ -33,6 +33,10 @@ interface GetUserInformationUseCase {
      * Save a link in the database
      */
     fun saveLink(link: Link)
+
+    fun save(user: User)
+
+    fun findById(id: String): User?
 }
 
 /**
@@ -133,5 +137,12 @@ class GetUserInformationUseCaseImpl(
         safeCall { linkRepository.save(link) }
     }
 
+    override fun save(user: User) {
+        safeCall { userRepository.save(user) }
+    }
+
+    override fun findById(id: String): User? {
+        return safeCall { userRepository.findById(id) }
+    }
 
 }

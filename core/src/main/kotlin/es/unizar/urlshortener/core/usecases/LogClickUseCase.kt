@@ -17,6 +17,8 @@ interface LogClickUseCase {
      * @param data The properties of the click event.
      */
     fun logClick(key: String, data: ClickProperties)
+
+    fun getTotalClicksByHash(hash: String): Int
 }
 
 /**
@@ -50,5 +52,9 @@ class LogClickUseCaseImpl(
         runCatching {
             clickRepository.save(cl)
         }
+    }
+
+    override fun getTotalClicksByHash(hash: String): Int {
+        return clickRepository.getTotalClicksByHash(hash)
     }
 }
