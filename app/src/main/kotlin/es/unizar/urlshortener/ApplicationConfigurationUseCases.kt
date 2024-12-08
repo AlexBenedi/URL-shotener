@@ -1,3 +1,5 @@
+@file:Suppress("WildcardImport")
+
 package es.unizar.urlshortener
 
 import es.unizar.urlshortener.core.usecases.CreateShortUrlUseCaseImpl
@@ -30,9 +32,11 @@ class ApplicationConfigurationUseCases(
     @Autowired val userEntityRepository: UserEntityRepository,
     @Autowired val linkEntityRepository: LinkEntityRepository,
     @Autowired val safetyServiceImpl: SafetyServiceImpl,
-    @Autowired val brandedServiceImpl: BrandedServiceImpl,
     @Autowired val qrServiceImpl: QrServiceImpl
 ){
+
+    @Autowired
+    lateinit var brandedServiceImpl: BrandedServiceImpl
 
     /**
      * Provides an implementation of the RedirectUseCase.

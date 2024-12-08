@@ -9,6 +9,8 @@ import org.springframework.stereotype.Component
 import org.springframework.web.client.RestTemplate
 import org.springframework.web.client.HttpClientErrorException
 import org.springframework.web.client.RestClientException
+import com.fasterxml.jackson.annotation.JsonCreator
+import com.fasterxml.jackson.annotation.JsonProperty
 
 @Component
 class NinjaProfanityFilter(
@@ -43,16 +45,13 @@ class NinjaProfanityFilter(
                 entity,
                 ResponseNinja::class.java
             )
-            println("Ninja response: ${response.body?.original} -> ${response.body?.has_profanity}")
-            !(response.body?.has_profanity ?: true)
+            println("Ninja response: ${response.body?.original} -> ${response.body?.hasProfanity}")
+            !(response.body?.hasProfanity ?: true)
         } catch (e: HttpClientErrorException) {
             println("HTTP error: ${e.statusCode} - ${e.responseBodyAsString}")
             false // Treat as invalid if the API fails
         } catch (e: RestClientException) {
             println("Client error: ${e.message}")
-            false
-        } catch (e: Exception) {
-            println("Unexpected error: ${e.message}")
             false
         }
     }
@@ -61,8 +60,8 @@ class NinjaProfanityFilter(
 /**
  * Class to model the response from the API Ninja Profanity Filter.
  */
-class ResponseNinja(
-    val original: String? = null,
-    val censored: String? = null,
-    val has_profanity: Boolean? = null
+data class ResponseNinja @JsonCreator constructor(
+    @JsonProperty("original") val original: String? = null,
+    @JsonProperty("censored") val censored: String? = null,
+    @JsonProperty("has_profanity") val hasProfanity: Boolean? = null
 )

@@ -21,7 +21,11 @@ class StoreQRUseCaseTest {
     fun `StoreQRUse updates the database with the new qr`() {
         val repository = mock<ShortUrlRepositoryService>()
         val redirection = mock<Redirection>()
-        val shortUrl = ShortUrl("key", redirection, properties = ShortUrlProperties(validBranded = null, isBranded = true))
+        val shortUrl = ShortUrl(
+            "key", 
+            redirection, 
+            properties = ShortUrlProperties(validBranded = null, isBranded = true))
+        
         whenever(repository.findByKey("key")).thenReturn(shortUrl)
         val useCase = StoreQRUseCaseImpl(repository)
         whenever(repository.save(any())).doAnswer { it.arguments[0] as ShortUrl }

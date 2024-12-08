@@ -1,3 +1,5 @@
+@file:Suppress("WildcardImport")
+
 package es.unizar.urlshortener.springbootkafkaexample.service
 
 import com.google.gson.Gson
