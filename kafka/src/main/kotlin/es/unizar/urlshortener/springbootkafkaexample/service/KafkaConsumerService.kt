@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.kafka.annotation.KafkaListener
 import org.springframework.stereotype.Service
 import es.unizar.urlshortener.gateway.GoogleSafeBrowsingClient
+import es.unizar.urlshortener.gateway.NinjaProfanityFilter
 import es.unizar.urlshortener.core.usecases.GenerateQRCodeUseCase
 import es.unizar.urlshortener.core.usecases.UpdateUrlSafetyUseCase
 import es.unizar.urlshortener.core.usecases.UpdateUrlBrandedUseCase
@@ -25,6 +26,9 @@ class KafkaConsumerService(
 ) {
     @Autowired 
     lateinit var googleSafeBrowsingClient: GoogleSafeBrowsingClient
+
+    @Autowired
+    lateinit var ninjaProfanityFilter: NinjaProfanityFilter
 
     @Autowired
     lateinit var kafkaProducerService: KafkaProducerService
@@ -72,8 +76,8 @@ class KafkaConsumerService(
     @KafkaListener(topics = ["branded"], groupId = "group_id")
     fun consumeBranded(message: String) {
         println("Serielized branded received: $message")
-        val valid = true 
-        //Comprobacion
+        //Check
+        val valid = ninjaProfanityFilter.isNameValid(message)
         updateUrlBrandedUseCase.updateUrlBranded(message, valid)
     }
 
