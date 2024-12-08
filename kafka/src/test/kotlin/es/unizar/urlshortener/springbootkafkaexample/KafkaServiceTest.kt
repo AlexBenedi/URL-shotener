@@ -12,6 +12,7 @@ import es.unizar.urlshortener.core.usecases.UpdateUrlBrandedUseCase
 import es.unizar.urlshortener.springbootkafkaexample.service.KafkaConsumerService
 import es.unizar.urlshortener.springbootkafkaexample.service.KafkaProducerService
 import es.unizar.urlshortener.gateway.GoogleSafeBrowsingClient
+import es.unizar.urlshortener.gateway.NinjaProfanityFilter
 import es.unizar.urlshortener.core.usecases.UpdateUrlSafetyUseCase
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
@@ -45,6 +46,9 @@ class KafkaServiceTest {
 
     @MockBean
     private lateinit var generateQRCodeUseCase: GenerateQRCodeUseCase
+
+    @MockBean
+    private lateinit var ninjaProfanityFilter: NinjaProfanityFilter
 
     @Autowired
     private lateinit var kafkaProducerService: KafkaProducerService
