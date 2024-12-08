@@ -29,8 +29,6 @@ import java.util.concurrent.TimeUnit
  * The specification of the controller.
  */
 interface UrlShortenerController {
-
-
     /**
      * Redirects and logs a short url identified by its [id].
      *
@@ -93,7 +91,6 @@ data class ShortUrlDataOut(
     val qrCode: String? = null, // Add the QR code here as a separate field
     val properties: Map<String, Any> = emptyMap(),
     val error: String? = null
-
 )
 
 /**
@@ -157,7 +154,6 @@ class UrlShortenerControllerImpl(
         } else {
             ipRedirectionCounts[ip] = Pair(currentCount + 1, lastTimestamp) // Increment the count
         }
-
 
         return createShortUrlUseCase.create(
             url = data.url,

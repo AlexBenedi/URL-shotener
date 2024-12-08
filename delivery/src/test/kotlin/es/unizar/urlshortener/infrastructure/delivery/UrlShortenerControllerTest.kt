@@ -4,6 +4,7 @@ package es.unizar.urlshortener.infrastructure.delivery
 import es.unizar.urlshortener.core.*
 import es.unizar.urlshortener.core.usecases.*
 import org.mockito.ArgumentMatchers.any
+import org.mockito.ArgumentMatchers.anyString
 import org.mockito.BDDMockito.given
 import org.mockito.BDDMockito.never
 import org.mockito.Mockito.doThrow
@@ -19,6 +20,7 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers.print
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
+import java.time.OffsetDateTime
 import kotlin.test.Test
 
 
@@ -56,6 +58,79 @@ class UrlShortenerControllerTest {
 
     @MockBean 
     private lateinit var generateQRCodeUseCase: GenerateQRCodeUseCase
+
+
+    @Test
+    fun `shortenerUser creates and returns shortened link successfully`() {
+        val user = User(
+            userId = "user123",
+            redirections = 0,
+            lastRedirectionTimeStamp = OffsetDateTime.now().minusMinutes(61) // Límite reiniciado
+        )
+        val shortUrl = ShortUrl(
+            hash = "abc123",
+            redirection = Redirection(target = "http://example.com"),
+            created = OffsetDateTime.now(),
+            properties = ShortUrlProperties(ip = "127.0.0.1", qrCode = null)
+        )
+
+        given(getUserInformationUseCase.findById("user123")).willReturn(user)
+        given(createShortUrlUseCase.save(shortUrl)).willReturn(shortUrl)
+        given(createShortUrlUseCase.create("http://example.com", shortUrl.properties)).willReturn(shortUrl)
+        given(createShortUrlUseCase.createAndDoNotSave("http://example.com", shortUrl.properties, "user123")).willReturn(shortUrl)
+
+        mockMvc.perform(
+            post("/api/linkUser")
+                .param("userId", "user123")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+                .param("url", "http://example.com")
+        )
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$.url").value("http://localhost:80/abc123"))
+    }
+
+
+    /**
+     * Test that verifies that the `shortenerUser` method returns a 404 Not Found when the user does not exist.
+     */
+    @Test
+    fun `shortenerUser returns 404 Not Found when user does not exist`() {
+        // Simular que el usuario no existe
+        given(getUserInformationUseCase.findById("invalidUserId")).willReturn(null)
+
+        mockMvc.perform(
+            post("/api/linkUser")
+                .param("userId", "invalidUserId")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+                .param("url", "http://example.com")
+        )
+            .andExpect(status().isNotFound)
+            .andExpect(jsonPath("$.properties.error").value("User not found"))
+    }
+
+    /**
+     * Test that verifies that the `shortenerUser` method returns a 429 when the user has exceeded the limit of redirections.
+     */
+    @Test
+    fun `shortenerUser returns 429 Too Many Requests when redirection limit is exceeded`() {
+        val user = User(
+            userId = "user123",
+            redirections = 6,
+            lastRedirectionTimeStamp = OffsetDateTime.now().minusMinutes(10) // Límite no reiniciado
+        )
+        given(getUserInformationUseCase.findById("user123")).willReturn(user)
+
+        mockMvc.perform(
+            post("/api/linkUser")
+                .param("userId", "user123")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+                .param("url", "http://example.com")
+        )
+            .andExpect(status().isTooManyRequests)
+            .andExpect(jsonPath("$.properties.error").value("Too many requests. Please try again later."))
+    }
+
+
 
     /**
      * Test that verifies that the `getLink` method returns a link when the id exists.
