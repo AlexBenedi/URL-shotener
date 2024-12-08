@@ -102,6 +102,7 @@ class WebSocketsServer {
 
     @OnError
     fun onError(session: Session, throwable: Throwable) {
+        println("Se ha producido un error en la sesión: ${session.id}")
         println("Error en la conexión: ${throwable.message}")
     }
 
