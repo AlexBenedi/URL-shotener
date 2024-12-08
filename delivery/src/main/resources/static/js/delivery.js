@@ -106,7 +106,7 @@ $(document).ready(function () {
                 links.forEach(function (link) {
                     var qrCodeHtml = link.shortUrl.qrCode
                         ? `<img src="data:image/png;base64,${link.shortUrl.qrCode}" alt="QR Code" width="100">`
-                        : `<button class="btn btn-primary generate-qr" data-hash="${link.shortUrl.hash}">Generate QR</button>`;
+                        : `<button class="btn btn-primary generate-qr" data-hash="${link.shortUrl.hash}" data-target="${link.shortUrl.redirection.target}">Generate QR</button>`;
 
                     var rowHtml = `
                         <tr id="link-row-${link.shortUrl.id}">
@@ -131,7 +131,8 @@ $(document).ready(function () {
 
                 $(".generate-qr").click(function () {
                     var hash = $(this).data("hash");
-                    generateQRCode(hash);
+                    var target = $(this).data("target");
+                    generateQRCode(hash, target);
                 });
             },
             error: function () {
@@ -153,13 +154,18 @@ $(document).ready(function () {
         });
     }
 
-    function generateQRCode(hash) {
+    function generateQRCode(hash, target) {
         $.ajax({
             type: "GET",
-            url: `/${hash}/qr`,
-            success: function (qrCodeImage) {
-                var qrImageUrl = URL.createObjectURL(new Blob([qrCodeImage], { type: 'image/png' }));
-                $(`button[data-hash="${hash}"]`).replaceWith(`<img src="${qrImageUrl}" alt="QR Code" width="50">`);
+            url: `/${hash}/qr?target=${encodeURIComponent(target)}`,
+            xhrFields: {
+                responseType: 'blob' // Asegura que recibimos el binario directamente
+            },
+            success: function (blob) {
+                var qrImageUrl = URL.createObjectURL(blob);
+                $(`button[data-hash="${hash}"]`).replaceWith(
+                    `<img src="${qrImageUrl}" alt="QR Code" width="100">`
+                );
             },
             error: function () {
                 alert("Error generating QR Code.");

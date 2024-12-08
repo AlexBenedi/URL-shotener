@@ -65,7 +65,7 @@ interface UrlShortenerController {
      * @param id The identifier of the short URL.
      * @return The QR code as a downloadable image.
      */
-    fun getQRCode(id: String): ResponseEntity<ByteArray>
+    fun getQRCode(id: String, target: String?): ResponseEntity<ByteArray>
 
     fun getUserLinks(userId: String): ResponseEntity<List<Link>>
 
@@ -374,27 +374,40 @@ class UrlShortenerControllerImpl(
     }
 
     @GetMapping("/{id}/qr", produces = [MediaType.IMAGE_PNG_VALUE])
-    override fun getQRCode(@PathVariable id: String): ResponseEntity<ByteArray> {
+    override fun getQRCode(
+        @PathVariable id: String,
+        @RequestParam(required = false) target: String?
+    ): ResponseEntity<ByteArray> {
         val shortUrl = shortUrlRepositoryService.findByKey(id)
             ?: return ResponseEntity(HttpStatus.NOT_FOUND)
-        //Show in the console the hash of the short URL
+
         println("The hash of the short URL is: $id")
-        //Show in the console the value of the qrCode field
         println("The value of the qrCode field is: ${shortUrl.qrCode}")
 
-        val qrCodeBase64 = shortUrl.qrCode
-        
-        println("The value of the qrCodeBase64 field is: $qrCodeBase64")
-        // Check if the QR code is present
-        // Decode the Base64 string into a byte array
-        try {
+        val qrCodeBase64 = if (shortUrl.qrCode != null) {
+            shortUrl.qrCode
+        } else {
+            if (target == null) {
+                // Si no se proporciona el parámetro `target`, no se puede generar el QR
+                return ResponseEntity(HttpStatus.BAD_REQUEST)
+            }
+
+            println("QR code is null for short URL with id: $id")
+            // Usar el target proporcionado para generar el QR
+            val generatedQRCode = generateQRCodeUseCase.generateQRCode(target).base64Image
+            val updatedShortUrl = shortUrl.copy(qrCode = generatedQRCode)
+            shortUrlRepositoryService.save(updatedShortUrl)
+            generatedQRCode
+        }
+
+        return try {
             val qrCodeImage = Base64.getDecoder().decode(qrCodeBase64)
-            return ResponseEntity.ok()
+            ResponseEntity.ok()
                 .contentType(MediaType.IMAGE_PNG)
                 .body(qrCodeImage)
         } catch (e: IllegalArgumentException) {
             println("Error decoding Base64 QR code: ${e.message}")
-            return ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR)
+            ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }
 }
