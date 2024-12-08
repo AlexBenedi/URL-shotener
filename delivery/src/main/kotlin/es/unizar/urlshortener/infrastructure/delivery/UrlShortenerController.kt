@@ -90,7 +90,7 @@ data class ShortUrlDataIn(
  */
 data class ShortUrlDataOut(
     val url: URI? = null,
-    //val qrCode: String? = null, // Add the QR code here as a separate field
+    val qrCodeGenerated: Boolean? = null,
     val properties: Map<String, Any> = emptyMap(),
     val error: String? = null
 
@@ -180,7 +180,7 @@ class UrlShortenerControllerImpl(
 
             val response = ShortUrlDataOut(
                 url = url,
-                //qrCode = qrCode, // Assign the QR code if generated
+                qrCodeGenerated = data.generateQRCode, // Assign the QR code if generated
                 properties = mapOf(
                     "safe" to mapOf(
                         "isSafe" to properties.safe?.isSafe,
@@ -302,7 +302,7 @@ class UrlShortenerControllerImpl(
                 val shortenedUrl = "${request.scheme}://${request.serverName}:${request.serverPort}/${shortUrl.hash}"
                 val response = ShortUrlDataOut(
                     url = URI.create(shortenedUrl), // Convert String to URI
-                    //qrCode = qrCode,
+                    qrCodeGenerated = data.generateQRCode, // Assign the QR code if generated
                     properties = mapOf("message" to "Link created successfully")
                 )
                 println(response)

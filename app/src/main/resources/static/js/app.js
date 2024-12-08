@@ -25,11 +25,8 @@ $(document).ready(
 
                     // Mostrar el QR en la página
                     var resultDiv = $("#result");
-                    resultDiv.append('<p>QR Code:</p>');
                     resultDiv.append('<img src="data:image/png;base64,' + qrCode + '" alt="QR Code">');
-                    var qrCodeDownloadUrl = "/" + shortenedUrl.split('/').pop() + "/qr";
-                    resultDiv.append('<p><a href="' + qrCodeDownloadUrl + '" download="qrcode.png">Download QR Code</a></p>');
-                    resultDiv.append('<p>' + window.location.origin + qrCodeDownloadUrl + '</p>');
+
                 };
 
                 // Manejar el cierre de la conexión WebSocket
@@ -85,9 +82,9 @@ $(document).ready(
                             + "</a></div>"
                         );
 
-                        if (msg.qrCode) {
+                        console.log("QR generado:", msg.qrCodeGenerated);
+                        if (msg.qrCodeGenerated === true) {
                             resultDiv.append('<p>QR Code:</p>');
-                            resultDiv.append('<img src="data:image/png;base64,' + msg.qrCode + '" alt="QR Code">');
                             var qrCodeDownloadUrl = "/" + shortenedUrl.split('/').pop() + "/qr";
                             resultDiv.append('<p><a href="' + qrCodeDownloadUrl + '" download="qrcode.png">Download QR Code</a></p>');
                             resultDiv.append('<p>' + window.location.origin + qrCodeDownloadUrl + '</p>');
