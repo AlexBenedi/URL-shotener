@@ -57,12 +57,8 @@ class CreateShortUrlUseCaseImpl(
             var id = safeCall { hashService.hasUrl(url) }
 
 
-            if (data.isBranded == true ) {
-                if ( data.name != null ) {
-                    id = data.name
-                } else {
-                    throw EmptyNameBrandedUrl()
-                }
+            if (data.isBranded == true) {
+                id = data.name ?: throw EmptyNameBrandedUrl()
             }
 
             val idName = if(data.ip == null){
