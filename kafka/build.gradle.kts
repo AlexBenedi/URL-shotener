@@ -17,10 +17,11 @@ plugins {
 dependencies {
     implementation(project(":gateway"))
     implementation(project(":core"))
-    
+    implementation(project(":WebSockets"))
     implementation(libs.spring.boot.starter.web)
     implementation(libs.spring.kafka)
     implementation(libs.gson)
+    implementation("org.springframework.boot:spring-boot-starter-websocket")
 
     runtimeOnly(libs.spring.boot.devtools)
 
@@ -34,6 +35,7 @@ dependencyManagement {
     imports {
         // Import the Spring Boot BOM (Bill of Materials) for dependency management
         mavenBom(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES)
+
     }
 }
 
