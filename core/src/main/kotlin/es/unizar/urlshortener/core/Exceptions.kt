@@ -83,7 +83,7 @@ class BrandedNotCheckedException : DomainException("The name of the branded link
  * An exception indicating that the name of a Branded link is invalid.
  * This exception is thrown when the name of a branded link is not valid.
  */
-class InvalidNameBrandedUrl : DomainException("The name of the branded link is invalid")
+class InvalidNameBrandedUrl(key: String) : DomainException("[$key] is not a valid branded link")
 
 /**
  * An exception indicating an internal error within the application.

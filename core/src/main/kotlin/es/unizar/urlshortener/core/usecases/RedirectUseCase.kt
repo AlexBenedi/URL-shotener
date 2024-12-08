@@ -65,7 +65,7 @@ class RedirectUseCaseImpl(
                 throw BrandedNotCheckedException()
             }
             else if (isBranded == true && validBranded == false) {
-                throw InvalidNameBrandedUrl()
+                throw InvalidNameBrandedUrl(key)
             }
 
             return shortUrl.redirection ?: throw RedirectionNotFound(key) // url is safe

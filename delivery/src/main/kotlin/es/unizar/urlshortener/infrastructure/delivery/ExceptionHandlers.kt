@@ -89,7 +89,7 @@ class RestResponseEntityExceptionHandler : ResponseEntityExceptionHandler() {
     @ResponseBody
     @ExceptionHandler(value = [InvalidNameBrandedUrl::class])
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    fun invalidNameBrandedUrl(ex: EmptyNameBrandedUrl) = ErrorMessage(HttpStatus.BAD_REQUEST.value(), ex.message)
+    fun invalidNameBrandedUrl(ex: InvalidNameBrandedUrl) = ErrorMessage(HttpStatus.NOT_FOUND.value(), ex.message)
 
     /**
      * Handles BrandedNotChecked exception and returns a BAD_REQUEST response.
