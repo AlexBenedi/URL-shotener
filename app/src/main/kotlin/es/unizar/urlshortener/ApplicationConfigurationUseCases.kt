@@ -7,11 +7,6 @@ import es.unizar.urlshortener.core.usecases.RedirectUseCaseImpl
 import es.unizar.urlshortener.core.usecases.UpdateUrlSafetyUseCaseImpl
 import es.unizar.urlshortener.core.usecases.UpdateUrlBrandedUseCaseImpl
 import es.unizar.urlshortener.ApplicationConfiguration
-import es.unizar.urlshortener.infrastructure.delivery.HashServiceImpl
-import es.unizar.urlshortener.infrastructure.delivery.ValidatorServiceImpl
-import es.unizar.urlshortener.infrastructure.delivery.SafetyServiceImpl
-import es.unizar.urlshortener.infrastructure.delivery.BrandedServiceImpl
-import es.unizar.urlshortener.infrastructure.delivery.QrServiceImpl
 import es.unizar.urlshortener.infrastructure.repositories.ClickEntityRepository
 import es.unizar.urlshortener.infrastructure.repositories.ClickRepositoryServiceImpl
 import es.unizar.urlshortener.infrastructure.repositories.ShortUrlEntityRepository
@@ -23,6 +18,7 @@ import es.unizar.urlshortener.infrastructure.repositories.LinkRepositoryServiceI
 import es.unizar.urlshortener.core.usecases.GenerateQRCodeUseCaseImpl
 import es.unizar.urlshortener.core.usecases.DeleteUserLinkUseCaseImpl
 import es.unizar.urlshortener.core.usecases.StoreQRUseCaseImpl
+import es.unizar.urlshortener.infrastructure.delivery.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

@@ -17,12 +17,41 @@ import org.springframework.stereotype.Component
 import org.springframework.web.socket.server.standard.ServerEndpointExporter
 import java.util.Locale
 import java.util.Scanner
+import java.util.concurrent.ConcurrentHashMap
 
-@ServerEndpoint("/ws-qr")
+@Configuration(proxyBeanMethods = false)
+open class WebSocketConfig {
+    @Bean
+    open fun serverEndpoint() = ServerEndpointExporter()
+}
+
+/**
+ * If the websocket connection underlying this [RemoteEndpoint] is busy sending a message when a call is made to send
+ * another one, for example if two threads attempt to call a send method concurrently, or if a developer attempts to
+ * send a new message while in the middle of sending an existing one, the send method called while the connection
+ * is already busy may throw an [IllegalStateException].
+ *
+ * This method wraps the call to [RemoteEndpoint.Basic.sendText] in a synchronized block to avoid this exception.
+ */
+fun RemoteEndpoint.Basic.sendTextSafe(message: String) {
+    synchronized(this) {
+        sendText(message)
+    }
+}
+@Component
+@ServerEndpoint("/ws-endpoint")
 class WebSocketsServer {
+    companion object {
+        var instanceCount = 0
+    }
+
+    init {
+        instanceCount++
+        println("Instancias de WebSocketsServer: $instanceCount")
+    }
 
     // Mapa para almacenar las sesiones de los usuarios por su userId
-    private val sessions = mutableMapOf<String, Session>()
+    private val sessions = ConcurrentHashMap<String, Session>()
 
     @OnOpen
     fun onOpen(session: Session) {
@@ -34,7 +63,10 @@ class WebSocketsServer {
 
         if (userId != null) {
             sessions[userId] = session
+            val sesionPrueba = sessions[userId]
             println("Conexión establecida para userId: $userId")
+            println("Valor de la sesión: $sesionPrueba")
+            println("La sesión está abierta: ${sesionPrueba?.isOpen}")
         } else {
             println("No se proporcionó userId en la URL")
         }
@@ -63,6 +95,9 @@ class WebSocketsServer {
     // Metodo para enviar el QR al usuario específico
     fun sendMessageToUser(userId: String, message: String) {
         val session = sessions[userId]
+        println("Enviando mensaje al usuario: $userId")
+        println("Valor de la sesión: $session")
+        println("La sesión está abierta: ${session?.isOpen}")
         if (session != null && session.isOpen) {
             session.basicRemote.sendText(message)
         } else {
@@ -73,89 +108,5 @@ class WebSocketsServer {
 
 
 
-@Configuration(proxyBeanMethods = false)
-open class WebSocketConfig {
-    @Bean
-    open fun serverEndpoint() = ServerEndpointExporter()
-}
 
-/**
- * If the websocket connection underlying this [RemoteEndpoint] is busy sending a message when a call is made to send
- * another one, for example if two threads attempt to call a send method concurrently, or if a developer attempts to
- * send a new message while in the middle of sending an existing one, the send method called while the connection
- * is already busy may throw an [IllegalStateException].
- *
- * This method wraps the call to [RemoteEndpoint.Basic.sendText] in a synchronized block to avoid this exception.
- */
-fun RemoteEndpoint.Basic.sendTextSafe(message: String) {
-    synchronized(this) {
-        sendText(message)
-    }
-}
 
-@ServerEndpoint("/ws-endpoint")
-@Component
-class WsEndpoint {
-    /**
-     * Successful connection
-     *
-     * @param session
-     */
-    @OnOpen
-    fun onOpen(session: Session) {
-        println("Server Connected ... Session ${session.id}")
-        with(session.basicRemote) {
-            sendTextSafe("Hello!!")
-        }
-    }
-
-    /**
-     * Connection closure
-     *
-     * @param session
-     */
-    @OnClose
-    fun onClose(
-        session: Session,
-        closeReason: CloseReason,
-    ) {
-        println("Session ${session.id} closed because of $closeReason")
-    }
-
-    /**
-     * Message received
-     *
-     * @param message
-     */
-    @OnMessage
-    fun onMsg(
-        message: String,
-        session: Session,
-    ) {
-        println("Server Message ... Session ${session.id}")
-        val currentLine = Scanner(message.lowercase(Locale.getDefault()))
-        if (currentLine.findInLine("bye") == null) {
-            println("Server received \"${message}\"")
-            runCatching {
-                if (session.isOpen) {
-                    with(session.basicRemote) {
-                        sendTextSafe("Hi")
-                    }
-                }
-            }.onFailure {
-                println("Error while sending message")
-                session.close(CloseReason(CloseCodes.CLOSED_ABNORMALLY, "Error!"))
-            }
-        } else {
-            session.close(CloseReason(CloseCodes.NORMAL_CLOSURE, "Goodbye!"))
-        }
-    }
-
-    @OnError
-    fun onError(
-        session: Session,
-        errorReason: Throwable,
-    ) {
-        println("Session ${session.id} closed because of ${errorReason.javaClass.name}")
-    }
-}

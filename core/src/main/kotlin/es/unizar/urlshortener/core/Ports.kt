@@ -171,3 +171,15 @@ interface QrService {
      */
     fun generateQr(url: UrlForQr?)
 }
+
+/**
+ * [WebSocketsServer] is the port to the service that sends messages to the clients using WebSockets.
+ */
+interface WebSocketsService {
+    /**
+     * Sends a message to the clients using WebSockets.
+     *
+     * @param message The message to be sent.
+     */
+    fun sendMessageToUser(userId: String, message: String)
+}

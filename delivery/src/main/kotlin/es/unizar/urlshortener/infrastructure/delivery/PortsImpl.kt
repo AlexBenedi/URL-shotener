@@ -6,6 +6,7 @@ import com.google.gson.Gson
 import com.google.common.hash.Hashing
 import es.unizar.urlshortener.core.*
 import es.unizar.urlshortener.springbootkafkaexample.service.KafkaProducerService
+import es.unizar.urlshortener.websockets.WebSocketsServer
 import org.apache.commons.validator.routines.UrlValidator
 import org.springframework.stereotype.Service
 import java.nio.charset.StandardCharsets
@@ -145,5 +146,13 @@ class QrServiceImpl(
         */
     override fun generateQr(id: UrlForQr?) {
         kafkaProducerService.sendMessage(QR_TOPIC, Gson().toJson(id))
+    }
+}
+
+class WebSocketsServiceImpl(
+    private val webSocketsServer: WebSocketsServer
+) : WebSocketsService {
+    override fun sendMessageToUser(userId: String, message: String) {
+        webSocketsServer.sendMessageToUser(userId, message)
     }
 }
