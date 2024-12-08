@@ -15,6 +15,7 @@ import es.unizar.urlshortener.infrastructure.repositories.UserEntityRepository
 import es.unizar.urlshortener.infrastructure.repositories.UserRepositoryServiceImpl
 import es.unizar.urlshortener.infrastructure.repositories.LinkEntityRepository
 import es.unizar.urlshortener.infrastructure.repositories.LinkRepositoryServiceImpl
+import es.unizar.urlshortener.websockets.WebSocketsServer
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -22,7 +23,6 @@ import org.springframework.context.annotation.Profile
 import org.springframework.security.config.Customizer
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.web.SecurityFilterChain
-import es.unizar.urlshortener.websockets.SocketHandler
 
 /**
  * Wires use cases with service implementations, and services implementations with repositories.
@@ -48,6 +48,7 @@ class ApplicationConfiguration(
         return http
             .csrf { it.disable() } // Desactiva CSRF para simplificar el acceso
             .authorizeHttpRequests { registry ->
+                registry.requestMatchers("/ws-endpoint").permitAll()  // Permitir acceso al WebSocket
                 registry.requestMatchers("/user").authenticated()  // Rutas autenticadas
                 registry.anyRequest().permitAll()  // Rutas públicas
             }
@@ -106,8 +107,8 @@ class ApplicationConfiguration(
     fun hashService() = HashServiceImpl()
 
     /**
-     * Provides an implementation of the socket
+     * Provides an implementation of the web sockets server
      */
     @Bean
-    fun socketHandler() = SocketHandler()
+    fun webSocketsServer() = WebSocketsServer()
 }

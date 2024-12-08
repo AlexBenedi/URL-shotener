@@ -10,7 +10,7 @@ import es.unizar.urlshortener.core.usecases.GenerateQRCodeUseCase
 import es.unizar.urlshortener.core.usecases.UpdateUrlSafetyUseCase
 import es.unizar.urlshortener.core.usecases.UpdateUrlBrandedUseCase
 import es.unizar.urlshortener.core.usecases.StoreQRUseCase
-import es.unizar.urlshortener.websockets.SocketHandler
+import es.unizar.urlshortener.websockets.WebSocketsServer
 
 
 // quizá esta clase irá en core? o en otro paquete?
@@ -22,7 +22,7 @@ class KafkaConsumerService(
     private val updateUrlBrandedUseCase: UpdateUrlBrandedUseCase,
     private val storeQRUseCase: StoreQRUseCase,
     private val generateQRCodeUseCase: GenerateQRCodeUseCase,
-    private val socketHandler: SocketHandler
+    private  val webSocketServer: WebSocketsServer
 
 ) {
     @Autowired 
@@ -89,7 +89,8 @@ class KafkaConsumerService(
         println("QR code generated: $qrCode")
 
         // Enviar mensaje al WebSocket del usuario
-        socketHandler.sendMessageToUser(deserializedObject.userId, qrCode)
+        // Enviar el mensaje al WebSocket del usuario
+        webSocketServer.sendMessageToUser(deserializedObject.userId, qrCode)
         // Store the QR code in the database
         storeQRUseCase.storeQR(deserializedObject.id, qrCode)
         println("QR code stored in the database")

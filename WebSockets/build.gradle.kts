@@ -22,6 +22,9 @@ dependencies {
     implementation(libs.spring.boot.starter.websocket) // Starter para WebSockets
     implementation(libs.spring.boot.starter.web)       // Starter para Web
 
+    // Dependencia para la API de Jakarta WebSocket
+    implementation("jakarta.websocket:jakarta.websocket-api:2.1.0")
+
     runtimeOnly(libs.spring.boot.devtools)
 
     compileOnly(libs.lombok)
