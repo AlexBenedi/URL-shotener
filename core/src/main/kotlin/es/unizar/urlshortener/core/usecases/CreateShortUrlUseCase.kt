@@ -110,19 +110,14 @@ class CreateShortUrlUseCaseImpl(
             id += userId
             System.out.println("ID de la url a insertar: " + id)
 
-
-
-            if (data.isBranded == true ) {
-                if ( data.name != null ) {
-                    id = data.name
-                } else {
-                    throw EmptyNameBrandedUrl()
-                }
+            if (data.isBranded == true) {
+                id = data.name ?: throw EmptyNameBrandedUrl()
             }
 
             if (data.generateQrCode == true) {
                 qrService.generateQr(UrlForQr(url, id, userId))
             }
+            
             safeCall { safetyService.isUrlSafe(UrlSafetyPetition(url, id)) }// this must be async
             println("Data dentro : $data")
             val su = ShortUrl(

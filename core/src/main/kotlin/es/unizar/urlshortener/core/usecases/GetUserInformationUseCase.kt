@@ -44,7 +44,8 @@ interface GetUserInformationUseCase {
  */
 class GetUserInformationUseCaseImpl(
     private val userRepository : UserRepositoryService,
-    private val linkRepository : LinkRepositoryService
+    private val linkRepository : LinkRepositoryService,
+    private val brandedService : BrandedService
 ) : GetUserInformationUseCase {
 
     /**
@@ -134,6 +135,11 @@ class GetUserInformationUseCaseImpl(
      * @param link The link to be saved.
      */
     override fun saveLink(link: Link) {
+
+        if (link.shortUrl.properties.isBranded == true) {
+            brandedService.isValidBrandedUrl(link.shortUrl.hash)
+        }
+
         safeCall { linkRepository.save(link) }
     }
 

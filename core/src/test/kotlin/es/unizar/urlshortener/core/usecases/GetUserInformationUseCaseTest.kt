@@ -10,6 +10,7 @@ import es.unizar.urlshortener.core.Redirection
 import es.unizar.urlshortener.core.ShortUrl
 import es.unizar.urlshortener.core.ShortUrlProperties
 import es.unizar.urlshortener.core.User
+import es.unizar.urlshortener.core.BrandedService
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.verify
 import org.mockito.kotlin.any
@@ -25,7 +26,12 @@ class GetUserInformationUseCaseTest {
 
     private val userRepository = mock<UserRepositoryService>()
     private val linkRepository = mock<LinkRepositoryService>()
-    private val getUserInformationUseCase = GetUserInformationUseCaseImpl(userRepository, linkRepository)
+    private val brandedService = mock<BrandedService>()
+    private val getUserInformationUseCase = GetUserInformationUseCaseImpl(
+        userRepository, 
+        linkRepository, 
+        brandedService
+    )
 
     @Test
     fun `should save user when it does not exist`() {

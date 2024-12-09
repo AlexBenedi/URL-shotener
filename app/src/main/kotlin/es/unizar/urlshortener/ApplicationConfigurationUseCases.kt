@@ -84,7 +84,8 @@ class ApplicationConfigurationUseCases(
     @Bean
     fun getUserInformationUseCase() = GetUserInformationUseCaseImpl(
         UserRepositoryServiceImpl(userEntityRepository),
-        LinkRepositoryServiceImpl(linkEntityRepository)
+        LinkRepositoryServiceImpl(linkEntityRepository),
+        brandedServiceImpl
     )
 
     /**
