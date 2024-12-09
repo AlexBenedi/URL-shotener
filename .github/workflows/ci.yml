@@ -37,15 +37,15 @@ jobs:
         run: ./gradlew build --no-daemon || true
         env:
           GOOGLE_SAFE_BROWSING_API_KEY: ${{ secrets.GOOGLE_API_SAFETY_KEY }}
-      - name: Build with Gradle
-        run: ./gradlew build --no-daemon
+      - name: Test with Gradle
+        run: ./gradlew check --no-daemon
         env:
           GOOGLE_SAFE_BROWSING_API_KEY: ${{ secrets.GOOGLE_API_SAFETY_KEY }}
           GOOGLE_CLIENT_ID_API_KEY: ${{ secrets.GOOGLE_CLIENT_ID_API_KEY }}
           GOOGLE_CLIENT_SECRET_API_KEY: ${{ secrets.GOOGLE_CLIENT_SECRET_API_KEY }}
           NINJA_PROFANITY_FILTER_API_KEY: ${{ secrets.NINJA_PROFANITY_FILTER_API_KEY }}
-      - name: Test with Gradle
-        run: ./gradlew check --no-daemon
+      - name: Build with Gradle
+        run: ./gradlew build --no-daemon
         env:
           GOOGLE_SAFE_BROWSING_API_KEY: ${{ secrets.GOOGLE_API_SAFETY_KEY }}
           GOOGLE_CLIENT_ID_API_KEY: ${{ secrets.GOOGLE_CLIENT_ID_API_KEY }}
