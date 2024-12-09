@@ -14,7 +14,11 @@ import es.unizar.urlshortener.core.usecases.UpdateUrlSafetyUseCase
 import es.unizar.urlshortener.core.usecases.UpdateUrlBrandedUseCase
 import es.unizar.urlshortener.core.usecases.StoreQRUseCase
 import es.unizar.urlshortener.websockets.MyWebSocketClient
+import es.unizar.urlshortener.websockets.WebSocketMessage
 import java.net.URI
+import com.google.gson.reflect.TypeToken
+import java.lang.reflect.Type
+
 
 
 
@@ -101,10 +105,16 @@ class KafkaConsumerService(
         val serverUri = URI("ws://localhost:8080/ws-endpoint")
         val webSocketClient = MyWebSocketClient(serverUri)
         webSocketClient.connectBlocking()
-        val userQrInfo = UserQrInfo(deserializedObject.userId, qrCode, deserializedObject.id)
-        val usrAndQrJson = Gson().toJson(userQrInfo)
-        println("User and QR code serialized: $usrAndQrJson")
-        webSocketClient.send(usrAndQrJson)
+        
+        // Serialize the user ID and the QR code
+        val content: Pair<String, String> = Pair(deserializedObject.userId, qrCode)
+        val serialization: Type = object : TypeToken<Pair<String, String>>() {}.type
+        val serializedContent = Gson().toJson(content, serialization)
+
+        val webSocketMessage = WebSocketMessage(deserializedObject.userId, serializedContent)
+
+        println("User and QR code serialized: $webSocketMessage")
+        webSocketClient.send(Gson().toJson(webSocketMessage))
         webSocketClient.close()
         // Store the QR code in the database
         storeQRUseCase.storeQR(deserializedObject.id, qrCode)
@@ -112,10 +122,3 @@ class KafkaConsumerService(
         // Send the QR code to the client VIA WEB SOCKETS
     }
 }
-
-
-data class UserQrInfo(
-    val userId: String,
-    val qrCode: String,
-    val id: String
-)
