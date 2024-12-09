@@ -101,8 +101,9 @@ class KafkaConsumerService(
         val serverUri = URI("ws://localhost:8080/ws-endpoint")
         val webSocketClient = MyWebSocketClient(serverUri)
         webSocketClient.connectBlocking()
-        val usrAndQr = Pair(deserializedObject.userId, qrCode)
-        val usrAndQrJson = Gson().toJson(usrAndQr)
+        val userQrInfo = UserQrInfo(deserializedObject.userId, qrCode, deserializedObject.id)
+        val usrAndQrJson = Gson().toJson(userQrInfo)
+        println("User and QR code serialized: $usrAndQrJson")
         webSocketClient.send(usrAndQrJson)
         webSocketClient.close()
         // Store the QR code in the database
@@ -111,3 +112,10 @@ class KafkaConsumerService(
         // Send the QR code to the client VIA WEB SOCKETS
     }
 }
+
+
+data class UserQrInfo(
+    val userId: String,
+    val qrCode: String,
+    val id: String
+)

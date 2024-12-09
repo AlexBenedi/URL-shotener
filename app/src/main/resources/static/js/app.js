@@ -17,12 +17,18 @@ $(document).ready(function () {
             };
 
             socket.onmessage = function (event) {
-                const qrCode = event.data;
-                console.log("QR recibido:", qrCode);
+                const data = JSON.parse(event.data);
+                console.log("Data from QR", data);
+
+                const qrCode = data.second;
+                const id = data.first;
 
                 // Mostrar el QR en la sección específica
                 const qrDiv = $("#qrSection");
                 qrDiv.html('<img src="data:image/png;base64,' + qrCode + '" alt="QR Code">');
+                var qrCodeDownloadUrl = "/" + id + "/qr";
+                qrDiv.append('<p><a href="' + qrCodeDownloadUrl + '" download="qr.png">Descargar QR</a><p>');
+                qrDiv.append('<p>' + window.location.origin + qrCodeDownloadUrl + '</p>');
             };
 
             socket.onclose = function () {

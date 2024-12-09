@@ -80,17 +80,29 @@ class WebSocketsServer {
     fun onMessage(message: String, session: Session) {
         println("Mensaje recibido: $message")
         val gson = Gson()
-        val tupleType: Type = object : TypeToken<Pair<String, String>>() {}.type
-        val userQrCode: Pair<String, String> = gson.fromJson(message, tupleType)
 
-        println("User ID: ${userQrCode.first}")
-        println("QR Code: ${userQrCode.second}")
+        data class UserQrInfo(
+            val userId: String,
+            val qrCode: String,
+            val id: String
+        )
+
+        val tupleType: Type = object : TypeToken<UserQrInfo>() {}.type
+        val userQrCode: UserQrInfo = gson.fromJson(message, tupleType)
+
+        println("User ID: ${userQrCode.userId}")
+        println("QR Code: ${userQrCode.qrCode}")
         
         // Aquí puedes realizar la lógica para enviar la respuesta con el QR
         println("Instancias activas kafka: $instanceCount")
         println("Sesiones activas: ${sessions}")
-        sendMessageToUser(userQrCode.first, userQrCode.second)
-        session.basicRemote.sendText("Respuesta desde el servidor: $message")
+
+        val clientType: Type = object : TypeToken<Pair<String, String>>() {}.type
+        val answerClient = Pair(userQrCode.id, userQrCode.qrCode)
+        val answer = gson.toJson(answerClient, clientType)
+        sendMessageToUser(userQrCode.userId, answer)
+        
+        session.basicRemote.sendText("Respuesta desde el servidor: $answer")
     }
 
     @OnClose

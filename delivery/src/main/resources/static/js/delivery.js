@@ -10,16 +10,27 @@ $(document).ready(function () {
     // Eventos del WebSocket
     socket.onopen = function () {
         console.log("WebSocket conectado para el usuario: " + userId);
+
+        fetchUserLinks();
     };
 
     // Cuando se recibe un mensaje del servidor
     socket.onmessage = function (event) {
-        var qrCode = event.data; // El contenido del mensaje recibido (el QR generado)
-        console.log("QR recibido:", qrCode);
+        const data = JSON.parse(event.data);
+        console.log("Data from QR", data);
+
+        const qrCode = data.second;
+        const id = data.first;
+
+        fetchUserLinks();
 
         // Mostrar el QR en la página
         var resultDiv = $("#result");
         resultDiv.append('<img src="data:image/png;base64,' + qrCode + '" alt="QR Code">');
+        resultDiv.html('<img src="data:image/png;base64,' + qrCode + '" alt="QR Code">');
+        var qrCodeDownloadUrl = "/" + id + "/qr";
+        resultDiv.append('<p><a href="' + qrCodeDownloadUrl + '" download="qr.png">Descargar QR</a><p>');
+        resultDiv.append('<p>' + window.location.origin + qrCodeDownloadUrl + '</p>');
     };
 
     // Manejar el cierre de la conexión WebSocket
@@ -71,7 +82,8 @@ $(document).ready(function () {
                     "</a>" +
                     "</div>"
                 );
-
+                
+                /*
                 console.log("QR Code generated:", response.qrCodeGenerated);
                 // Display the QR code if it exists
                 if (response.qrCodeGenerated === true) {
@@ -80,6 +92,8 @@ $(document).ready(function () {
                     resultDiv.append('<p><a href="' + qrCodeDownloadUrl + '" download="qrcode.png">Download QR Code</a></p>');
                     resultDiv.append('<p>' + window.location.origin + qrCodeDownloadUrl + '</p>');
                 }
+                */
+                fetchUserLinks();
             },
             error: function () {
                 $("#result").html(
