@@ -35,6 +35,7 @@ kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotl
 # Spring Boot managed dependencies
 spring-boot-starter = { module = "org.springframework.boot:spring-boot-starter" }  # Spring Boot Starter
 spring-boot-starter-web = { module = "org.springframework.boot:spring-boot-starter-web" }  # Spring Boot Starter Web
+spring-boot-starter-websocket = { module = "org.springframework.boot:spring-boot-starter-websocket" }
 spring-boot-starter-hateoas = { module = "org.springframework.boot:spring-boot-starter-hateoas" }  # Spring Boot Starter HATEOAS
 spring-boot-starter-jdbc = { module = "org.springframework.boot:spring-boot-starter-jdbc" }  # Spring Boot Starter JDBC
 spring-boot-starter-data-jpa = { module = "org.springframework.boot:spring-boot-starter-data-jpa" }  # Spring Boot Starter Data JPA

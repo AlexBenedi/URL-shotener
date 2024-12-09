@@ -35,6 +35,8 @@ class CreateShortUrlUseCaseImpl(
     private val validatorService: ValidatorService,
     private val hashService: HashService,
     private val safetyService: SafetyService,
+    private val brandedService: BrandedService,
+    private val qrService: QrService
 ) : CreateShortUrlUseCase {
     /**
      * Creates a short URL for the given URL and optional data.
@@ -57,13 +59,22 @@ class CreateShortUrlUseCaseImpl(
                 throw UnsafeUrlException(url)
             }*/
             var id = safeCall { hashService.hasUrl(url) }
-            if (data.isBranded == true ) {
-                if ( data.name != null ) {
-                    id = data.name
-                } else {
-                    throw InvalidNameBrandedUrl()
-                }
+
+
+            if (data.isBranded == true) {
+                id = data.name ?: throw EmptyNameBrandedUrl()
             }
+
+            val idName = if(data.ip == null){
+                            "1.1.1.1"
+                            }
+                            else{
+                                data.ip
+                            }
+            if (data.generateQrCode == true) {
+                qrService.generateQr(UrlForQr(url, id, idName))
+            }
+
             safeCall { safetyService.isUrlSafe(UrlSafetyPetition(url, id)) } // post kafka message
             val su = ShortUrl(
                 hash = id,
@@ -73,10 +84,15 @@ class CreateShortUrlUseCaseImpl(
                     ip = data.ip,
                     sponsor = data.sponsor,
                     isBranded = data.isBranded != null && data.name != null,
-                    qrCode = data.qrCode,
+                    generateQrCode = data.generateQrCode
                 )
             )
-            return safeCall { shortUrlRepository.save(su) }
+            val short = safeCall { shortUrlRepository.save(su) }
+            println("Short URL created: $short")
+            if (data.isBranded == true ) {
+                brandedService.isValidBrandedUrl(id)
+            }
+            return short
         } else {
             throw InvalidUrlException(url)
         }
@@ -93,12 +109,19 @@ class CreateShortUrlUseCaseImpl(
             var id = safeCall { hashService.hasUrl(url) }
             id += userId
             System.out.println("ID de la url a insertar: " + id)
+
+
+
             if (data.isBranded == true ) {
                 if ( data.name != null ) {
                     id = data.name
                 } else {
-                    throw InvalidNameBrandedUrl()
+                    throw EmptyNameBrandedUrl()
                 }
+            }
+
+            if (data.generateQrCode == true) {
+                qrService.generateQr(UrlForQr(url, id, userId))
             }
             safeCall { safetyService.isUrlSafe(UrlSafetyPetition(url, id)) }// this must be async
             println("Data dentro : $data")
@@ -110,7 +133,7 @@ class CreateShortUrlUseCaseImpl(
                     ip = data.ip,
                     sponsor = data.sponsor,
                     isBranded = data.isBranded != null && data.name != null,
-                    qrCode = data.qrCode,
+                    generateQrCode = data.generateQrCode
                 )
             )
             println("Short URL created: $su")

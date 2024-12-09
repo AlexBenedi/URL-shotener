@@ -63,7 +63,7 @@ interface UrlShortenerController {
      * @param id The identifier of the short URL.
      * @return The QR code as a downloadable image.
      */
-    fun getQRCode(id: String): ResponseEntity<ByteArray>
+    fun getQRCode(id: String, target: String?): ResponseEntity<ByteArray>
 
     fun getUserLinks(userId: String): ResponseEntity<List<Link>>
 
@@ -88,7 +88,7 @@ data class ShortUrlDataIn(
  */
 data class ShortUrlDataOut(
     val url: URI? = null,
-    val qrCode: String? = null, // Add the QR code here as a separate field
+    val qrCodeGenerated: Boolean? = null,
     val properties: Map<String, Any> = emptyMap(),
     val error: String? = null
 )
@@ -105,7 +105,9 @@ class UrlShortenerControllerImpl(
     val createShortUrlUseCase: CreateShortUrlUseCase,
     val getUserInformationUseCase : GetUserInformationUseCase,
     val deleteUserLinkUseCase : DeleteUserLinkUseCase,
-    val generateQRCodeUseCase: GenerateQRCodeUseCase
+    val generateQRCodeUseCase: GenerateQRCodeUseCase,
+    val shortUrlRepositoryService: ShortUrlRepositoryService,
+
 
 ) : UrlShortenerController {
     private val ipRedirectionCounts = ConcurrentHashMap<String, Pair<Int, Instant>>()
@@ -161,6 +163,7 @@ class UrlShortenerControllerImpl(
                 ip = ip,
                 sponsor = data.sponsor,
                 isBranded = data.isBranded,
+                generateQrCode = data.generateQRCode,
                 name = data.name
             )
         ).run {
@@ -168,28 +171,11 @@ class UrlShortenerControllerImpl(
             val url = linkTo<UrlShortenerControllerImpl> { redirectTo(hash, request) }.toUri()
             h.location = url
 
-            // Check if the QR code should be generated
-            val qrCode = if (data.generateQRCode == true) {
-                generateQRCodeUseCase.generateQRCode(data.url).base64Image
-            } else {
-                null
-            }
             println("Key hachis: $hash")
-            val shortUrl = createShortUrlUseCase.findByKey(hash)
-                ?: throw UrlNotFoundException(data.url) // Throw exception if the URL is not found
-
-            // Update the ShortUrlProperties with the generated QR code
-            val updatedProperties = shortUrl.properties.copy(qrCode = qrCode)
-
-            // Create an updated ShortUrl with the new properties
-            val updatedShortUrl = shortUrl.copy(properties = updatedProperties)
-
-            // Save the updated ShortUrl
-            createShortUrlUseCase.save(updatedShortUrl)
 
             val response = ShortUrlDataOut(
                 url = url,
-                qrCode = qrCode, // Assign the QR code if generated
+                qrCodeGenerated = data.generateQRCode, // Assign the QR code if generated
                 properties = mapOf(
                     "safe" to mapOf(
                         "isSafe" to properties.safe?.isSafe,
@@ -241,7 +227,7 @@ class UrlShortenerControllerImpl(
                     .body(
                         ShortUrlDataOut(
                             url = null,
-                            qrCode = null,
+                            //qrCode = null,
                             properties = mapOf("error" to "Too many requests. Please try again later.")
                         )
                     )
@@ -249,13 +235,6 @@ class UrlShortenerControllerImpl(
                 val newRedirections = user1.redirections + 1
 
                 println("Data: $data")
-                // Check if the QR code should be generated
-                val qrCode = if (data.generateQRCode == true) {
-                    generateQRCodeUseCase.generateQRCode(data.url).base64Image
-                } else {
-                    null
-                }
-                println("QR CODE: $qrCode")
 
                 // Crear el ShortUrl con el use case
                 val shortUrlCreation = createShortUrlUseCase.createAndDoNotSave(
@@ -264,8 +243,8 @@ class UrlShortenerControllerImpl(
                         ip = request.remoteAddr,
                         sponsor = data.sponsor,
                         isBranded = data.isBranded,
-                        name = data.name,
-                        qrCode = qrCode
+                        generateQrCode = data.generateQRCode,
+                        name = data.name
                     ),
                     userId = userId
                 )
@@ -275,7 +254,7 @@ class UrlShortenerControllerImpl(
                     hash = shortUrlCreation.hash,
                     redirection = Redirection(target = data.url),
                     created = OffsetDateTime.now(),
-                    properties = shortUrlCreation.properties,
+                    properties = shortUrlCreation.properties
                 )
 
                 println("SHORTURL: $shortUrl")
@@ -318,7 +297,7 @@ class UrlShortenerControllerImpl(
                 val shortenedUrl = "${request.scheme}://${request.serverName}:${request.serverPort}/${shortUrl.hash}"
                 val response = ShortUrlDataOut(
                     url = URI.create(shortenedUrl), // Convert String to URI
-                    qrCode = qrCode,
+                    qrCodeGenerated = data.generateQRCode, // Assign the QR code if generated
                     properties = mapOf("message" to "Link created successfully")
                 )
                 println(response)
@@ -331,7 +310,7 @@ class UrlShortenerControllerImpl(
                 .body(
                     ShortUrlDataOut(
                         url = null,
-                        qrCode = null,
+                        //qrCode = null,
                         properties = mapOf("error" to "User not found")
                     )
                 )
@@ -345,6 +324,12 @@ class UrlShortenerControllerImpl(
         val user = getUserInformationUseCase.findById(userId)
         val links = user?.let { getUserInformationUseCase.getLinks(it) }
         return ResponseEntity.ok(links)
+    }
+
+    @GetMapping("/api/ip")
+    fun getClientIp(request: HttpServletRequest): ResponseEntity<String> {
+        val ip = request.remoteAddr
+        return ResponseEntity.ok(ip)
     }
 
     @GetMapping("/user")
@@ -384,27 +369,40 @@ class UrlShortenerControllerImpl(
     }
 
     @GetMapping("/{id}/qr", produces = [MediaType.IMAGE_PNG_VALUE])
-    override fun getQRCode(@PathVariable id: String): ResponseEntity<ByteArray> {
-        val shortUrl = createShortUrlUseCase.findByKey(id)
+    override fun getQRCode(
+        @PathVariable id: String,
+        @RequestParam(required = false) target: String?
+    ): ResponseEntity<ByteArray> {
+        val shortUrl = shortUrlRepositoryService.findByKey(id)
             ?: return ResponseEntity(HttpStatus.NOT_FOUND)
-        //Show in the console the hash of the short URL
-        println("The hash of the short URL is: $id")
-        //Show in the console the value of the qrCode field
-        println("The value of the qrCode field is: ${shortUrl.properties.qrCode}")
 
-        val qrCodeBase64 = shortUrl.properties.qrCode
-        
-        println("The value of the qrCodeBase64 field is: $qrCodeBase64")
-        // Check if the QR code is present
-        // Decode the Base64 string into a byte array
-        try {
+        println("The hash of the short URL is: $id")
+        println("The value of the qrCode field is: ${shortUrl.qrCode}")
+
+        val qrCodeBase64 = if (shortUrl.qrCode != null) {
+            shortUrl.qrCode
+        } else {
+            if (target == null) {
+                // Si no se proporciona el parámetro `target`, no se puede generar el QR
+                return ResponseEntity(HttpStatus.BAD_REQUEST)
+            }
+
+            println("QR code is null for short URL with id: $id")
+            // Usar el target proporcionado para generar el QR
+            val generatedQRCode = generateQRCodeUseCase.generateQRCode(target).base64Image
+            val updatedShortUrl = shortUrl.copy(qrCode = generatedQRCode)
+            shortUrlRepositoryService.save(updatedShortUrl)
+            generatedQRCode
+        }
+
+        return try {
             val qrCodeImage = Base64.getDecoder().decode(qrCodeBase64)
-            return ResponseEntity.ok()
+            ResponseEntity.ok()
                 .contentType(MediaType.IMAGE_PNG)
                 .body(qrCodeImage)
         } catch (e: IllegalArgumentException) {
             println("Error decoding Base64 QR code: ${e.message}")
-            return ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR)
+            ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }
 }

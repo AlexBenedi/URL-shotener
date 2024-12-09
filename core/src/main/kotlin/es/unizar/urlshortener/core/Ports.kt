@@ -113,14 +113,6 @@ interface ValidatorService {
      * @return True if the URL is valid, false otherwise.
      */
     fun isValid(url: String): Boolean
-
-    /**
-     * Validates if the given id can be used.
-     *
-     * @param id The id to be validated.
-     * @return True if the id is valid, false otherwise.
-     */
-    fun isValidBrandedUrl(id: String?): Boolean
 }
 
 /**
@@ -152,4 +144,42 @@ interface SafetyService {
      * @return True if the URL is safe, false otherwise.
      */
     fun isUrlSafe(petition: UrlSafetyPetition)
+}
+
+/**
+ * [BrandedService] is the port to the service that checks if a branded URL is valid.
+ */
+interface BrandedService {
+    /**
+     * Validates if the given id can be used.
+     *
+     * @param id The id to be validated.
+     * @return True if the id is valid, false otherwise.
+     */
+    fun isValidBrandedUrl(id: String)
+}
+
+/**
+ * [QrService] is the port to the service that generates a QR code.
+ */
+interface QrService {
+    /**
+     * Generates a QR code for the given URL.
+     *
+     * @param url The URL to generate the QR code.
+     * @return The QR code.
+     */
+    fun generateQr(url: UrlForQr?)
+}
+
+/**
+ * [WebSocketsServer] is the port to the service that sends messages to the clients using WebSockets.
+ */
+interface WebSocketsService {
+    /**
+     * Sends a message to the clients using WebSockets.
+     *
+     * @param message The message to be sent.
+     */
+    fun sendMessageToUser(userId: String, message: String)
 }

@@ -7,10 +7,13 @@ import es.unizar.urlshortener.core.InvalidUrlException
 import es.unizar.urlshortener.core.UnsafeUrlException
 import es.unizar.urlshortener.core.SafetyService
 import es.unizar.urlshortener.core.InvalidNameBrandedUrl
+import es.unizar.urlshortener.core.EmptyNameBrandedUrl
 import es.unizar.urlshortener.core.ShortUrl
 import es.unizar.urlshortener.core.ShortUrlProperties
 import es.unizar.urlshortener.core.ShortUrlRepositoryService
 import es.unizar.urlshortener.core.ValidatorService
+import es.unizar.urlshortener.core.BrandedService
+import es.unizar.urlshortener.core.QrService
 import org.mockito.Mockito.mock
 import org.mockito.kotlin.any
 import org.mockito.kotlin.doAnswer
@@ -32,7 +35,8 @@ class CreateShortUrlUseCaseTest {
         val hashService = mock<HashService>()
         val safetyService = mock<SafetyService>()
         val shortUrlProperties = mock<ShortUrlProperties>()
-    
+        val brandedService = mock<BrandedService>()
+        val qrService = mock<QrService>()
 
         whenever(validatorService.isValid("http://example.com/")).thenReturn(true)
         whenever(hashService.hasUrl("http://example.com/")).thenReturn("f684a3c4")
@@ -44,6 +48,8 @@ class CreateShortUrlUseCaseTest {
                 validatorService, 
                 hashService,
                 safetyService,
+                brandedService,
+                qrService
             )
         val shortUrl = createShortUrlUseCase.create("http://example.com/", shortUrlProperties)
         println(shortUrl)
@@ -58,6 +64,8 @@ class CreateShortUrlUseCaseTest {
         val safetyService = mock<SafetyService>()
         val hashService = mock<HashService>()
         val shortUrlProperties = mock<ShortUrlProperties>()
+        val brandedService = mock<BrandedService>()
+        val qrService = mock<QrService>()
 
         whenever(validatorService.isValid("ftp://example.com/")).thenReturn(false)
 
@@ -65,8 +73,10 @@ class CreateShortUrlUseCaseTest {
             = CreateShortUrlUseCaseImpl(
                 shortUrlRepository, 
                 validatorService, 
-                hashService, 
+                hashService,
                 safetyService,
+                brandedService,
+                qrService
             )
 
         assertFailsWith<InvalidUrlException> {
@@ -81,6 +91,8 @@ class CreateShortUrlUseCaseTest {
         val safetyService = mock<SafetyService>()
         val hashService = mock<HashService>()
         val shortUrlProperties = mock<ShortUrlProperties>()
+        val brandedService = mock<BrandedService>()
+        val qrService = mock<QrService>()
 
         whenever(validatorService.isValid("http://example.com/")).thenThrow(RuntimeException())
 
@@ -88,9 +100,11 @@ class CreateShortUrlUseCaseTest {
             = CreateShortUrlUseCaseImpl(
                 shortUrlRepository, 
                 validatorService, 
-                hashService, 
+                hashService,
                 safetyService,
-                )
+                brandedService,
+                qrService
+            )
 
         assertFailsWith<InternalError> {
             createShortUrlUseCase.create("http://example.com/", shortUrlProperties)
@@ -104,15 +118,20 @@ class CreateShortUrlUseCaseTest {
         val hashService = mock<HashService>()
         val shortUrlProperties = mock<ShortUrlProperties>()
         val safetyService = mock<SafetyService>()
+        val brandedService = mock<BrandedService>()
+        val qrService = mock<QrService>()
 
         whenever(validatorService.isValid("http://example.com/")).thenReturn(true)
         whenever(hashService.hasUrl("http://example.com/")).thenThrow(RuntimeException())
 
-        val createShortUrlUseCase = CreateShortUrlUseCaseImpl(
-            shortUrlRepository, 
-            validatorService, 
-            hashService, 
-            safetyService, 
+        val createShortUrlUseCase 
+            = CreateShortUrlUseCaseImpl(
+                shortUrlRepository, 
+                validatorService, 
+                hashService,
+                safetyService,
+                brandedService,
+                qrService
             )
 
         assertFailsWith<InternalError> {
@@ -127,6 +146,8 @@ class CreateShortUrlUseCaseTest {
         val hashService = mock<HashService>()
         val shortUrlProperties = mock<ShortUrlProperties>()
         val safetyService = mock<SafetyService>()
+        val brandedService = mock<BrandedService>()
+        val qrService = mock<QrService>()
 
         whenever(validatorService.isValid("http://example.com/")).thenReturn(true)
         whenever(hashService.hasUrl("http://example.com/")).thenReturn("f684a3c4")
@@ -136,9 +157,11 @@ class CreateShortUrlUseCaseTest {
             = CreateShortUrlUseCaseImpl(
                 shortUrlRepository, 
                 validatorService, 
-                hashService, 
+                hashService,
                 safetyService,
-                )
+                brandedService,
+                qrService
+            )
 
         assertFailsWith<InternalError> {
             createShortUrlUseCase.create("http://example.com/", shortUrlProperties)
@@ -152,17 +175,21 @@ class CreateShortUrlUseCaseTest {
         val hashService = mock<HashService>()
         val safetyService = mock<SafetyService>()
         val shortUrlProperties = mock<ShortUrlProperties>()
+        val brandedService = mock<BrandedService>()
+        val qrService = mock<QrService>()
 
         whenever(validatorService.isValid("http://example.com/")).thenReturn(true)
         whenever(shortUrlRepository.save(any())).doAnswer { it.arguments[0] as ShortUrl }
 
         val createShortUrlUseCase 
-        = CreateShortUrlUseCaseImpl(
-            shortUrlRepository, 
-            validatorService, 
-            hashService,
-            safetyService,
-        )
+            = CreateShortUrlUseCaseImpl(
+                shortUrlRepository, 
+                validatorService, 
+                hashService,
+                safetyService,
+                brandedService,
+                qrService
+            )
         val properties = ShortUrlProperties(isBranded = true, name = "branded")
         val shortUrl = createShortUrlUseCase.create("http://example.com/", properties)
 
@@ -176,6 +203,8 @@ class CreateShortUrlUseCaseTest {
         val hashService = mock<HashService>()
         val safetyService = mock<SafetyService>()
         val shortUrlProperties = mock<ShortUrlProperties>()
+        val brandedService = mock<BrandedService>()
+        val qrService = mock<QrService>()
 
         whenever(validatorService.isValid("http://example.com/")).thenReturn(true)
         whenever(shortUrlRepository.save(any())).doAnswer { it.arguments[0] as ShortUrl }
@@ -186,8 +215,10 @@ class CreateShortUrlUseCaseTest {
                 validatorService, 
                 hashService,
                 safetyService,
+                brandedService,
+                qrService
             )
-        assertFailsWith<InvalidNameBrandedUrl> {
+        assertFailsWith<EmptyNameBrandedUrl> {
             createShortUrlUseCase.create("http://example.com/", ShortUrlProperties(isBranded = true))
         }
     }
@@ -199,6 +230,8 @@ class CreateShortUrlUseCaseTest {
         val hashService = mock<HashService>()
         val safetyService = mock<SafetyService>()
         val shortUrlProperties = mock<ShortUrlProperties>()
+        val brandedService = mock<BrandedService>()
+        val qrService = mock<QrService>()
 
         whenever(validatorService.isValid("http://example.com/")).thenReturn(true)
         whenever(hashService.hasUrl("http://example.com/")).thenReturn("f684a3c4")
@@ -210,6 +243,8 @@ class CreateShortUrlUseCaseTest {
                 validatorService, 
                 hashService,
                 safetyService,
+                brandedService,
+                qrService
             )
         val shortUrl = createShortUrlUseCase.create("http://example.com/", ShortUrlProperties(isBranded = false))
 

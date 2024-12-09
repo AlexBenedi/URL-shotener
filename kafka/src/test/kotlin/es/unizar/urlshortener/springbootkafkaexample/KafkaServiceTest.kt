@@ -6,9 +6,13 @@ import com.google.gson.Gson
 import es.unizar.urlshortener.core.UrlSafetyResponse
 import es.unizar.urlshortener.core.UrlSafetyPetition
 import es.unizar.urlshortener.core.UrlSafetyChecked
+import es.unizar.urlshortener.core.usecases.StoreQRUseCase
+import es.unizar.urlshortener.core.usecases.GenerateQRCodeUseCase
+import es.unizar.urlshortener.core.usecases.UpdateUrlBrandedUseCase
 import es.unizar.urlshortener.springbootkafkaexample.service.KafkaConsumerService
 import es.unizar.urlshortener.springbootkafkaexample.service.KafkaProducerService
 import es.unizar.urlshortener.gateway.GoogleSafeBrowsingClient
+import es.unizar.urlshortener.gateway.NinjaProfanityFilter
 import es.unizar.urlshortener.core.usecases.UpdateUrlSafetyUseCase
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
@@ -19,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.kafka.core.KafkaTemplate
+import es.unizar.urlshortener.core.WebSocketsService
 import java.util.concurrent.TimeUnit
 
 @SpringBootTest(classes=[KafkaProducerService::class, KafkaConsumerService::class])
@@ -31,7 +36,19 @@ class KafkaServiceTest {
     private lateinit var updateUrlSafetyUseCase: UpdateUrlSafetyUseCase
 
     @MockBean
+    private lateinit var updateBrandedUseCase: UpdateUrlBrandedUseCase    
+
+    @MockBean
     private lateinit var googleSafeBrowsingClient: GoogleSafeBrowsingClient
+
+    @MockBean
+    private lateinit var storeQRUseCase: StoreQRUseCase
+
+    @MockBean
+    private lateinit var generateQRCodeUseCase: GenerateQRCodeUseCase
+
+    @MockBean
+    private lateinit var ninjaProfanityFilter: NinjaProfanityFilter
 
     @Autowired
     private lateinit var kafkaProducerService: KafkaProducerService
@@ -85,7 +102,7 @@ class KafkaServiceTest {
         assertEquals(message, kafkaConsumerService.lastConsumedMessage)
     }
 
-        // Test the KafkaConsumerService, which consumes a message from Kafka
+    // Test the KafkaConsumerService, which consumes a message from Kafka
     @Test
     fun `test safety checking process works`() {
         // Arrange

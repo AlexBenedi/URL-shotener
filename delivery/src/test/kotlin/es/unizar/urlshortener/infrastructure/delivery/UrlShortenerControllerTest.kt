@@ -23,7 +23,7 @@ import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers.print
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.* 
 import java.time.OffsetDateTime
 import kotlin.test.Test
 
@@ -63,6 +63,9 @@ class UrlShortenerControllerTest {
     @MockBean 
     private lateinit var generateQRCodeUseCase: GenerateQRCodeUseCase
 
+    @MockBean
+    private lateinit var shortUrlRepositoryService: ShortUrlRepositoryService
+
     @Test
     fun `should allow access to protected routes with authentication`() {
         // Simulamos un OAuth2Principal con un atributo "sub" que es el user ID
@@ -99,7 +102,7 @@ class UrlShortenerControllerTest {
             hash = "abc123",
             redirection = Redirection(target = "http://example.com"),
             created = OffsetDateTime.now(),
-            properties = ShortUrlProperties(ip = "127.0.0.1", qrCode = null)
+            properties = ShortUrlProperties(ip = "127.0.0.1")
         )
 
         given(getUserInformationUseCase.findById("user123")).willReturn(user)
@@ -339,7 +342,7 @@ class UrlShortenerControllerTest {
                 url = "http://example.com/",
                 data = ShortUrlProperties(ip = "127.0.0.1", isBranded = true)
             )
-        ).willAnswer { throw InvalidNameBrandedUrl() }
+        ).willAnswer { throw EmptyNameBrandedUrl() }
 
         // Perform a POST request and verify the response status and error message
         mockMvc.perform(

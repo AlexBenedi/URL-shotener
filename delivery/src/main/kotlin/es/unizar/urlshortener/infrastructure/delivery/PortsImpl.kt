@@ -1,17 +1,18 @@
+@file:Suppress("WildcardImport")
+
 package es.unizar.urlshortener.infrastructure.delivery
 
 import com.google.gson.Gson
 import com.google.common.hash.Hashing
-import es.unizar.urlshortener.core.HashService
-import es.unizar.urlshortener.core.ValidatorService
-import es.unizar.urlshortener.core.SafetyService
-import es.unizar.urlshortener.core.UrlSafetyPetition
+import es.unizar.urlshortener.core.*
 import es.unizar.urlshortener.springbootkafkaexample.service.KafkaProducerService
+import es.unizar.urlshortener.websockets.WebSocketsServer
 import org.apache.commons.validator.routines.UrlValidator
 import org.springframework.stereotype.Service
 import java.nio.charset.StandardCharsets
 import java.time.Instant
 import java.util.concurrent.ConcurrentHashMap
+import es.unizar.urlshortener.core.usecases.*
 
 /**
  * Implementation of the port [ValidatorService].
@@ -32,13 +33,6 @@ class ValidatorServiceImpl : ValidatorService {
         val urlValidator = UrlValidator(arrayOf("http", "https"))
     }
 
-    /**
-     * Validates if the given id can be used.
-     *
-     * @param id The id to be validated.
-     * @return True if the id is valid, false otherwise.
-     */
-    override fun isValidBrandedUrl(id: String?): Boolean = id != null
 }
 
 /**
@@ -79,6 +73,7 @@ class SafetyServiceImpl(
         kafkaProducerService.sendMessage(CHECK_SAFETY_TOPIC, Gson().toJson(petition)) 
 }
 
+
 /**
  * Service to check if a non-registered user can be redirected.
  */
@@ -108,5 +103,56 @@ class NonRegisteredUserService {
         } else {
             false
         }
+    }
+}
+
+@Service
+class BrandedServiceImpl(
+    private val kafkaProducerService: KafkaProducerService
+) : BrandedService {
+
+    companion object{
+        /**
+         * The Branded links topic to check the validation of the id.
+         */
+        const val BRANDED_TOPIC = "branded"
+    }
+     /**
+     * Validates if the given id can be used.
+     *
+     * @param id The id to be validated.
+     * @return True if the id is valid, false otherwise.
+     */
+    override fun isValidBrandedUrl(id: String) {
+        kafkaProducerService.sendMessage(BRANDED_TOPIC, id) 
+    }
+}
+
+@Service
+class QrServiceImpl(
+    private val kafkaProducerService: KafkaProducerService
+) : QrService {
+
+    companion object{
+        /**
+         * The QR code topic to check the validation of the id.
+         */
+        const val QR_TOPIC = "qr"
+    }
+        /**
+        * Generates a QR code for the given id.
+        *
+        * @param id The id to generate the QR code.
+        */
+    override fun generateQr(id: UrlForQr?) {
+        kafkaProducerService.sendMessage(QR_TOPIC, Gson().toJson(id))
+    }
+}
+
+class WebSocketsServiceImpl(
+    private val webSocketsServer: WebSocketsServer
+) : WebSocketsService {
+    override fun sendMessageToUser(userId: String, message: String) {
+        webSocketsServer.sendMessageToUser(userId, message)
     }
 }

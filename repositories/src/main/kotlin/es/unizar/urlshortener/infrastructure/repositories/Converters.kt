@@ -58,8 +58,10 @@ fun ShortUrlEntity.toDomain() = ShortUrl(
         ip = ip,
         country = country, 
         isBranded = isBranded,
-        qrCode = qrCode
-    )
+        validBranded = validBranded,
+        generateQrCode = generateQr
+    ),
+    qrCode = qrCode
 )
 
 /**
@@ -80,7 +82,9 @@ fun ShortUrl.toEntity() = ShortUrlEntity(
     ip = properties.ip,
     country = properties.country,
     isBranded = properties.isBranded,
-    qrCode = properties.qrCode
+    validBranded = properties.validBranded,
+    generateQr = properties.generateQrCode,
+    qrCode = qrCode
 )
 
 /**
@@ -120,7 +124,4 @@ fun User.toEntity() = UserEntity(
     redirections = redirections,
     lastRedirectionTimeStamp = lastRedirectionTimeStamp
 )
-
-
-
 

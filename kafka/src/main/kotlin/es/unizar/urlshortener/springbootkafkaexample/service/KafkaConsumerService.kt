@@ -1,24 +1,43 @@
+@file:Suppress("WildcardImport")
+
 package es.unizar.urlshortener.springbootkafkaexample.service
 
 import com.google.gson.Gson
+import es.unizar.urlshortener.core.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.kafka.annotation.KafkaListener
 import org.springframework.stereotype.Service
 import es.unizar.urlshortener.gateway.GoogleSafeBrowsingClient
-import es.unizar.urlshortener.core.UrlSafetyResponse
-import es.unizar.urlshortener.core.UrlSafetyPetition
-import es.unizar.urlshortener.core.UrlSafetyChecked
+import es.unizar.urlshortener.gateway.NinjaProfanityFilter
+import es.unizar.urlshortener.core.usecases.GenerateQRCodeUseCase
 import es.unizar.urlshortener.core.usecases.UpdateUrlSafetyUseCase
+import es.unizar.urlshortener.core.usecases.UpdateUrlBrandedUseCase
+import es.unizar.urlshortener.core.usecases.StoreQRUseCase
+import es.unizar.urlshortener.websockets.MyWebSocketClient
+import es.unizar.urlshortener.websockets.WebSocketMessage
+import java.net.URI
+import com.google.gson.reflect.TypeToken
+import java.lang.reflect.Type
+
+
+
+
 
 // quizá esta clase irá en core? o en otro paquete?
 // no le acabo de ver sentido a tenerla separada es una clase con mucho acoplamiento
 // con otras pero no logro ver donde habrá q meterla, tengo q darle una vuelta más
 @Service
 class KafkaConsumerService(
-    private val updateUrlSafetyUseCase: UpdateUrlSafetyUseCase
+    private val updateUrlSafetyUseCase: UpdateUrlSafetyUseCase,
+    private val updateUrlBrandedUseCase: UpdateUrlBrandedUseCase,
+    private val storeQRUseCase: StoreQRUseCase,
+    private val generateQRCodeUseCase: GenerateQRCodeUseCase,
 ) {
     @Autowired 
     lateinit var googleSafeBrowsingClient: GoogleSafeBrowsingClient
+
+    @Autowired
+    lateinit var ninjaProfanityFilter: NinjaProfanityFilter
 
     @Autowired
     lateinit var kafkaProducerService: KafkaProducerService
@@ -61,5 +80,45 @@ class KafkaConsumerService(
         // THIS WILL BE DONE USING WEBSOCKETS INSTEAD OF JUST CALLING THE FUNCTION DIRECTLY
         // send the safety check result to the client
         updateUrlSafetyUseCase.updateUrlSafety(deserializedObject.id, deserializedObject.information)
+    }
+
+    @KafkaListener(topics = ["branded"], groupId = "group_id")
+    fun consumeBranded(message: String) {
+        println("Serielized branded received: $message")
+        //Check
+        val valid = ninjaProfanityFilter.isNameValid(message)
+        updateUrlBrandedUseCase.updateUrlBranded(message, valid)
+    }
+
+    @KafkaListener(topics = ["qr"], groupId = "group_id")
+    fun consumeQr(url: String) {
+        println("Serielized QR received: $url")
+        val deserializedObject = Gson().fromJson(url, UrlForQr::class.java)
+        println("Url for the Qr received in Kafka: $deserializedObject.url")
+        // Generate the QR code
+        val qrCode = generateQRCodeUseCase.generateQRCode(deserializedObject.url).base64Image
+        println("QR code generated: $qrCode")
+
+        // Enviar mensaje al WebSocket del usuario
+        // Enviar el mensaje al WebSocket del usuario
+        println("User id kafka: ${deserializedObject.userId}")
+        val serverUri = URI("ws://localhost:8080/ws-endpoint")
+        val webSocketClient = MyWebSocketClient(serverUri)
+        webSocketClient.connectBlocking()
+        
+        // Serialize the user ID and the QR code
+        val content: Pair<String, String> = Pair(deserializedObject.userId, qrCode)
+        val serialization: Type = object : TypeToken<Pair<String, String>>() {}.type
+        val serializedContent = Gson().toJson(content, serialization)
+
+        val webSocketMessage = WebSocketMessage(deserializedObject.userId, serializedContent)
+
+        println("User and QR code serialized: $webSocketMessage")
+        webSocketClient.send(Gson().toJson(webSocketMessage))
+        webSocketClient.close()
+        // Store the QR code in the database
+        storeQRUseCase.storeQR(deserializedObject.id, qrCode)
+        println("QR code stored in the database")
+        // Send the QR code to the client VIA WEB SOCKETS
     }
 }
