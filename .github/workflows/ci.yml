@@ -47,8 +47,8 @@ jobs:
       - name: Send POST request
         run: |
           echo "Waiting for the application to start..."
-          sleep 30  # Ajusta este tiempo según el arranque de tu aplicación
-          curl -X POST http://localhost:8080/api/link -H "Content-Type: application/x-www-form-urlencoded" -d "url=https://www.unizar.es/&generateQRCode=on&brandedName=hola&isBranded=true&name=hola"
+          sleep 60  # Ajusta este tiempo según el arranque de tu aplicación
+          curl -X POST http:///127.0.0.1:8080/api/link -H "Content-Type: application/x-www-form-urlencoded" -d "url=https://www.unizar.es/&generateQRCode=on&brandedName=hola&isBranded=true&name=hola"
 
       - name: Stop application
         run: |
