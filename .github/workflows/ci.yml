@@ -15,46 +15,57 @@ jobs:
         with:
           java-version: '17'
           distribution: 'adopt'
+        
       - name: Validate Gradle wrapper
         uses: gradle/wrapper-validation-action@e6e38bacfdf1a337459f332974bb2327a31aaf4b
+      
       - name: Install Docker
         run: |
           curl -fsSL https://get.docker.com -o get-docker.sh
           sudo sh get-docker.sh
           sudo usermod -aG docker $USER
+        
       - name: Install Docker Compose
         run: |
           sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
           sudo chmod +x /usr/local/bin/docker-compose
           docker-compose --version
+        
       - name: Set up Kafka Docker Compose 
         run: docker-compose -f docker-compose.yml up -d
+
       - name: Sanitize kafka I
         run: ./gradlew build --no-daemon || true
         env:
           NINJA_PROFANITY_FILTER_API_KEY: ${{ secrets.NINJA_PROFANITY_FILTER_API_KEY }}
           GOOGLE_SAFE_BROWSING_API_KEY: ${{ secrets.GOOGLE_API_SAFETY_KEY }}
+
       - name: Sanitize kafka II
         run: ./gradlew build --no-daemon || true
         env:
           NINJA_PROFANITY_FILTER_API_KEY: ${{ secrets.NINJA_PROFANITY_FILTER_API_KEY }}
           GOOGLE_SAFE_BROWSING_API_KEY: ${{ secrets.GOOGLE_API_SAFETY_KEY }}
+
       - name: Sanitize kafka III
         run: ./gradlew build --no-daemon || true
         env:
           NINJA_PROFANITY_FILTER_API_KEY: ${{ secrets.NINJA_PROFANITY_FILTER_API_KEY }}
           GOOGLE_SAFE_BROWSING_API_KEY: ${{ secrets.GOOGLE_API_SAFETY_KEY }}
+
       - name: Sanitize kafka IV
         run: ./gradlew build --no-daemon || true
         env:
           NINJA_PROFANITY_FILTER_API_KEY: ${{ secrets.NINJA_PROFANITY_FILTER_API_KEY }}
           GOOGLE_SAFE_BROWSING_API_KEY: ${{ secrets.GOOGLE_API_SAFETY_KEY }}
-      - run: ./gradlew check --no-daemon
+      
+      - name: Check with Gradle
+        run: ./gradlew check --no-daemon
         env:
           GOOGLE_SAFE_BROWSING_API_KEY: ${{ secrets.GOOGLE_API_SAFETY_KEY }}
           GOOGLE_CLIENT_ID_API_KEY: ${{ secrets.GOOGLE_CLIENT_ID_API_KEY }}
           GOOGLE_CLIENT_SECRET_API_KEY: ${{ secrets.GOOGLE_CLIENT_SECRET_API_KEY }}
           NINJA_PROFANITY_FILTER_API_KEY: ${{ secrets.NINJA_PROFANITY_FILTER_API_KEY }}
+
       - name: Build with Gradle
         run: ./gradlew build --no-daemon
         env:
