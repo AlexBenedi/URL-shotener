@@ -5,8 +5,9 @@ on:
   pull_request:
     branches: [ main ]
   workflow_dispatch:
+
 jobs:
-  build:
+  run-app:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -29,21 +30,32 @@ jobs:
           docker-compose --version
       - name: Set up Kafka Docker Compose 
         run: docker-compose -f docker-compose.yml up -d
-      - name: Sanitize kafka I
-        run: ./gradlew build --no-daemon || true
-        env:
-          GOOGLE_SAFE_BROWSING_API_KEY: ${{ secrets.GOOGLE_API_SAFETY_KEY }} 
-      - name: run application
-        run: ./gradlew bootRun --no-daemon
+      - name: Run application in the background
+        run: |
+          ./gradlew bootRun --no-daemon &
+          echo $! > app.pid
         env:
           GOOGLE_SAFE_BROWSING_API_KEY: ${{ secrets.GOOGLE_API_SAFETY_KEY }}
           GOOGLE_CLIENT_ID_API_KEY: ${{ secrets.GOOGLE_CLIENT_ID_API_KEY }}
           GOOGLE_CLIENT_SECRET_API_KEY: ${{ secrets.GOOGLE_CLIENT_SECRET_API_KEY }}
-          NINJA_PROFANITY_FILTER_API_KEY: ${{ secrets.NINJA_PROFANITY_FILTER_API_KEY }}  
-      - name: send POST
+          NINJA_PROFANITY_FILTER_API_KEY: ${{ secrets.NINJA_PROFANITY_FILTER_API_KEY }}
+
+  post-request:
+    runs-on: ubuntu-latest
+    needs: run-app
+    steps:
+      - uses: actions/checkout@v2
+      - name: Send POST request
         run: |
-          curl -X POST http://localhost:8080/api/link -H "Content-Type: application/x-www-form-urlencoded" -d "url=https://www.unizar.es/&generateQRCode=on&brandedName=hola&isBranded=true&name=hola" 
-      - run: ./gradlew check --no-daemon
+          echo "Waiting for the application to start..."
+          sleep 30  # Ajusta este tiempo según el arranque de tu aplicación
+          curl -X POST http://localhost:8080/api/link -H "Content-Type: application/x-www-form-urlencoded" -d "url=https://www.unizar.es/&generateQRCode=on&brandedName=hola&isBranded=true&name=hola"
+      - name: Stop application
+        run: |
+          kill $(cat app.pid)
+          rm -f app.pid
+      - name: Run Gradle check
+        run: ./gradlew check --no-daemon
         env:
           GOOGLE_SAFE_BROWSING_API_KEY: ${{ secrets.GOOGLE_API_SAFETY_KEY }}
           GOOGLE_CLIENT_ID_API_KEY: ${{ secrets.GOOGLE_CLIENT_ID_API_KEY }}
@@ -56,7 +68,7 @@ jobs:
           GOOGLE_CLIENT_ID_API_KEY: ${{ secrets.GOOGLE_CLIENT_ID_API_KEY }}
           GOOGLE_CLIENT_SECRET_API_KEY: ${{ secrets.GOOGLE_CLIENT_SECRET_API_KEY }}
           NINJA_PROFANITY_FILTER_API_KEY: ${{ secrets.NINJA_PROFANITY_FILTER_API_KEY }}
-      - name: Cleanup Gradle CacheGOOGLE_API_SAFETY_KEY
+      - name: Cleanup Gradle Cache
         run: |
           rm -f ~/.gradle/caches/modules-2/modules-2.lock
           rm -f ~/.gradle/caches/modules-2/gc.properties
