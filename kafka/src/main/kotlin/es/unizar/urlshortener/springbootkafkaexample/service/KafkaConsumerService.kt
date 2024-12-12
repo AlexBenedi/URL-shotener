@@ -94,9 +94,9 @@ class KafkaConsumerService(
     fun consumeQr(url: String) {
         println("Serielized QR received: $url")
         val deserializedObject = Gson().fromJson(url, UrlForQr::class.java)
-        println("Url for the Qr received in Kafka: $deserializedObject.url")
+        println("Url for the Qr received in Kafka: ${deserializedObject.id}")
         // Generate the QR code
-        val qrCode = generateQRCodeUseCase.generateQRCode(deserializedObject.url).base64Image
+        val qrCode = generateQRCodeUseCase.generateQRCode("http://localhost:8080/"+deserializedObject.id).base64Image
         println("QR code generated: $qrCode")
 
         // Enviar mensaje al WebSocket del usuario

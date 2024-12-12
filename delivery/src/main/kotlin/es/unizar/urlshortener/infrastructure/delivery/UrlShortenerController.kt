@@ -143,6 +143,7 @@ class UrlShortenerControllerImpl(
     @PostMapping("/api/link", consumes = [MediaType.APPLICATION_FORM_URLENCODED_VALUE])
     override fun shortener(data: ShortUrlDataIn, request: HttpServletRequest): ResponseEntity<ShortUrlDataOut> {
         val ip = request.remoteAddr
+        println("IP: $ip")
         val now = Instant.now()
 
         val (currentCount, lastTimestamp) = ipRedirectionCounts[ip] ?: Pair(0, now)

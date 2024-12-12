@@ -28,7 +28,8 @@ $(document).ready(function () {
                 qrDiv.html('<img src="data:image/png;base64,' + qrCode + '" alt="QR Code">');
                 var qrCodeDownloadUrl = "/" + id + "/qr";
                 qrDiv.append('<p><a href="' + qrCodeDownloadUrl + '" download="qr.png">Descargar QR</a><p>');
-                qrDiv.append('<p>' + window.location.origin + qrCodeDownloadUrl + '</p>');
+                qrDiv.append('<p><a href="' + window.location.origin + qrCodeDownloadUrl + '" target="_blank">' + window.location.origin + qrCodeDownloadUrl + '</a></p>');
+
             };
 
             socket.onclose = function () {

@@ -29,7 +29,7 @@ $(document).ready(function () {
         resultDiv.append('<img src="data:image/png;base64,' + qrCode + '" alt="QR Code">');
         var qrCodeDownloadUrl = "/" + id + "/qr";
         resultDiv.append('<p><a href="' + qrCodeDownloadUrl + '" download="qr.png">Descargar QR</a><p>');
-        resultDiv.append('<p>' + window.location.origin + qrCodeDownloadUrl + '</p>');
+        resultDiv.append('<p><a href="' + window.location.origin + qrCodeDownloadUrl + '" target="_blank">' + window.location.origin + qrCodeDownloadUrl + '</a></p>');
     };
 
     // Manejar el cierre de la conexión WebSocket
