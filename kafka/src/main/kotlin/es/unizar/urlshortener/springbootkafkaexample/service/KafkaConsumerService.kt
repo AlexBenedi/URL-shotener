@@ -107,7 +107,7 @@ class KafkaConsumerService(
         webSocketClient.connectBlocking()
         
         // Serialize the user ID and the QR code
-        val content: Pair<String, String> = Pair(deserializedObject.userId, qrCode)
+        val content: Pair<String, String> = Pair(deserializedObject.id, qrCode)
         val serialization: Type = object : TypeToken<Pair<String, String>>() {}.type
         val serializedContent = Gson().toJson(content, serialization)
 
