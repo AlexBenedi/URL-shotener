@@ -27,3 +27,6 @@ Thumbs.db
 
 target/º
 app/src/main/resources/application.yaml
+
+apache-jmeter-5.6.3.tgz
+apache-jmeter-5.6.3/
