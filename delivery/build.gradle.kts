@@ -105,3 +105,11 @@ sonar {
     property("sonar.jacoco.reportPaths", "build/reports/jacoco/test/jacocoTestReport.xml")
   }
 }
+
+configurations.all {
+    resolutionStrategy.eachDependency {
+        if (requested.group == "com.fasterxml.jackson.core") {
+            useVersion("2.13.5")
+        }
+    }
+}

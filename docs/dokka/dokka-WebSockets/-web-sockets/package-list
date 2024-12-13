@@ -1,0 +1,28 @@
+$dokka.format:html-v1
+$dokka.linkExtension:html
+$dokka.location:es.unizar.urlshortener.websockets////PointingToDeclaration/-web-sockets/es.unizar.urlshortener.websockets/index.html
+$dokka.location:es.unizar.urlshortener.websockets//sendTextSafe/jakarta.websocket.RemoteEndpoint.Basic#kotlin.String/PointingToDeclaration/-web-sockets/es.unizar.urlshortener.websockets/send-text-safe.html
+$dokka.location:es.unizar.urlshortener.websockets/MyWebSocketClient///PointingToDeclaration/-web-sockets/es.unizar.urlshortener.websockets/-my-web-socket-client/index.html
+$dokka.location:es.unizar.urlshortener.websockets/MyWebSocketClient/MyWebSocketClient/#java.net.URI/PointingToDeclaration/-web-sockets/es.unizar.urlshortener.websockets/-my-web-socket-client/-my-web-socket-client.html
+$dokka.location:es.unizar.urlshortener.websockets/MyWebSocketClient/onClose/#kotlin.Int#kotlin.String#kotlin.Boolean/PointingToDeclaration/-web-sockets/es.unizar.urlshortener.websockets/-my-web-socket-client/on-close.html
+$dokka.location:es.unizar.urlshortener.websockets/MyWebSocketClient/onError/#java.lang.Exception/PointingToDeclaration/-web-sockets/es.unizar.urlshortener.websockets/-my-web-socket-client/on-error.html
+$dokka.location:es.unizar.urlshortener.websockets/MyWebSocketClient/onMessage/#kotlin.String/PointingToDeclaration/-web-sockets/es.unizar.urlshortener.websockets/-my-web-socket-client/on-message.html
+$dokka.location:es.unizar.urlshortener.websockets/MyWebSocketClient/onOpen/#org.java_websocket.handshake.ServerHandshake/PointingToDeclaration/-web-sockets/es.unizar.urlshortener.websockets/-my-web-socket-client/on-open.html
+$dokka.location:es.unizar.urlshortener.websockets/WebSocketConfig///PointingToDeclaration/-web-sockets/es.unizar.urlshortener.websockets/-web-socket-config/index.html
+$dokka.location:es.unizar.urlshortener.websockets/WebSocketConfig/WebSocketConfig/#/PointingToDeclaration/-web-sockets/es.unizar.urlshortener.websockets/-web-socket-config/-web-socket-config.html
+$dokka.location:es.unizar.urlshortener.websockets/WebSocketConfig/serverEndpoint/#/PointingToDeclaration/-web-sockets/es.unizar.urlshortener.websockets/-web-socket-config/server-endpoint.html
+$dokka.location:es.unizar.urlshortener.websockets/WebSocketMessage///PointingToDeclaration/-web-sockets/es.unizar.urlshortener.websockets/-web-socket-message/index.html
+$dokka.location:es.unizar.urlshortener.websockets/WebSocketMessage/WebSocketMessage/#kotlin.String#kotlin.String/PointingToDeclaration/-web-sockets/es.unizar.urlshortener.websockets/-web-socket-message/-web-socket-message.html
+$dokka.location:es.unizar.urlshortener.websockets/WebSocketMessage/message/#/PointingToDeclaration/-web-sockets/es.unizar.urlshortener.websockets/-web-socket-message/message.html
+$dokka.location:es.unizar.urlshortener.websockets/WebSocketMessage/userId/#/PointingToDeclaration/-web-sockets/es.unizar.urlshortener.websockets/-web-socket-message/user-id.html
+$dokka.location:es.unizar.urlshortener.websockets/WebSocketsServer.Companion///PointingToDeclaration/-web-sockets/es.unizar.urlshortener.websockets/-web-sockets-server/-companion/index.html
+$dokka.location:es.unizar.urlshortener.websockets/WebSocketsServer.Companion/sessions/#/PointingToDeclaration/-web-sockets/es.unizar.urlshortener.websockets/-web-sockets-server/-companion/sessions.html
+$dokka.location:es.unizar.urlshortener.websockets/WebSocketsServer///PointingToDeclaration/-web-sockets/es.unizar.urlshortener.websockets/-web-sockets-server/index.html
+$dokka.location:es.unizar.urlshortener.websockets/WebSocketsServer/WebSocketsServer/#/PointingToDeclaration/-web-sockets/es.unizar.urlshortener.websockets/-web-sockets-server/-web-sockets-server.html
+$dokka.location:es.unizar.urlshortener.websockets/WebSocketsServer/onClose/#jakarta.websocket.Session#jakarta.websocket.CloseReason/PointingToDeclaration/-web-sockets/es.unizar.urlshortener.websockets/-web-sockets-server/on-close.html
+$dokka.location:es.unizar.urlshortener.websockets/WebSocketsServer/onError/#jakarta.websocket.Session#kotlin.Throwable/PointingToDeclaration/-web-sockets/es.unizar.urlshortener.websockets/-web-sockets-server/on-error.html
+$dokka.location:es.unizar.urlshortener.websockets/WebSocketsServer/onMessage/#kotlin.String#jakarta.websocket.Session/PointingToDeclaration/-web-sockets/es.unizar.urlshortener.websockets/-web-sockets-server/on-message.html
+$dokka.location:es.unizar.urlshortener.websockets/WebSocketsServer/onOpen/#jakarta.websocket.Session/PointingToDeclaration/-web-sockets/es.unizar.urlshortener.websockets/-web-sockets-server/on-open.html
+$dokka.location:es.unizar.urlshortener.websockets/WebSocketsServer/sendMessageToUser/#kotlin.String#kotlin.String/PointingToDeclaration/-web-sockets/es.unizar.urlshortener.websockets/-web-sockets-server/send-message-to-user.html
+es.unizar.urlshortener.websockets
+

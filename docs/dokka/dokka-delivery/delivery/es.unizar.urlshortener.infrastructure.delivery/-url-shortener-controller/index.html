@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html class="no-js">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>UrlShortenerController</title>
+    <link href="../../../images/logo-icon.svg" rel="icon" type="image/svg">
+    <script>var pathToRoot = "../../../";</script>
+    <script>document.documentElement.classList.replace("no-js","js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+    if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    } else {
+        const savedDarkMode = JSON.parse(storage)
+        if(savedDarkMode === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    }
+    </script>
+<script type="text/javascript" src="https://unpkg.com/kotlin-playground@1/dist/playground.min.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async="async"></script>
+<link href="../../../styles/style.css" rel="Stylesheet">
+<link href="../../../styles/main.css" rel="Stylesheet">
+<link href="../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../../styles/font-jb-sans-auto.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../scripts/clipboard.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/navigation-loader.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/platform-content-handler.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/main.js" defer="defer"></script>
+<script type="text/javascript" src="../../../scripts/prism.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/symbol-parameters-wrapper_deferred.js" defer="defer"></script>
+</head>
+<body>
+    <div class="root">
+<nav class="navigation" id="navigation-wrapper">
+    <div class="navigation--inner">
+        <div class="navigation-title">
+            <button class="menu-toggle" id="menu-toggle" type="button">toggle menu</button>
+            <div class="library-name">
+                    <a class="library-name--link" href="../../../index.html">
+                            delivery
+                    </a>
+            </div>
+            <div class="library-version">
+0.2024.1-SNAPSHOT            </div>
+        </div>
+        <div class="filter-section" id="filter-section">
+                <button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":delivery:dokkaHtml/main">jvm</button>
+        </div>
+    </div>
+    <div class="navigation-controls">
+        <button class="navigation-controls--btn navigation-controls--theme" id="theme-toggle-button" type="button">switch theme</button>
+        <div class="navigation-controls--btn navigation-controls--search" id="searchBar" role="button">search in API</div>
+    </div>
+</nav>
+        <div id="container">
+            <div class="sidebar" id="leftColumn">
+                <div class="sidebar--inner" id="sideMenu"></div>
+            </div>
+            <div id="main">
+<div class="main-content" data-page-type="classlike" id="content" pageIds="delivery::es.unizar.urlshortener.infrastructure.delivery/UrlShortenerController///PointingToDeclaration//-1173714533">
+  <div class="breadcrumbs"><a href="../../../index.html">delivery</a><span class="delimiter">/</span><a href="../index.html">es.unizar.urlshortener.infrastructure.delivery</a><span class="delimiter">/</span><span class="current">UrlShortenerController</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span>Url</span><wbr></wbr><span>Shortener</span><wbr></wbr><span><span>Controller</span></span></h1>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":delivery:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">interface </span><a href="index.html">UrlShortenerController</a></div><p class="paragraph">The specification of the controller.</p><h4 class="">Inheritors</h4><div class="table"><div class="table-row" data-filterable-current=":delivery:dokkaHtml/main" data-filterable-set=":delivery:dokkaHtml/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><a href="../-url-shortener-controller-impl/index.html">UrlShortenerControllerImpl</a></div></span></div><div></div></div></div></div></div></div>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="FUNCTION">
+        <h2 class="">Functions</h2>
+        <div class="table"><a data-name="1096960425%2FFunctions%2F-1173714533" anchor-label="deleteLink" id="1096960425%2FFunctions%2F-1173714533" data-filterable-set=":delivery:dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":delivery:dokkaHtml/main" data-filterable-set=":delivery:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="delete-link.html"><span>delete</span><wbr></wbr><span><span>Link</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1096960425%2FFunctions%2F-1173714533"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":delivery:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="delete-link.html"><span class="token function">deleteLink</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span><span class="token annotation builtin">@</span><span data-unresolved-link="org.springframework.web.bind.annotation/PathVariable///PointingToDeclaration/"><span class="token annotation builtin">PathVariable</span></span> </span>idLink<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html">Long</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="org.springframework.http/ResponseEntity///PointingToDeclaration/">ResponseEntity</span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1380149925%2FFunctions%2F-1173714533" anchor-label="getClicksByHash" id="1380149925%2FFunctions%2F-1173714533" data-filterable-set=":delivery:dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":delivery:dokkaHtml/main" data-filterable-set=":delivery:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="get-clicks-by-hash.html"><span>get</span><wbr></wbr><span>Clicks</span><wbr></wbr><span>By</span><wbr></wbr><span><span>Hash</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1380149925%2FFunctions%2F-1173714533"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":delivery:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="get-clicks-by-hash.html"><span class="token function">getClicksByHash</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span><span class="token annotation builtin">@</span><span data-unresolved-link="org.springframework.web.bind.annotation/PathVariable///PointingToDeclaration/"><span class="token annotation builtin">PathVariable</span></span> </span>hash<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="org.springframework.http/ResponseEntity///PointingToDeclaration/">ResponseEntity</span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-575822749%2FFunctions%2F-1173714533" anchor-label="getQRCode" id="-575822749%2FFunctions%2F-1173714533" data-filterable-set=":delivery:dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":delivery:dokkaHtml/main" data-filterable-set=":delivery:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="get-q-r-code.html"><span>get</span><wbr></wbr><span><span>QRCode</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-575822749%2FFunctions%2F-1173714533"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":delivery:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="get-q-r-code.html"><span class="token function">getQRCode</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">id<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="org.springframework.http/ResponseEntity///PointingToDeclaration/">ResponseEntity</span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html">ByteArray</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Retrieves the QR code image associated with a short URL identified by its <a href="get-q-r-code.html">id</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="295564007%2FFunctions%2F-1173714533" anchor-label="getUserLinks" id="295564007%2FFunctions%2F-1173714533" data-filterable-set=":delivery:dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":delivery:dokkaHtml/main" data-filterable-set=":delivery:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="get-user-links.html"><span>get</span><wbr></wbr><span>User</span><wbr></wbr><span><span>Links</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="295564007%2FFunctions%2F-1173714533"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":delivery:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="get-user-links.html"><span class="token function">getUserLinks</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">userId<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="org.springframework.http/ResponseEntity///PointingToDeclaration/">ResponseEntity</span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><span data-unresolved-link="es.unizar.urlshortener.core/Link///PointingToDeclaration/">Link</span><span class="token operator">&gt;</span><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1143879338%2FFunctions%2F-1173714533" anchor-label="redirectTo" id="-1143879338%2FFunctions%2F-1173714533" data-filterable-set=":delivery:dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":delivery:dokkaHtml/main" data-filterable-set=":delivery:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="redirect-to.html"><span>redirect</span><wbr></wbr><span><span>To</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1143879338%2FFunctions%2F-1173714533"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":delivery:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="redirect-to.html"><span class="token function">redirectTo</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">id<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">request<span class="token operator">: </span><span data-unresolved-link="jakarta.servlet.http/HttpServletRequest///PointingToDeclaration/">HttpServletRequest</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="org.springframework.http/ResponseEntity///PointingToDeclaration/">ResponseEntity</span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Redirects and logs a short url identified by its <a href="redirect-to.html">id</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="601235318%2FFunctions%2F-1173714533" anchor-label="shortener" id="601235318%2FFunctions%2F-1173714533" data-filterable-set=":delivery:dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":delivery:dokkaHtml/main" data-filterable-set=":delivery:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="shortener.html"><span><span>shortener</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="601235318%2FFunctions%2F-1173714533"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":delivery:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="shortener.html"><span class="token function">shortener</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">data<span class="token operator">: </span><a href="../-short-url-data-in/index.html">ShortUrlDataIn</a><span class="token punctuation">, </span></span><span class="parameter ">request<span class="token operator">: </span><span data-unresolved-link="jakarta.servlet.http/HttpServletRequest///PointingToDeclaration/">HttpServletRequest</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="org.springframework.http/ResponseEntity///PointingToDeclaration/">ResponseEntity</span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../-short-url-data-out/index.html">ShortUrlDataOut</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Creates a short url from details provided in <a href="shortener.html">data</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1650707526%2FFunctions%2F-1173714533" anchor-label="shortenerUser" id="1650707526%2FFunctions%2F-1173714533" data-filterable-set=":delivery:dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":delivery:dokkaHtml/main" data-filterable-set=":delivery:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="shortener-user.html"><span>shortener</span><wbr></wbr><span><span>User</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1650707526%2FFunctions%2F-1173714533"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":delivery:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="shortener-user.html"><span class="token function">shortenerUser</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">data<span class="token operator">: </span><a href="../-short-url-data-in/index.html">ShortUrlDataIn</a><span class="token punctuation">, </span></span><span class="parameter ">request<span class="token operator">: </span><span data-unresolved-link="jakarta.servlet.http/HttpServletRequest///PointingToDeclaration/">HttpServletRequest</span><span class="token punctuation">, </span></span><span class="parameter ">userId<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="org.springframework.http/ResponseEntity///PointingToDeclaration/">ResponseEntity</span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../-short-url-data-out/index.html">ShortUrlDataOut</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Creates a short url from details provided in <a href="shortener-user.html">data</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1887416462%2FFunctions%2F-1173714533" anchor-label="user" id="-1887416462%2FFunctions%2F-1173714533" data-filterable-set=":delivery:dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":delivery:dokkaHtml/main" data-filterable-set=":delivery:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="user.html"><span><span>user</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1887416462%2FFunctions%2F-1173714533"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":delivery:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="user.html"><span class="token function">user</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">token<span class="token operator">: </span><span data-unresolved-link="org.springframework.security.oauth2.client.authentication/OAuth2AuthenticationToken///PointingToDeclaration/">OAuth2AuthenticationToken</span><span class="token operator">?</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="org.springframework.http/ResponseEntity///PointingToDeclaration/">ResponseEntity</span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">This method is used to get the user information.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      <div class="footer">
+        <span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2024 Copyright</span><span
+                class="pull-right"><span>Generated by </span><a
+                href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span>
+      </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

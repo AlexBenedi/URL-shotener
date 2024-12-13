@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html class="no-js">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>ApplicationConfigurationUseCases</title>
+    <link href="../../../images/logo-icon.svg" rel="icon" type="image/svg">
+    <script>var pathToRoot = "../../../";</script>
+    <script>document.documentElement.classList.replace("no-js","js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+    if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    } else {
+        const savedDarkMode = JSON.parse(storage)
+        if(savedDarkMode === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    }
+    </script>
+<script type="text/javascript" src="https://unpkg.com/kotlin-playground@1/dist/playground.min.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async="async"></script>
+<link href="../../../styles/style.css" rel="Stylesheet">
+<link href="../../../styles/main.css" rel="Stylesheet">
+<link href="../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../../styles/font-jb-sans-auto.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../scripts/clipboard.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/navigation-loader.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/platform-content-handler.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/main.js" defer="defer"></script>
+<script type="text/javascript" src="../../../scripts/prism.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/symbol-parameters-wrapper_deferred.js" defer="defer"></script>
+</head>
+<body>
+    <div class="root">
+<nav class="navigation" id="navigation-wrapper">
+    <div class="navigation--inner">
+        <div class="navigation-title">
+            <button class="menu-toggle" id="menu-toggle" type="button">toggle menu</button>
+            <div class="library-name">
+                    <a class="library-name--link" href="../../../index.html">
+                            app
+                    </a>
+            </div>
+            <div class="library-version">
+0.2024.1-SNAPSHOT            </div>
+        </div>
+        <div class="filter-section" id="filter-section">
+                <button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":app:dokkaHtml/main">jvm</button>
+        </div>
+    </div>
+    <div class="navigation-controls">
+        <button class="navigation-controls--btn navigation-controls--theme" id="theme-toggle-button" type="button">switch theme</button>
+        <div class="navigation-controls--btn navigation-controls--search" id="searchBar" role="button">search in API</div>
+    </div>
+</nav>
+        <div id="container">
+            <div class="sidebar" id="leftColumn">
+                <div class="sidebar--inner" id="sideMenu"></div>
+            </div>
+            <div id="main">
+<div class="main-content" data-page-type="classlike" id="content" pageIds="app::es.unizar.urlshortener/ApplicationConfigurationUseCases///PointingToDeclaration//-1895570378">
+  <div class="breadcrumbs"><a href="../../../index.html">app</a><span class="delimiter">/</span><a href="../index.html">es.unizar.urlshortener</a><span class="delimiter">/</span><span class="current">ApplicationConfigurationUseCases</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span>Application</span><wbr></wbr><span>Configuration</span><wbr></wbr><span>Use</span><wbr></wbr><span><span>Cases</span></span></h1>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":app:dokkaHtml/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="org.springframework.context.annotation/Configuration///PointingToDeclaration/"><span class="token annotation builtin">Configuration</span></span></div></div><span class="token keyword">class </span><a href="index.html">ApplicationConfigurationUseCases</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span><span class="token annotation builtin">@</span><span data-unresolved-link="org.springframework.beans.factory.annotation/Autowired///PointingToDeclaration/"><span class="token annotation builtin">Autowired</span></span> </span><span class="token keyword">val </span>shortUrlEntityRepository<span class="token operator">: </span><span data-unresolved-link="es.unizar.urlshortener.infrastructure.repositories/ShortUrlEntityRepository///PointingToDeclaration/">ShortUrlEntityRepository</span><span class="token punctuation">, </span></span><span class="parameter "><span><span class="token annotation builtin">@</span><span data-unresolved-link="org.springframework.beans.factory.annotation/Autowired///PointingToDeclaration/"><span class="token annotation builtin">Autowired</span></span> </span><span class="token keyword">val </span>clickEntityRepository<span class="token operator">: </span><span data-unresolved-link="es.unizar.urlshortener.infrastructure.repositories/ClickEntityRepository///PointingToDeclaration/">ClickEntityRepository</span><span class="token punctuation">, </span></span><span class="parameter "><span><span class="token annotation builtin">@</span><span data-unresolved-link="org.springframework.beans.factory.annotation/Autowired///PointingToDeclaration/"><span class="token annotation builtin">Autowired</span></span> </span><span class="token keyword">val </span>userEntityRepository<span class="token operator">: </span><span data-unresolved-link="es.unizar.urlshortener.infrastructure.repositories/UserEntityRepository///PointingToDeclaration/">UserEntityRepository</span><span class="token punctuation">, </span></span><span class="parameter "><span><span class="token annotation builtin">@</span><span data-unresolved-link="org.springframework.beans.factory.annotation/Autowired///PointingToDeclaration/"><span class="token annotation builtin">Autowired</span></span> </span><span class="token keyword">val </span>linkEntityRepository<span class="token operator">: </span><span data-unresolved-link="es.unizar.urlshortener.infrastructure.repositories/LinkEntityRepository///PointingToDeclaration/">LinkEntityRepository</span><span class="token punctuation">, </span></span><span class="parameter "><span><span class="token annotation builtin">@</span><span data-unresolved-link="org.springframework.beans.factory.annotation/Autowired///PointingToDeclaration/"><span class="token annotation builtin">Autowired</span></span> </span><span class="token keyword">val </span>safetyServiceImpl<span class="token operator">: </span><span data-unresolved-link="es.unizar.urlshortener.infrastructure.delivery/SafetyServiceImpl///PointingToDeclaration/">SafetyServiceImpl</span><span class="token punctuation">, </span></span><span class="parameter "><span><span class="token annotation builtin">@</span><span data-unresolved-link="org.springframework.beans.factory.annotation/Autowired///PointingToDeclaration/"><span class="token annotation builtin">Autowired</span></span> </span><span class="token keyword">val </span>qrServiceImpl<span class="token operator">: </span><span data-unresolved-link="es.unizar.urlshortener.infrastructure.delivery/QrServiceImpl///PointingToDeclaration/">QrServiceImpl</span></span></span><span class="token punctuation">)</span></div></div></div>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="CONSTRUCTOR">
+        <h2 class="">Constructors</h2>
+        <div class="table"><a data-name="1995074533%2FConstructors%2F-1895570378" anchor-label="ApplicationConfigurationUseCases" id="1995074533%2FConstructors%2F-1895570378" data-filterable-set=":app:dokkaHtml/main"></a>
+          <div class="table-row" data-togglable="CONSTRUCTOR" data-filterable-current=":app:dokkaHtml/main" data-filterable-set=":app:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-application-configuration-use-cases.html"><span>Application</span><wbr></wbr><span>Configuration</span><wbr></wbr><span>Use</span><wbr></wbr><span><span>Cases</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1995074533%2FConstructors%2F-1895570378"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":app:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span><span class="token annotation builtin">@</span><span data-unresolved-link="org.springframework.beans.factory.annotation/Autowired///PointingToDeclaration/"><span class="token annotation builtin">Autowired</span></span> </span>shortUrlEntityRepository<span class="token operator">: </span><span data-unresolved-link="es.unizar.urlshortener.infrastructure.repositories/ShortUrlEntityRepository///PointingToDeclaration/">ShortUrlEntityRepository</span><span class="token punctuation">, </span></span><span class="parameter "><span><span class="token annotation builtin">@</span><span data-unresolved-link="org.springframework.beans.factory.annotation/Autowired///PointingToDeclaration/"><span class="token annotation builtin">Autowired</span></span> </span>clickEntityRepository<span class="token operator">: </span><span data-unresolved-link="es.unizar.urlshortener.infrastructure.repositories/ClickEntityRepository///PointingToDeclaration/">ClickEntityRepository</span><span class="token punctuation">, </span></span><span class="parameter "><span><span class="token annotation builtin">@</span><span data-unresolved-link="org.springframework.beans.factory.annotation/Autowired///PointingToDeclaration/"><span class="token annotation builtin">Autowired</span></span> </span>userEntityRepository<span class="token operator">: </span><span data-unresolved-link="es.unizar.urlshortener.infrastructure.repositories/UserEntityRepository///PointingToDeclaration/">UserEntityRepository</span><span class="token punctuation">, </span></span><span class="parameter "><span><span class="token annotation builtin">@</span><span data-unresolved-link="org.springframework.beans.factory.annotation/Autowired///PointingToDeclaration/"><span class="token annotation builtin">Autowired</span></span> </span>linkEntityRepository<span class="token operator">: </span><span data-unresolved-link="es.unizar.urlshortener.infrastructure.repositories/LinkEntityRepository///PointingToDeclaration/">LinkEntityRepository</span><span class="token punctuation">, </span></span><span class="parameter "><span><span class="token annotation builtin">@</span><span data-unresolved-link="org.springframework.beans.factory.annotation/Autowired///PointingToDeclaration/"><span class="token annotation builtin">Autowired</span></span> </span>safetyServiceImpl<span class="token operator">: </span><span data-unresolved-link="es.unizar.urlshortener.infrastructure.delivery/SafetyServiceImpl///PointingToDeclaration/">SafetyServiceImpl</span><span class="token punctuation">, </span></span><span class="parameter "><span><span class="token annotation builtin">@</span><span data-unresolved-link="org.springframework.beans.factory.annotation/Autowired///PointingToDeclaration/"><span class="token annotation builtin">Autowired</span></span> </span>qrServiceImpl<span class="token operator">: </span><span data-unresolved-link="es.unizar.urlshortener.infrastructure.delivery/QrServiceImpl///PointingToDeclaration/">QrServiceImpl</span></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="PROPERTY">
+        <h2 class="">Properties</h2>
+        <div class="table"><a data-name="1036405626%2FProperties%2F-1895570378" anchor-label="brandedServiceImpl" id="1036405626%2FProperties%2F-1895570378" data-filterable-set=":app:dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":app:dokkaHtml/main" data-filterable-set=":app:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="branded-service-impl.html"><span>branded</span><wbr></wbr><span>Service</span><wbr></wbr><span><span>Impl</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1036405626%2FProperties%2F-1895570378"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":app:dokkaHtml/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="org.springframework.beans.factory.annotation/Autowired///PointingToDeclaration/"><span class="token annotation builtin">Autowired</span></span></div></div><span class="token keyword">lateinit </span><span class="token keyword">var </span><a href="branded-service-impl.html">brandedServiceImpl</a><span class="token operator">: </span><span data-unresolved-link="es.unizar.urlshortener.infrastructure.delivery/BrandedServiceImpl///PointingToDeclaration/">BrandedServiceImpl</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-470409316%2FProperties%2F-1895570378" anchor-label="clickEntityRepository" id="-470409316%2FProperties%2F-1895570378" data-filterable-set=":app:dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":app:dokkaHtml/main" data-filterable-set=":app:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="click-entity-repository.html"><span>click</span><wbr></wbr><span>Entity</span><wbr></wbr><span><span>Repository</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-470409316%2FProperties%2F-1895570378"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":app:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="click-entity-repository.html">clickEntityRepository</a><span class="token operator">: </span><span data-unresolved-link="es.unizar.urlshortener.infrastructure.repositories/ClickEntityRepository///PointingToDeclaration/">ClickEntityRepository</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1726552062%2FProperties%2F-1895570378" anchor-label="linkEntityRepository" id="-1726552062%2FProperties%2F-1895570378" data-filterable-set=":app:dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":app:dokkaHtml/main" data-filterable-set=":app:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="link-entity-repository.html"><span>link</span><wbr></wbr><span>Entity</span><wbr></wbr><span><span>Repository</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1726552062%2FProperties%2F-1895570378"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":app:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="link-entity-repository.html">linkEntityRepository</a><span class="token operator">: </span><span data-unresolved-link="es.unizar.urlshortener.infrastructure.repositories/LinkEntityRepository///PointingToDeclaration/">LinkEntityRepository</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1870961693%2FProperties%2F-1895570378" anchor-label="qrServiceImpl" id="1870961693%2FProperties%2F-1895570378" data-filterable-set=":app:dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":app:dokkaHtml/main" data-filterable-set=":app:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="qr-service-impl.html"><span>qr</span><wbr></wbr><span>Service</span><wbr></wbr><span><span>Impl</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1870961693%2FProperties%2F-1895570378"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":app:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="qr-service-impl.html">qrServiceImpl</a><span class="token operator">: </span><span data-unresolved-link="es.unizar.urlshortener.infrastructure.delivery/QrServiceImpl///PointingToDeclaration/">QrServiceImpl</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1828909490%2FProperties%2F-1895570378" anchor-label="safetyServiceImpl" id="-1828909490%2FProperties%2F-1895570378" data-filterable-set=":app:dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":app:dokkaHtml/main" data-filterable-set=":app:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="safety-service-impl.html"><span>safety</span><wbr></wbr><span>Service</span><wbr></wbr><span><span>Impl</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1828909490%2FProperties%2F-1895570378"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":app:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="safety-service-impl.html">safetyServiceImpl</a><span class="token operator">: </span><span data-unresolved-link="es.unizar.urlshortener.infrastructure.delivery/SafetyServiceImpl///PointingToDeclaration/">SafetyServiceImpl</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2050712265%2FProperties%2F-1895570378" anchor-label="shortUrlEntityRepository" id="2050712265%2FProperties%2F-1895570378" data-filterable-set=":app:dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":app:dokkaHtml/main" data-filterable-set=":app:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="short-url-entity-repository.html"><span>short</span><wbr></wbr><span>Url</span><wbr></wbr><span>Entity</span><wbr></wbr><span><span>Repository</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2050712265%2FProperties%2F-1895570378"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":app:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="short-url-entity-repository.html">shortUrlEntityRepository</a><span class="token operator">: </span><span data-unresolved-link="es.unizar.urlshortener.infrastructure.repositories/ShortUrlEntityRepository///PointingToDeclaration/">ShortUrlEntityRepository</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-898536623%2FProperties%2F-1895570378" anchor-label="userEntityRepository" id="-898536623%2FProperties%2F-1895570378" data-filterable-set=":app:dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":app:dokkaHtml/main" data-filterable-set=":app:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="user-entity-repository.html"><span>user</span><wbr></wbr><span>Entity</span><wbr></wbr><span><span>Repository</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-898536623%2FProperties%2F-1895570378"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":app:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="user-entity-repository.html">userEntityRepository</a><span class="token operator">: </span><span data-unresolved-link="es.unizar.urlshortener.infrastructure.repositories/UserEntityRepository///PointingToDeclaration/">UserEntityRepository</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="FUNCTION">
+        <h2 class="">Functions</h2>
+        <div class="table"><a data-name="1142349385%2FFunctions%2F-1895570378" anchor-label="createShortUrlUseCase" id="1142349385%2FFunctions%2F-1895570378" data-filterable-set=":app:dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":app:dokkaHtml/main" data-filterable-set=":app:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="create-short-url-use-case.html"><span>create</span><wbr></wbr><span>Short</span><wbr></wbr><span>Url</span><wbr></wbr><span>Use</span><wbr></wbr><span><span>Case</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1142349385%2FFunctions%2F-1895570378"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":app:dokkaHtml/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="org.springframework.context.annotation/Bean///PointingToDeclaration/"><span class="token annotation builtin">Bean</span></span></div></div><span class="token keyword"></span><span class="token keyword">fun </span><a href="create-short-url-use-case.html"><span class="token function">createShortUrlUseCase</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="es.unizar.urlshortener.core.usecases/CreateShortUrlUseCaseImpl///PointingToDeclaration/">CreateShortUrlUseCaseImpl</span></div><div class="brief "><p class="paragraph">Provides an implementation of the CreateShortUrlUseCase.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-39523574%2FFunctions%2F-1895570378" anchor-label="deleteUserLinkUseCase" id="-39523574%2FFunctions%2F-1895570378" data-filterable-set=":app:dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":app:dokkaHtml/main" data-filterable-set=":app:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="delete-user-link-use-case.html"><span>delete</span><wbr></wbr><span>User</span><wbr></wbr><span>Link</span><wbr></wbr><span>Use</span><wbr></wbr><span><span>Case</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-39523574%2FFunctions%2F-1895570378"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":app:dokkaHtml/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="org.springframework.context.annotation/Bean///PointingToDeclaration/"><span class="token annotation builtin">Bean</span></span></div></div><span class="token keyword"></span><span class="token keyword">fun </span><a href="delete-user-link-use-case.html"><span class="token function">deleteUserLinkUseCase</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="es.unizar.urlshortener.core.usecases/DeleteUserLinkUseCaseImpl///PointingToDeclaration/">DeleteUserLinkUseCaseImpl</span></div><div class="brief "><p class="paragraph">Provides an implementation of the DeleteUserLinkUseCase.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-364070083%2FFunctions%2F-1895570378" anchor-label="generateQRCodeUseCase" id="-364070083%2FFunctions%2F-1895570378" data-filterable-set=":app:dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":app:dokkaHtml/main" data-filterable-set=":app:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="generate-q-r-code-use-case.html"><span>generate</span><wbr></wbr><span>QRCode</span><wbr></wbr><span>Use</span><wbr></wbr><span><span>Case</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-364070083%2FFunctions%2F-1895570378"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":app:dokkaHtml/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="org.springframework.context.annotation/Bean///PointingToDeclaration/"><span class="token annotation builtin">Bean</span></span></div></div><span class="token keyword"></span><span class="token keyword">fun </span><a href="generate-q-r-code-use-case.html"><span class="token function">generateQRCodeUseCase</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="es.unizar.urlshortener.core.usecases/GenerateQRCodeUseCaseImpl///PointingToDeclaration/">GenerateQRCodeUseCaseImpl</span></div><div class="brief "><p class="paragraph">Provides an implementation of GenerateQRCodeUseCase.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2111608315%2FFunctions%2F-1895570378" anchor-label="getUserInformationUseCase" id="-2111608315%2FFunctions%2F-1895570378" data-filterable-set=":app:dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":app:dokkaHtml/main" data-filterable-set=":app:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="get-user-information-use-case.html"><span>get</span><wbr></wbr><span>User</span><wbr></wbr><span>Information</span><wbr></wbr><span>Use</span><wbr></wbr><span><span>Case</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2111608315%2FFunctions%2F-1895570378"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":app:dokkaHtml/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="org.springframework.context.annotation/Bean///PointingToDeclaration/"><span class="token annotation builtin">Bean</span></span></div></div><span class="token keyword"></span><span class="token keyword">fun </span><a href="get-user-information-use-case.html"><span class="token function">getUserInformationUseCase</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="es.unizar.urlshortener.core.usecases/GetUserInformationUseCaseImpl///PointingToDeclaration/">GetUserInformationUseCaseImpl</span></div><div class="brief "><p class="paragraph">Provides an implementation of the GetUserInformationUseCase.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-115008130%2FFunctions%2F-1895570378" anchor-label="logClickUseCase" id="-115008130%2FFunctions%2F-1895570378" data-filterable-set=":app:dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":app:dokkaHtml/main" data-filterable-set=":app:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="log-click-use-case.html"><span>log</span><wbr></wbr><span>Click</span><wbr></wbr><span>Use</span><wbr></wbr><span><span>Case</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-115008130%2FFunctions%2F-1895570378"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":app:dokkaHtml/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="org.springframework.context.annotation/Bean///PointingToDeclaration/"><span class="token annotation builtin">Bean</span></span></div></div><span class="token keyword"></span><span class="token keyword">fun </span><a href="log-click-use-case.html"><span class="token function">logClickUseCase</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="es.unizar.urlshortener.core.usecases/LogClickUseCaseImpl///PointingToDeclaration/">LogClickUseCaseImpl</span></div><div class="brief "><p class="paragraph">Provides an implementation of the LogClickUseCase.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2070845622%2FFunctions%2F-1895570378" anchor-label="redirectUseCase" id="2070845622%2FFunctions%2F-1895570378" data-filterable-set=":app:dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":app:dokkaHtml/main" data-filterable-set=":app:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="redirect-use-case.html"><span>redirect</span><wbr></wbr><span>Use</span><wbr></wbr><span><span>Case</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2070845622%2FFunctions%2F-1895570378"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":app:dokkaHtml/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="org.springframework.context.annotation/Bean///PointingToDeclaration/"><span class="token annotation builtin">Bean</span></span></div></div><span class="token keyword"></span><span class="token keyword">fun </span><a href="redirect-use-case.html"><span class="token function">redirectUseCase</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="es.unizar.urlshortener.core.usecases/RedirectUseCaseImpl///PointingToDeclaration/">RedirectUseCaseImpl</span></div><div class="brief "><p class="paragraph">Provides an implementation of the RedirectUseCase.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1016820788%2FFunctions%2F-1895570378" anchor-label="storeQRUseCase" id="1016820788%2FFunctions%2F-1895570378" data-filterable-set=":app:dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":app:dokkaHtml/main" data-filterable-set=":app:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="store-q-r-use-case.html"><span>store</span><wbr></wbr><span>QRUse</span><wbr></wbr><span><span>Case</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1016820788%2FFunctions%2F-1895570378"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":app:dokkaHtml/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="org.springframework.context.annotation/Bean///PointingToDeclaration/"><span class="token annotation builtin">Bean</span></span></div></div><span class="token keyword"></span><span class="token keyword">fun </span><a href="store-q-r-use-case.html"><span class="token function">storeQRUseCase</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="es.unizar.urlshortener.core.usecases/StoreQRUseCaseImpl///PointingToDeclaration/">StoreQRUseCaseImpl</span></div><div class="brief "><p class="paragraph">Provides an implementation of the storeQRUseCase.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-342522758%2FFunctions%2F-1895570378" anchor-label="updateUrlBrandedUseCase" id="-342522758%2FFunctions%2F-1895570378" data-filterable-set=":app:dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":app:dokkaHtml/main" data-filterable-set=":app:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="update-url-branded-use-case.html"><span>update</span><wbr></wbr><span>Url</span><wbr></wbr><span>Branded</span><wbr></wbr><span>Use</span><wbr></wbr><span><span>Case</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-342522758%2FFunctions%2F-1895570378"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":app:dokkaHtml/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="org.springframework.context.annotation/Bean///PointingToDeclaration/"><span class="token annotation builtin">Bean</span></span></div></div><span class="token keyword"></span><span class="token keyword">fun </span><a href="update-url-branded-use-case.html"><span class="token function">updateUrlBrandedUseCase</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="es.unizar.urlshortener.core.usecases/UpdateUrlBrandedUseCaseImpl///PointingToDeclaration/">UpdateUrlBrandedUseCaseImpl</span></div><div class="brief "><p class="paragraph">Provides an implementation of the UpdateUrlBrandedUseCase.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1528757194%2FFunctions%2F-1895570378" anchor-label="updateUrlSafetyUseCase" id="1528757194%2FFunctions%2F-1895570378" data-filterable-set=":app:dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":app:dokkaHtml/main" data-filterable-set=":app:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="update-url-safety-use-case.html"><span>update</span><wbr></wbr><span>Url</span><wbr></wbr><span>Safety</span><wbr></wbr><span>Use</span><wbr></wbr><span><span>Case</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1528757194%2FFunctions%2F-1895570378"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":app:dokkaHtml/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="org.springframework.context.annotation/Bean///PointingToDeclaration/"><span class="token annotation builtin">Bean</span></span></div></div><span class="token keyword"></span><span class="token keyword">fun </span><a href="update-url-safety-use-case.html"><span class="token function">updateUrlSafetyUseCase</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="es.unizar.urlshortener.core.usecases/UpdateUrlSafetyUseCaseImpl///PointingToDeclaration/">UpdateUrlSafetyUseCaseImpl</span></div><div class="brief "><p class="paragraph">Provides an implementation of the UpdateUrlSafetyUseCase.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      <div class="footer">
+        <span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2024 Copyright</span><span
+                class="pull-right"><span>Generated by </span><a
+                href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span>
+      </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

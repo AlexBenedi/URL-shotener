@@ -29,6 +29,14 @@ dependencyManagement {
     }
 }
 
+configurations.all {
+    resolutionStrategy.eachDependency {
+        if (requested.group == "com.fasterxml.jackson.core") {
+            useVersion("2.13.5")
+        }
+    }
+}
+
 configurations.matching { it.name == "detekt" }.all {
     resolutionStrategy.eachDependency {
         // Ensure that all dependencies from the org.jetbrains.kotlin group use version 1.9.23

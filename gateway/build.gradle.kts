@@ -2,7 +2,7 @@ plugins {
     // Apply the common conventions plugin for the project
     id("urlshortener-common-conventions")
     id("org.sonarqube") version "6.0.1.5171"
-    id("jacoco")
+    id("jacoco") 
 
     // Apply the Spring Boot plugin but do not apply it immediately
     alias(libs.plugins.spring.boot) apply false
@@ -53,6 +53,13 @@ configurations.matching { it.name == "detekt" }.all {
     }
 }
 
+configurations.all {
+    resolutionStrategy.eachDependency {
+        if (requested.group == "com.fasterxml.jackson.core") {
+            useVersion("2.13.5")
+        }
+    }
+}
 
 jacoco{
     toolVersion = "0.8.7"

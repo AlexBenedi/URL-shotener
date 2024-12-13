@@ -1,0 +1,37 @@
+$dokka.format:html-v1
+$dokka.linkExtension:html
+$dokka.location:es.unizar.urlshortener.gateway////PointingToDeclaration/gateway/es.unizar.urlshortener.gateway/index.html
+$dokka.location:es.unizar.urlshortener.gateway/Entry///PointingToDeclaration/gateway/es.unizar.urlshortener.gateway/-entry/index.html
+$dokka.location:es.unizar.urlshortener.gateway/Entry/Entry/#kotlin.String?#kotlin.String?/PointingToDeclaration/gateway/es.unizar.urlshortener.gateway/-entry/-entry.html
+$dokka.location:es.unizar.urlshortener.gateway/Entry/key/#/PointingToDeclaration/gateway/es.unizar.urlshortener.gateway/-entry/key.html
+$dokka.location:es.unizar.urlshortener.gateway/Entry/value/#/PointingToDeclaration/gateway/es.unizar.urlshortener.gateway/-entry/value.html
+$dokka.location:es.unizar.urlshortener.gateway/GoogleSafeBrowsingClient///PointingToDeclaration/gateway/es.unizar.urlshortener.gateway/-google-safe-browsing-client/index.html
+$dokka.location:es.unizar.urlshortener.gateway/GoogleSafeBrowsingClient/GoogleSafeBrowsingClient/#org.springframework.web.client.RestTemplate?/PointingToDeclaration/gateway/es.unizar.urlshortener.gateway/-google-safe-browsing-client/-google-safe-browsing-client.html
+$dokka.location:es.unizar.urlshortener.gateway/GoogleSafeBrowsingClient/isUrlSafe/#kotlin.String/PointingToDeclaration/gateway/es.unizar.urlshortener.gateway/-google-safe-browsing-client/is-url-safe.html
+$dokka.location:es.unizar.urlshortener.gateway/GoogleSafeBrowsingResponse///PointingToDeclaration/gateway/es.unizar.urlshortener.gateway/-google-safe-browsing-response/index.html
+$dokka.location:es.unizar.urlshortener.gateway/GoogleSafeBrowsingResponse/GoogleSafeBrowsingResponse/#kotlin.collections.List[es.unizar.urlshortener.gateway.ThreatMatch]?/PointingToDeclaration/gateway/es.unizar.urlshortener.gateway/-google-safe-browsing-response/-google-safe-browsing-response.html
+$dokka.location:es.unizar.urlshortener.gateway/GoogleSafeBrowsingResponse/matches/#/PointingToDeclaration/gateway/es.unizar.urlshortener.gateway/-google-safe-browsing-response/matches.html
+$dokka.location:es.unizar.urlshortener.gateway/NinjaProfanityFilter///PointingToDeclaration/gateway/es.unizar.urlshortener.gateway/-ninja-profanity-filter/index.html
+$dokka.location:es.unizar.urlshortener.gateway/NinjaProfanityFilter/NinjaProfanityFilter/#org.springframework.web.client.RestTemplate?/PointingToDeclaration/gateway/es.unizar.urlshortener.gateway/-ninja-profanity-filter/-ninja-profanity-filter.html
+$dokka.location:es.unizar.urlshortener.gateway/NinjaProfanityFilter/isNameValid/#kotlin.String/PointingToDeclaration/gateway/es.unizar.urlshortener.gateway/-ninja-profanity-filter/is-name-valid.html
+$dokka.location:es.unizar.urlshortener.gateway/ResponseNinja///PointingToDeclaration/gateway/es.unizar.urlshortener.gateway/-response-ninja/index.html
+$dokka.location:es.unizar.urlshortener.gateway/ResponseNinja/ResponseNinja/#kotlin.String?#kotlin.String?#kotlin.Boolean?/PointingToDeclaration/gateway/es.unizar.urlshortener.gateway/-response-ninja/-response-ninja.html
+$dokka.location:es.unizar.urlshortener.gateway/ResponseNinja/censored/#/PointingToDeclaration/gateway/es.unizar.urlshortener.gateway/-response-ninja/censored.html
+$dokka.location:es.unizar.urlshortener.gateway/ResponseNinja/hasProfanity/#/PointingToDeclaration/gateway/es.unizar.urlshortener.gateway/-response-ninja/has-profanity.html
+$dokka.location:es.unizar.urlshortener.gateway/ResponseNinja/original/#/PointingToDeclaration/gateway/es.unizar.urlshortener.gateway/-response-ninja/original.html
+$dokka.location:es.unizar.urlshortener.gateway/ThreatEntryMetadata///PointingToDeclaration/gateway/es.unizar.urlshortener.gateway/-threat-entry-metadata/index.html
+$dokka.location:es.unizar.urlshortener.gateway/ThreatEntryMetadata/ThreatEntryMetadata/#kotlin.collections.List[es.unizar.urlshortener.gateway.Entry]?/PointingToDeclaration/gateway/es.unizar.urlshortener.gateway/-threat-entry-metadata/-threat-entry-metadata.html
+$dokka.location:es.unizar.urlshortener.gateway/ThreatEntryMetadata/entries/#/PointingToDeclaration/gateway/es.unizar.urlshortener.gateway/-threat-entry-metadata/entries.html
+$dokka.location:es.unizar.urlshortener.gateway/ThreatInfo///PointingToDeclaration/gateway/es.unizar.urlshortener.gateway/-threat-info/index.html
+$dokka.location:es.unizar.urlshortener.gateway/ThreatInfo/ThreatInfo/#kotlin.String?/PointingToDeclaration/gateway/es.unizar.urlshortener.gateway/-threat-info/-threat-info.html
+$dokka.location:es.unizar.urlshortener.gateway/ThreatInfo/url/#/PointingToDeclaration/gateway/es.unizar.urlshortener.gateway/-threat-info/url.html
+$dokka.location:es.unizar.urlshortener.gateway/ThreatMatch///PointingToDeclaration/gateway/es.unizar.urlshortener.gateway/-threat-match/index.html
+$dokka.location:es.unizar.urlshortener.gateway/ThreatMatch/ThreatMatch/#kotlin.String?#kotlin.String?#kotlin.String?#es.unizar.urlshortener.gateway.ThreatInfo?#es.unizar.urlshortener.gateway.ThreatEntryMetadata?#kotlin.String?/PointingToDeclaration/gateway/es.unizar.urlshortener.gateway/-threat-match/-threat-match.html
+$dokka.location:es.unizar.urlshortener.gateway/ThreatMatch/cacheDuration/#/PointingToDeclaration/gateway/es.unizar.urlshortener.gateway/-threat-match/cache-duration.html
+$dokka.location:es.unizar.urlshortener.gateway/ThreatMatch/platformType/#/PointingToDeclaration/gateway/es.unizar.urlshortener.gateway/-threat-match/platform-type.html
+$dokka.location:es.unizar.urlshortener.gateway/ThreatMatch/threat/#/PointingToDeclaration/gateway/es.unizar.urlshortener.gateway/-threat-match/threat.html
+$dokka.location:es.unizar.urlshortener.gateway/ThreatMatch/threatEntryMetadata/#/PointingToDeclaration/gateway/es.unizar.urlshortener.gateway/-threat-match/threat-entry-metadata.html
+$dokka.location:es.unizar.urlshortener.gateway/ThreatMatch/threatEntryType/#/PointingToDeclaration/gateway/es.unizar.urlshortener.gateway/-threat-match/threat-entry-type.html
+$dokka.location:es.unizar.urlshortener.gateway/ThreatMatch/threatType/#/PointingToDeclaration/gateway/es.unizar.urlshortener.gateway/-threat-match/threat-type.html
+es.unizar.urlshortener.gateway
+

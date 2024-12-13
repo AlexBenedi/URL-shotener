@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html class="no-js">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>ShortUrl</title>
+    <link href="../../../images/logo-icon.svg" rel="icon" type="image/svg">
+    <script>var pathToRoot = "../../../";</script>
+    <script>document.documentElement.classList.replace("no-js","js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+    if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    } else {
+        const savedDarkMode = JSON.parse(storage)
+        if(savedDarkMode === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    }
+    </script>
+<script type="text/javascript" src="https://unpkg.com/kotlin-playground@1/dist/playground.min.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async="async"></script>
+<link href="../../../styles/style.css" rel="Stylesheet">
+<link href="../../../styles/main.css" rel="Stylesheet">
+<link href="../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../../styles/font-jb-sans-auto.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../scripts/clipboard.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/navigation-loader.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/platform-content-handler.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/main.js" defer="defer"></script>
+<script type="text/javascript" src="../../../scripts/prism.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/symbol-parameters-wrapper_deferred.js" defer="defer"></script>
+</head>
+<body>
+    <div class="root">
+<nav class="navigation" id="navigation-wrapper">
+    <div class="navigation--inner">
+        <div class="navigation-title">
+            <button class="menu-toggle" id="menu-toggle" type="button">toggle menu</button>
+            <div class="library-name">
+                    <a class="library-name--link" href="../../../index.html">
+                            core
+                    </a>
+            </div>
+            <div class="library-version">
+0.2024.1-SNAPSHOT            </div>
+        </div>
+        <div class="filter-section" id="filter-section">
+                <button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":core:dokkaHtml/main">jvm</button>
+        </div>
+    </div>
+    <div class="navigation-controls">
+        <button class="navigation-controls--btn navigation-controls--theme" id="theme-toggle-button" type="button">switch theme</button>
+        <div class="navigation-controls--btn navigation-controls--search" id="searchBar" role="button">search in API</div>
+    </div>
+</nav>
+        <div id="container">
+            <div class="sidebar" id="leftColumn">
+                <div class="sidebar--inner" id="sideMenu"></div>
+            </div>
+            <div id="main">
+<div class="main-content" data-page-type="classlike" id="content" pageIds="core::es.unizar.urlshortener.core/ShortUrl///PointingToDeclaration//-121426938">
+  <div class="breadcrumbs"><a href="../../../index.html">core</a><span class="delimiter">/</span><a href="../index.html">es.unizar.urlshortener.core</a><span class="delimiter">/</span><span class="current">ShortUrl</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span>Short</span><wbr></wbr><span><span>Url</span></span></h1>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">class </span><a href="index.html">ShortUrl</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>hash<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>redirection<span class="token operator">: </span><a href="../-redirection/index.html">Redirection</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>created<span class="token operator">: </span><a href="https://docs.oracle.com/javase/8/docs/api/java/time/OffsetDateTime.html">OffsetDateTime</a><span class="token operator"> = </span>OffsetDateTime.now()<span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>properties<span class="token operator">: </span><a href="../-short-url-properties/index.html">ShortUrlProperties</a><span class="token operator"> = </span>ShortUrlProperties()<span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">var </span>qrCode<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token operator"> = </span>null</span></span><span class="token punctuation">)</span></div><p class="paragraph">A <a href="index.html">ShortUrl</a> is the mapping between a remote url identified by <a href="redirection.html">redirection</a> and a local short url identified by <a href="hash.html">hash</a>.</p></div></div>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="CONSTRUCTOR">
+        <h2 class="">Constructors</h2>
+        <div class="table"><a data-name="-1858199220%2FConstructors%2F-121426938" anchor-label="ShortUrl" id="-1858199220%2FConstructors%2F-121426938" data-filterable-set=":core:dokkaHtml/main"></a>
+          <div class="table-row" data-togglable="CONSTRUCTOR" data-filterable-current=":core:dokkaHtml/main" data-filterable-set=":core:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-short-url.html"><span>Short</span><wbr></wbr><span><span>Url</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1858199220%2FConstructors%2F-121426938"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">hash<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">redirection<span class="token operator">: </span><a href="../-redirection/index.html">Redirection</a><span class="token punctuation">, </span></span><span class="parameter ">created<span class="token operator">: </span><a href="https://docs.oracle.com/javase/8/docs/api/java/time/OffsetDateTime.html">OffsetDateTime</a><span class="token operator"> = </span>OffsetDateTime.now()<span class="token punctuation">, </span></span><span class="parameter ">properties<span class="token operator">: </span><a href="../-short-url-properties/index.html">ShortUrlProperties</a><span class="token operator"> = </span>ShortUrlProperties()<span class="token punctuation">, </span></span><span class="parameter ">qrCode<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token operator"> = </span>null</span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="PROPERTY">
+        <h2 class="">Properties</h2>
+        <div class="table"><a data-name="-1742743591%2FProperties%2F-121426938" anchor-label="created" id="-1742743591%2FProperties%2F-121426938" data-filterable-set=":core:dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":core:dokkaHtml/main" data-filterable-set=":core:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="created.html"><span><span>created</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1742743591%2FProperties%2F-121426938"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="created.html">created</a><span class="token operator">: </span><a href="https://docs.oracle.com/javase/8/docs/api/java/time/OffsetDateTime.html">OffsetDateTime</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1190874859%2FProperties%2F-121426938" anchor-label="hash" id="1190874859%2FProperties%2F-121426938" data-filterable-set=":core:dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":core:dokkaHtml/main" data-filterable-set=":core:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="hash.html"><span><span>hash</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1190874859%2FProperties%2F-121426938"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="hash.html">hash</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-134629018%2FProperties%2F-121426938" anchor-label="properties" id="-134629018%2FProperties%2F-121426938" data-filterable-set=":core:dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":core:dokkaHtml/main" data-filterable-set=":core:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="properties.html"><span><span>properties</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-134629018%2FProperties%2F-121426938"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="properties.html">properties</a><span class="token operator">: </span><a href="../-short-url-properties/index.html">ShortUrlProperties</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1233673547%2FProperties%2F-121426938" anchor-label="qrCode" id="1233673547%2FProperties%2F-121426938" data-filterable-set=":core:dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":core:dokkaHtml/main" data-filterable-set=":core:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="qr-code.html"><span>qr</span><wbr></wbr><span><span>Code</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1233673547%2FProperties%2F-121426938"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">var </span><a href="qr-code.html">qrCode</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1831564949%2FProperties%2F-121426938" anchor-label="redirection" id="1831564949%2FProperties%2F-121426938" data-filterable-set=":core:dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":core:dokkaHtml/main" data-filterable-set=":core:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="redirection.html"><span><span>redirection</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1831564949%2FProperties%2F-121426938"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="redirection.html">redirection</a><span class="token operator">: </span><a href="../-redirection/index.html">Redirection</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="FUNCTION">
+        <h2 class="">Functions</h2>
+        <div class="table"><a data-name="1195448206%2FFunctions%2F-121426938" anchor-label="generateQRCode" id="1195448206%2FFunctions%2F-121426938" data-filterable-set=":core:dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":core:dokkaHtml/main" data-filterable-set=":core:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="generate-q-r-code.html"><span>generate</span><wbr></wbr><span><span>QRCode</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1195448206%2FFunctions%2F-121426938"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="generate-q-r-code.html"><span class="token function">generateQRCode</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">outputFilePath<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Generates a QR code image for this ShortUrl and saves it to the specified output path.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      <div class="footer">
+        <span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2024 Copyright</span><span
+                class="pull-right"><span>Generated by </span><a
+                href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span>
+      </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

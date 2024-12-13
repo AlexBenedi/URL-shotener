@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html class="no-js">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>es.unizar.urlshortener.core.usecases</title>
+    <link href="../../images/logo-icon.svg" rel="icon" type="image/svg">
+    <script>var pathToRoot = "../../";</script>
+    <script>document.documentElement.classList.replace("no-js","js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+    if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    } else {
+        const savedDarkMode = JSON.parse(storage)
+        if(savedDarkMode === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    }
+    </script>
+<script type="text/javascript" src="https://unpkg.com/kotlin-playground@1/dist/playground.min.js" async="async"></script>
+<script type="text/javascript" src="../../scripts/sourceset_dependencies.js" async="async"></script>
+<link href="../../styles/style.css" rel="Stylesheet">
+<link href="../../styles/main.css" rel="Stylesheet">
+<link href="../../styles/prism.css" rel="Stylesheet">
+<link href="../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../styles/font-jb-sans-auto.css" rel="Stylesheet">
+<script type="text/javascript" src="../../scripts/clipboard.js" async="async"></script>
+<script type="text/javascript" src="../../scripts/navigation-loader.js" async="async"></script>
+<script type="text/javascript" src="../../scripts/platform-content-handler.js" async="async"></script>
+<script type="text/javascript" src="../../scripts/main.js" defer="defer"></script>
+<script type="text/javascript" src="../../scripts/prism.js" async="async"></script>
+<script type="text/javascript" src="../../scripts/symbol-parameters-wrapper_deferred.js" defer="defer"></script>
+</head>
+<body>
+    <div class="root">
+<nav class="navigation" id="navigation-wrapper">
+    <div class="navigation--inner">
+        <div class="navigation-title">
+            <button class="menu-toggle" id="menu-toggle" type="button">toggle menu</button>
+            <div class="library-name">
+                    <a class="library-name--link" href="../../index.html">
+                            core
+                    </a>
+            </div>
+            <div class="library-version">
+0.2024.1-SNAPSHOT            </div>
+        </div>
+        <div class="filter-section" id="filter-section">
+                <button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":core:dokkaHtml/main">jvm</button>
+        </div>
+    </div>
+    <div class="navigation-controls">
+        <button class="navigation-controls--btn navigation-controls--theme" id="theme-toggle-button" type="button">switch theme</button>
+        <div class="navigation-controls--btn navigation-controls--search" id="searchBar" role="button">search in API</div>
+    </div>
+</nav>
+        <div id="container">
+            <div class="sidebar" id="leftColumn">
+                <div class="sidebar--inner" id="sideMenu"></div>
+            </div>
+            <div id="main">
+<div class="main-content" data-page-type="package" id="content" pageIds="core::es.unizar.urlshortener.core.usecases////PointingToDeclaration//-121426938">
+  <div class="breadcrumbs"><a href="../../index.html">core</a><span class="delimiter">/</span><span class="current">es.unizar.urlshortener.core.usecases</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span><span>Package-level</span></span> <span><span>declarations</span></span></h1>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="TYPE">Types</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="TYPE">
+        <h2 class="">Types</h2>
+        <div class="table"><a data-name="-1344799803%2FClasslikes%2F-121426938" anchor-label="CreateShortUrlUseCase" id="-1344799803%2FClasslikes%2F-121426938" data-filterable-set=":core:dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":core:dokkaHtml/main" data-filterable-set=":core:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-create-short-url-use-case/index.html"><span>Create</span><wbr></wbr><span>Short</span><wbr></wbr><span>Url</span><wbr></wbr><span>Use</span><wbr></wbr><span><span>Case</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1344799803%2FClasslikes%2F-121426938"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">interface </span><a href="-create-short-url-use-case/index.html">CreateShortUrlUseCase</a></div><div class="brief "><p class="paragraph">Given an url returns the key that is used to create a short URL. When the url is created optional data may be added.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="982631301%2FClasslikes%2F-121426938" anchor-label="CreateShortUrlUseCaseImpl" id="982631301%2FClasslikes%2F-121426938" data-filterable-set=":core:dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":core:dokkaHtml/main" data-filterable-set=":core:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-create-short-url-use-case-impl/index.html"><span>Create</span><wbr></wbr><span>Short</span><wbr></wbr><span>Url</span><wbr></wbr><span>Use</span><wbr></wbr><span>Case</span><wbr></wbr><span><span>Impl</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="982631301%2FClasslikes%2F-121426938"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-create-short-url-use-case-impl/index.html">CreateShortUrlUseCaseImpl</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">shortUrlRepository<span class="token operator">: </span><a href="../es.unizar.urlshortener.core/-short-url-repository-service/index.html">ShortUrlRepositoryService</a><span class="token punctuation">, </span></span><span class="parameter ">validatorService<span class="token operator">: </span><a href="../es.unizar.urlshortener.core/-validator-service/index.html">ValidatorService</a><span class="token punctuation">, </span></span><span class="parameter ">hashService<span class="token operator">: </span><a href="../es.unizar.urlshortener.core/-hash-service/index.html">HashService</a><span class="token punctuation">, </span></span><span class="parameter ">safetyService<span class="token operator">: </span><a href="../es.unizar.urlshortener.core/-safety-service/index.html">SafetyService</a><span class="token punctuation">, </span></span><span class="parameter ">brandedService<span class="token operator">: </span><a href="../es.unizar.urlshortener.core/-branded-service/index.html">BrandedService</a><span class="token punctuation">, </span></span><span class="parameter ">qrService<span class="token operator">: </span><a href="../es.unizar.urlshortener.core/-qr-service/index.html">QrService</a></span></span><span class="token punctuation">)</span> : <a href="-create-short-url-use-case/index.html">CreateShortUrlUseCase</a></div><div class="brief "><p class="paragraph">Implementation of <a href="-create-short-url-use-case/index.html">CreateShortUrlUseCase</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1768294534%2FClasslikes%2F-121426938" anchor-label="DeleteUserLinkUseCase" id="1768294534%2FClasslikes%2F-121426938" data-filterable-set=":core:dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":core:dokkaHtml/main" data-filterable-set=":core:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-delete-user-link-use-case/index.html"><span>Delete</span><wbr></wbr><span>User</span><wbr></wbr><span>Link</span><wbr></wbr><span>Use</span><wbr></wbr><span><span>Case</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1768294534%2FClasslikes%2F-121426938"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">interface </span><a href="-delete-user-link-use-case/index.html">DeleteUserLinkUseCase</a></div><div class="brief "><p class="paragraph">Given an url returns the key that is used to create a short URL. When the url is created optional data may be added.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="819562438%2FClasslikes%2F-121426938" anchor-label="DeleteUserLinkUseCaseImpl" id="819562438%2FClasslikes%2F-121426938" data-filterable-set=":core:dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":core:dokkaHtml/main" data-filterable-set=":core:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-delete-user-link-use-case-impl/index.html"><span>Delete</span><wbr></wbr><span>User</span><wbr></wbr><span>Link</span><wbr></wbr><span>Use</span><wbr></wbr><span>Case</span><wbr></wbr><span><span>Impl</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="819562438%2FClasslikes%2F-121426938"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-delete-user-link-use-case-impl/index.html">DeleteUserLinkUseCaseImpl</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">linkRepository<span class="token operator">: </span><a href="../es.unizar.urlshortener.core/-link-repository-service/index.html">LinkRepositoryService</a></span></span><span class="token punctuation">)</span> : <a href="-delete-user-link-use-case/index.html">DeleteUserLinkUseCase</a></div><div class="brief "><p class="paragraph">Implementation of <a href="-get-user-information-use-case/index.html">GetUserInformationUseCase</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1443748025%2FClasslikes%2F-121426938" anchor-label="GenerateQRCodeUseCase" id="1443748025%2FClasslikes%2F-121426938" data-filterable-set=":core:dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":core:dokkaHtml/main" data-filterable-set=":core:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-generate-q-r-code-use-case/index.html"><span>Generate</span><wbr></wbr><span>QRCode</span><wbr></wbr><span>Use</span><wbr></wbr><span><span>Case</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1443748025%2FClasslikes%2F-121426938"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">interface </span><a href="-generate-q-r-code-use-case/index.html">GenerateQRCodeUseCase</a></div><div class="brief "><p class="paragraph">Interface to generate a QR code for a given URL.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-404224391%2FClasslikes%2F-121426938" anchor-label="GenerateQRCodeUseCaseImpl" id="-404224391%2FClasslikes%2F-121426938" data-filterable-set=":core:dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":core:dokkaHtml/main" data-filterable-set=":core:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-generate-q-r-code-use-case-impl/index.html"><span>Generate</span><wbr></wbr><span>QRCode</span><wbr></wbr><span>Use</span><wbr></wbr><span>Case</span><wbr></wbr><span><span>Impl</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-404224391%2FClasslikes%2F-121426938"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-generate-q-r-code-use-case-impl/index.html">GenerateQRCodeUseCaseImpl</a> : <a href="-generate-q-r-code-use-case/index.html">GenerateQRCodeUseCase</a></div><div class="brief "><p class="paragraph">Implementation of <a href="-generate-q-r-code-use-case/index.html">GenerateQRCodeUseCase</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1260897153%2FClasslikes%2F-121426938" anchor-label="GetUserInformationUseCase" id="1260897153%2FClasslikes%2F-121426938" data-filterable-set=":core:dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":core:dokkaHtml/main" data-filterable-set=":core:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-get-user-information-use-case/index.html"><span>Get</span><wbr></wbr><span>User</span><wbr></wbr><span>Information</span><wbr></wbr><span>Use</span><wbr></wbr><span><span>Case</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1260897153%2FClasslikes%2F-121426938"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">interface </span><a href="-get-user-information-use-case/index.html">GetUserInformationUseCase</a></div><div class="brief "><p class="paragraph">Given an url returns the key that is used to create a short URL. When the url is created optional data may be added.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1795207871%2FClasslikes%2F-121426938" anchor-label="GetUserInformationUseCaseImpl" id="-1795207871%2FClasslikes%2F-121426938" data-filterable-set=":core:dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":core:dokkaHtml/main" data-filterable-set=":core:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-get-user-information-use-case-impl/index.html"><span>Get</span><wbr></wbr><span>User</span><wbr></wbr><span>Information</span><wbr></wbr><span>Use</span><wbr></wbr><span>Case</span><wbr></wbr><span><span>Impl</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1795207871%2FClasslikes%2F-121426938"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-get-user-information-use-case-impl/index.html">GetUserInformationUseCaseImpl</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">userRepository<span class="token operator">: </span><a href="../es.unizar.urlshortener.core/-user-repository-service/index.html">UserRepositoryService</a><span class="token punctuation">, </span></span><span class="parameter ">linkRepository<span class="token operator">: </span><a href="../es.unizar.urlshortener.core/-link-repository-service/index.html">LinkRepositoryService</a><span class="token punctuation">, </span></span><span class="parameter ">brandedService<span class="token operator">: </span><a href="../es.unizar.urlshortener.core/-branded-service/index.html">BrandedService</a></span></span><span class="token punctuation">)</span> : <a href="-get-user-information-use-case/index.html">GetUserInformationUseCase</a></div><div class="brief "><p class="paragraph">Implementation of <a href="-get-user-information-use-case/index.html">GetUserInformationUseCase</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1229643526%2FClasslikes%2F-121426938" anchor-label="LogClickUseCase" id="-1229643526%2FClasslikes%2F-121426938" data-filterable-set=":core:dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":core:dokkaHtml/main" data-filterable-set=":core:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-log-click-use-case/index.html"><span>Log</span><wbr></wbr><span>Click</span><wbr></wbr><span>Use</span><wbr></wbr><span><span>Case</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1229643526%2FClasslikes%2F-121426938"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">interface </span><a href="-log-click-use-case/index.html">LogClickUseCase</a></div><div class="brief "><p class="paragraph">Log that somebody has requested the redirection identified by a key.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1757460934%2FClasslikes%2F-121426938" anchor-label="LogClickUseCaseImpl" id="-1757460934%2FClasslikes%2F-121426938" data-filterable-set=":core:dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":core:dokkaHtml/main" data-filterable-set=":core:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-log-click-use-case-impl/index.html"><span>Log</span><wbr></wbr><span>Click</span><wbr></wbr><span>Use</span><wbr></wbr><span>Case</span><wbr></wbr><span><span>Impl</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1757460934%2FClasslikes%2F-121426938"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-log-click-use-case-impl/index.html">LogClickUseCaseImpl</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">clickRepository<span class="token operator">: </span><a href="../es.unizar.urlshortener.core/-click-repository-service/index.html">ClickRepositoryService</a></span></span><span class="token punctuation">)</span> : <a href="-log-click-use-case/index.html">LogClickUseCase</a></div><div class="brief "><p class="paragraph">Implementation of <a href="-log-click-use-case/index.html">LogClickUseCase</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="956210226%2FClasslikes%2F-121426938" anchor-label="RedirectUseCase" id="956210226%2FClasslikes%2F-121426938" data-filterable-set=":core:dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":core:dokkaHtml/main" data-filterable-set=":core:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-redirect-use-case/index.html"><span>Redirect</span><wbr></wbr><span>Use</span><wbr></wbr><span><span>Case</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="956210226%2FClasslikes%2F-121426938"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">interface </span><a href="-redirect-use-case/index.html">RedirectUseCase</a></div><div class="brief "><p class="paragraph">Given a key returns a <a href="../es.unizar.urlshortener.core/-redirection/index.html">Redirection</a> that contains a <a href="../es.unizar.urlshortener.core/-redirection/target.html">URI target</a> and an <a href="../es.unizar.urlshortener.core/-redirection/mode.html">HTTP redirection mode</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1788320398%2FClasslikes%2F-121426938" anchor-label="RedirectUseCaseImpl" id="-1788320398%2FClasslikes%2F-121426938" data-filterable-set=":core:dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":core:dokkaHtml/main" data-filterable-set=":core:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-redirect-use-case-impl/index.html"><span>Redirect</span><wbr></wbr><span>Use</span><wbr></wbr><span>Case</span><wbr></wbr><span><span>Impl</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1788320398%2FClasslikes%2F-121426938"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-redirect-use-case-impl/index.html">RedirectUseCaseImpl</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">shortUrlRepository<span class="token operator">: </span><a href="../es.unizar.urlshortener.core/-short-url-repository-service/index.html">ShortUrlRepositoryService</a></span></span><span class="token punctuation">)</span> : <a href="-redirect-use-case/index.html">RedirectUseCase</a></div><div class="brief "><p class="paragraph">Implementation of <a href="-redirect-use-case/index.html">RedirectUseCase</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1321298784%2FClasslikes%2F-121426938" anchor-label="StoreQRUseCase" id="-1321298784%2FClasslikes%2F-121426938" data-filterable-set=":core:dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":core:dokkaHtml/main" data-filterable-set=":core:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-store-q-r-use-case/index.html"><span>Store</span><wbr></wbr><span>QRUse</span><wbr></wbr><span><span>Case</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1321298784%2FClasslikes%2F-121426938"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">interface </span><a href="-store-q-r-use-case/index.html">StoreQRUseCase</a></div><div class="brief "><p class="paragraph">Given an url and a <a href="../es.unizar.urlshortener.core/-q-r-code/index.html">QRCode</a> updates the state of the short URL.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2097514784%2FClasslikes%2F-121426938" anchor-label="StoreQRUseCaseImpl" id="-2097514784%2FClasslikes%2F-121426938" data-filterable-set=":core:dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":core:dokkaHtml/main" data-filterable-set=":core:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-store-q-r-use-case-impl/index.html"><span>Store</span><wbr></wbr><span>QRUse</span><wbr></wbr><span>Case</span><wbr></wbr><span><span>Impl</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2097514784%2FClasslikes%2F-121426938"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-store-q-r-use-case-impl/index.html">StoreQRUseCaseImpl</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">shortUrlRepository<span class="token operator">: </span><a href="../es.unizar.urlshortener.core/-short-url-repository-service/index.html">ShortUrlRepositoryService</a></span></span><span class="token punctuation">)</span> : <a href="-store-q-r-use-case/index.html">StoreQRUseCase</a></div><div class="brief "><p class="paragraph">Implementation of <a href="-update-url-branded-use-case/index.html">UpdateUrlBrandedUseCase</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="627572726%2FClasslikes%2F-121426938" anchor-label="UpdateUrlBrandedUseCase" id="627572726%2FClasslikes%2F-121426938" data-filterable-set=":core:dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":core:dokkaHtml/main" data-filterable-set=":core:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-update-url-branded-use-case/index.html"><span>Update</span><wbr></wbr><span>Url</span><wbr></wbr><span>Branded</span><wbr></wbr><span>Use</span><wbr></wbr><span><span>Case</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="627572726%2FClasslikes%2F-121426938"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">interface </span><a href="-update-url-branded-use-case/index.html">UpdateUrlBrandedUseCase</a></div><div class="brief "><p class="paragraph">Given an url and a BrandedState updates the state of the short Branded URL.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1556986058%2FClasslikes%2F-121426938" anchor-label="UpdateUrlBrandedUseCaseImpl" id="-1556986058%2FClasslikes%2F-121426938" data-filterable-set=":core:dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":core:dokkaHtml/main" data-filterable-set=":core:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-update-url-branded-use-case-impl/index.html"><span>Update</span><wbr></wbr><span>Url</span><wbr></wbr><span>Branded</span><wbr></wbr><span>Use</span><wbr></wbr><span>Case</span><wbr></wbr><span><span>Impl</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1556986058%2FClasslikes%2F-121426938"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-update-url-branded-use-case-impl/index.html">UpdateUrlBrandedUseCaseImpl</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">shortUrlRepository<span class="token operator">: </span><a href="../es.unizar.urlshortener.core/-short-url-repository-service/index.html">ShortUrlRepositoryService</a></span></span><span class="token punctuation">)</span> : <a href="-update-url-branded-use-case/index.html">UpdateUrlBrandedUseCase</a></div><div class="brief "><p class="paragraph">Implementation of <a href="-update-url-branded-use-case/index.html">UpdateUrlBrandedUseCase</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="89170998%2FClasslikes%2F-121426938" anchor-label="UpdateUrlSafetyUseCase" id="89170998%2FClasslikes%2F-121426938" data-filterable-set=":core:dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":core:dokkaHtml/main" data-filterable-set=":core:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-update-url-safety-use-case/index.html"><span>Update</span><wbr></wbr><span>Url</span><wbr></wbr><span>Safety</span><wbr></wbr><span>Use</span><wbr></wbr><span><span>Case</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="89170998%2FClasslikes%2F-121426938"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">interface </span><a href="-update-url-safety-use-case/index.html">UpdateUrlSafetyUseCase</a></div><div class="brief "><p class="paragraph">Given an url and a <a href="../es.unizar.urlshortener.core/-url-safety-response/index.html">UrlSafetyResponse</a> updates the safety of the short URL.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1504627574%2FClasslikes%2F-121426938" anchor-label="UpdateUrlSafetyUseCaseImpl" id="1504627574%2FClasslikes%2F-121426938" data-filterable-set=":core:dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":core:dokkaHtml/main" data-filterable-set=":core:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-update-url-safety-use-case-impl/index.html"><span>Update</span><wbr></wbr><span>Url</span><wbr></wbr><span>Safety</span><wbr></wbr><span>Use</span><wbr></wbr><span>Case</span><wbr></wbr><span><span>Impl</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1504627574%2FClasslikes%2F-121426938"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-update-url-safety-use-case-impl/index.html">UpdateUrlSafetyUseCaseImpl</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">shortUrlRepository<span class="token operator">: </span><a href="../es.unizar.urlshortener.core/-short-url-repository-service/index.html">ShortUrlRepositoryService</a></span></span><span class="token punctuation">)</span> : <a href="-update-url-safety-use-case/index.html">UpdateUrlSafetyUseCase</a></div><div class="brief "><p class="paragraph">Implementation of <a href="-update-url-safety-use-case/index.html">UpdateUrlSafetyUseCase</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      <div class="footer">
+        <span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2024 Copyright</span><span
+                class="pull-right"><span>Generated by </span><a
+                href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span>
+      </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
