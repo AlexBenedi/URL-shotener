@@ -7,6 +7,7 @@ import es.unizar.urlshortener.core.UrlSafetyResponse
 import es.unizar.urlshortener.core.UrlSafetyPetition
 import es.unizar.urlshortener.core.UrlSafetyChecked
 import es.unizar.urlshortener.core.usecases.StoreQRUseCase
+import es.unizar.urlshortener.core.QRCode
 import es.unizar.urlshortener.core.usecases.GenerateQRCodeUseCase
 import es.unizar.urlshortener.core.usecases.UpdateUrlBrandedUseCase
 import es.unizar.urlshortener.springbootkafkaexample.service.KafkaConsumerService
@@ -19,12 +20,15 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.mockito.ArgumentCaptor
 import org.mockito.Mockito.*
+import org.mockito.MockedConstruction
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.kafka.core.KafkaTemplate
 import es.unizar.urlshortener.core.WebSocketsService
+import es.unizar.urlshortener.websockets.MyWebSocketClient
 import java.util.concurrent.TimeUnit
+import java.net.URI
 
 @SpringBootTest(classes=[KafkaProducerService::class, KafkaConsumerService::class])
 class KafkaServiceTest {
@@ -54,7 +58,7 @@ class KafkaServiceTest {
     private lateinit var kafkaProducerService: KafkaProducerService
 
     @Autowired
-    private lateinit var kafkaConsumerService: KafkaConsumerService
+    private lateinit var kafkaConsumerService: KafkaConsumerService 
 
     @BeforeEach
     fun setUp() {
@@ -141,5 +145,73 @@ class KafkaServiceTest {
         assertEquals(1, timesKafkaCheck)
         assertEquals(1, timesKafkaCheked)
         verify(googleSafeBrowsingClient, times(1)).isUrlSafe(message.url)
+    }
+
+
+    @Test
+    fun `branded link creation process works`() {
+        // Arrange
+        val topic = "branded"
+        val message = "exampleBrand"
+        val profanityResponse = true
+        var timesKafka = 0
+
+        `when`(ninjaProfanityFilter.isNameValid(message)).thenReturn(profanityResponse)
+
+        // when a message is sent to branded Kafka, we call 'consumeBranded'
+        doAnswer {
+            kafkaConsumerService.consumeBranded(message)
+            timesKafka++
+            null
+        }.`when`(kafkaTemplate).send(eq(topic), eq(message))
+
+        // Act
+        kafkaTemplate.send(topic, message)
+
+        // Assert
+        assertEquals(1, timesKafka)
+        verify(ninjaProfanityFilter, times(1)).isNameValid(message)
+    }
+
+    @Test
+    fun `QR creation process works`() {
+        // Arrange
+        var timesKafka = 0;
+        val topic = "qr"
+        val message = """{"url":"http://www.example.com","id":"example","userId":"0:0:0:0:0:0:0:1"}"""
+        val qrCode = "base64QRCode"
+        val serverUri = URI("ws://localhost:8080/ws-endpoint")
+        val webSocketMessage = """{"userId":"0:0:0:0:0:0:0:1","content":"[\"example\",\"base64QRCode\"]"}"""
+
+        `when`(generateQRCodeUseCase.generateQRCode("http://localhost:8080/example"))
+                                                    .thenReturn(QRCode(base64Image = qrCode,
+                                                                       url = "http://localhost:8080/example",
+                                                                       size = 250
+                                                                       )
+                                                                )
+        val mockedConstruction: MockedConstruction<MyWebSocketClient> 
+                = mockConstruction(MyWebSocketClient::class.java) 
+                    { mock, context ->
+                        `when`(mock.connectBlocking()).thenReturn(true)
+                        doNothing().`when`(mock).send(any(String::class.java))
+                        doNothing().`when`(mock).close()
+                    }
+
+        doAnswer {
+            kafkaConsumerService.consumeQr(message)
+            timesKafka++
+            null
+        }.`when`(kafkaTemplate).send(eq(topic), eq(message))
+
+        // Act
+        kafkaTemplate.send(topic, message)
+
+        // Assert
+        assertEquals(1, timesKafka)
+        verify(generateQRCodeUseCase, times(1)).generateQRCode("http://localhost:8080/example")
+        verify(storeQRUseCase, times(1)).storeQR("example", qrCode)
+        verify(mockedConstruction.constructed().first(), times(1)).connectBlocking()
+        verify(mockedConstruction.constructed().first(), times(1)).send(any(String::class.java))
+        verify(mockedConstruction.constructed().first(), times(1)).close()
     }
 }
