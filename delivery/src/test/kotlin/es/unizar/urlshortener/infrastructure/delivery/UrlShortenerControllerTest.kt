@@ -131,6 +131,16 @@ class UrlShortenerControllerTest {
             .andExpect(jsonPath("$.length()").value(0)) // Verifica que la lista está vacía
     }
 
+    @Test
+    fun `should return unauthorized when token is null`() {
+        // Realizamos la solicitud al endpoint "/user" sin enviar un token
+        mockMvc.perform(get("/user"))
+            .andExpect(status().isUnauthorized) // Verificamos que devuelve 401 Unauthorized
+    }
+
+
+
+
     /**
      * Test that verifies that we can`t access the user page without authentication.
      */

@@ -55,7 +55,7 @@ interface UrlShortenerController {
      * @param tocken the user information
      * @return the user information
      */
-    fun user(token: OAuth2AuthenticationToken): ResponseEntity<String>
+    fun user(token: OAuth2AuthenticationToken?): ResponseEntity<String>
 
     /**
      * Retrieves the QR code image associated with a short URL identified by its [id].
@@ -355,12 +355,15 @@ class UrlShortenerControllerImpl(
      */
     @GetMapping("/user")
     @ResponseBody
-    override fun user(token: OAuth2AuthenticationToken): ResponseEntity<String> {
+    override fun user(token: OAuth2AuthenticationToken?): ResponseEntity<String> {
+        if(token == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not authenticated")
+        }
         val user = User(token.principal.attributes["sub"].toString(), redirections = 0, lastRedirectionTimeStamp = null)
         val userId = user.userId
         getUserInformationUseCase.processUser(user)
 
-        System.out.println("User ID from users: $userId")
+        println("User ID from users: $userId")
 
         val resource = ClassPathResource("static/user.html")
         var htmlContent = resource.inputStream.bufferedReader().use { it.readText() }
