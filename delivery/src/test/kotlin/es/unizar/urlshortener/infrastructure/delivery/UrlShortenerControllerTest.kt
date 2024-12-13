@@ -106,8 +106,7 @@ class UrlShortenerControllerTest {
         whenever(getUserInformationUseCase.getLinks(user)).thenReturn(links)
 
         // Realizamos la petición y verificamos los resultados
-        mockMvc.perform(get("/api/getUserLink")
-            .param("userId", userId))
+        mockMvc.perform(get("/api/users/{userId}/links", userId))
             .andExpect(status().isOk)
             .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.length()").value(1)) // Verifica que hay un enlace
@@ -124,8 +123,7 @@ class UrlShortenerControllerTest {
         // Simulamos que el usuario no existe
         whenever(getUserInformationUseCase.findById(userId)).thenReturn(null)
 
-        mockMvc.perform(get("/api/getUserLink")
-            .param("userId", userId))
+        mockMvc.perform(get("/api/users/{userId}/links", userId))
             .andExpect(status().isNotFound)
             .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.length()").value(0)) // Verifica que la lista está vacía
