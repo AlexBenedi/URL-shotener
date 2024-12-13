@@ -51,7 +51,8 @@ class MyWebSocketClientTest {
     /**
      * Tests that the `onMessage` method prints the correct received message.
      *
-     * Sends a test message and verifies that the message "Mensaje recibido del servidor: Test message" is printed.
+     * Sends a test message and verifies that the message "Mensaje recibido del servidor: Test message" 
+     * is printed.
      */
     @Test
     fun `onMessage should print received message`() {
@@ -69,7 +70,8 @@ class MyWebSocketClientTest {
     /**
      * Tests that the `onClose` method prints the correct connection closed message.
      *
-     * Mocks the closure of the WebSocket connection and verifies that the message "Conexión WebSocket cerrada: Normal closure" is printed.
+     * Mocks the closure of the WebSocket connection and verifies that the message 
+     * "Conexión WebSocket cerrada: Normal closure" is printed.
      */
     @Test
     fun `onClose should print connection closed message`() {

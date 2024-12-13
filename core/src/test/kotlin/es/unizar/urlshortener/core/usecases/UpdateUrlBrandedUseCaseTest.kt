@@ -20,7 +20,8 @@ class UpdateUrlBrandedUseCaseTest {
     /**
      * Tests that `updateUrlBranded` updates the database with the new URL state information.
      *
-     * Mocks the repository, redirection, and short URL, and verifies that the URL state information is updated correctly.
+     * Mocks the repository, redirection, and short URL, and verifies that the URL 
+     * state information is updated correctly.
      */
     @Test
     fun `updateUrlvalidBranded updates the database with the new url state info`() {

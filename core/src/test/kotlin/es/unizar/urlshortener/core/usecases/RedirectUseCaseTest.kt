@@ -23,7 +23,8 @@ class RedirectUseCaseTest {
     /**
      * Tests that `redirectTo` returns a redirect when the key exists.
      *
-     * Mocks the repository, redirection, and URL safety response, and verifies that the redirection is returned correctly.
+     * Mocks the repository, redirection, and URL safety response, and 
+     * verifies that the redirection is returned correctly.
      */
     @Test
     fun `redirectTo returns a redirect when the key exists`() {

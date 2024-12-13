@@ -21,7 +21,8 @@ class UpdateUrlSafetyUseCaseTest {
     /**
      * Tests that `updateUrlSafety` updates the database with the new URL safety information.
      *
-     * Mocks the repository, redirection, and safety response, and verifies that the URL safety information is updated correctly.
+     * Mocks the repository, redirection, and safety response, and verifies that the URL 
+     * safety information is updated correctly.
      */
     @Test
     fun `updateUrlSafety updates the database with the new url safety info`() {
