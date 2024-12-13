@@ -180,8 +180,7 @@ class UrlShortenerControllerTest {
             .willReturn(shortUrl)
 
         mockMvc.perform(
-            post("/api/linkUser")
-                .param("userId", "user123")
+            post("/api/link/user/{userId}", "user123")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
                 .param("url", "http://example.com")
         )
@@ -195,17 +194,15 @@ class UrlShortenerControllerTest {
      */
     @Test
     fun `shortenerUser returns 404 Not Found when user does not exist`() {
-        // Simular que el usuario no existe
         given(getUserInformationUseCase.findById("invalidUserId")).willReturn(null)
 
         mockMvc.perform(
-            post("/api/linkUser")
-                .param("userId", "invalidUserId")
+            post("/api/link/user/{userId}", "invalidUserId")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
                 .param("url", "http://example.com")
         )
-            .andExpect(status().isNotFound)
-            .andExpect(jsonPath("$.properties.error").value("User not found"))
+        .andExpect(status().isNotFound)
+        .andExpect(jsonPath("$.properties.error").value("User not found"))
     }
 
     /**
@@ -222,10 +219,9 @@ class UrlShortenerControllerTest {
         given(getUserInformationUseCase.findById("user123")).willReturn(user)
 
         mockMvc.perform(
-            post("/api/linkUser")
-                .param("userId", "user123")
-                .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-                .param("url", "http://example.com")
+            post("/api/link/user/{userId}", "user123")
+            .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+            .param("url", "http://example.com")
         )
             .andExpect(status().isTooManyRequests)
             .andExpect(jsonPath("$.properties.error").value("Too many requests. " +

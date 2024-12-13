@@ -20,11 +20,21 @@ class MyWebSocketClientTest {
         client = MyWebSocketClient(URI("ws://localhost:8080"))
     }
 
+    /**
+     * Cleans up the test environment after each test.
+     *
+     * Restores the original standard output.
+     */
     @AfterEach
     fun tearDown() {
         System.setOut(originalOut)
     }
 
+    /**
+     * Tests that the `onOpen` method prints the correct connection open message.
+     *
+     * Mocks a `ServerHandshake` and verifies that the message "Conexión WebSocket abierta" is printed.
+     */
     @Test
     fun `onOpen should print connection open message`() {
         // Arrange
@@ -38,6 +48,11 @@ class MyWebSocketClientTest {
         Assertions.assertEquals("Conexión WebSocket abierta", output)
     }
 
+    /**
+     * Tests that the `onMessage` method prints the correct received message.
+     *
+     * Sends a test message and verifies that the message "Mensaje recibido del servidor: Test message" is printed.
+     */
     @Test
     fun `onMessage should print received message`() {
         // Arrange
@@ -51,6 +66,11 @@ class MyWebSocketClientTest {
         Assertions.assertEquals("Mensaje recibido del servidor: $message", output)
     }
 
+    /**
+     * Tests that the `onClose` method prints the correct connection closed message.
+     *
+     * Mocks the closure of the WebSocket connection and verifies that the message "Conexión WebSocket cerrada: Normal closure" is printed.
+     */
     @Test
     fun `onClose should print connection closed message`() {
         // Arrange
@@ -66,6 +86,11 @@ class MyWebSocketClientTest {
         Assertions.assertEquals("Conexión WebSocket cerrada: $reason", output)
     }
 
+    /**
+     * Tests that the `onError` method prints the correct error message.
+     *
+     * Mocks an exception and verifies that the message "Error en la conexión WebSocket: Test error" is printed.
+     */
     @Test
     fun `onError should print error message`() {
         // Arrange

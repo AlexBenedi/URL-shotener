@@ -33,6 +33,12 @@ class GetUserInformationUseCaseTest {
         brandedService
     )
 
+    /**
+     * Tests that `processUser` saves the user when it does not exist.
+     *
+     * Mocks the user repository to simulate that the user does not exist,
+     * and verifies that the user is saved.
+     */
     @Test
     fun `should save user when it does not exist`() {
         val user = User("123456", 0, null)
@@ -50,6 +56,12 @@ class GetUserInformationUseCaseTest {
         verify(userRepository).save(user)
     }
 
+    /**
+     * Tests that `getLinks` returns links for a user.
+     *
+     * Mocks the link repository to simulate that there are links for the user,
+     * and verifies that the returned links are correct.
+     */
     @Test
     fun `getLinks returns links for a user`() {
         val user = User("123456", 0, null)
@@ -81,6 +93,12 @@ class GetUserInformationUseCaseTest {
         assertEquals("kamalmola", links[0].click.hash)
     }
 
+    /**
+     * Tests that `insertExampleLink` saves the link correctly.
+     *
+     * Mocks the link repository to simulate the save method call,
+     * and verifies that the link was saved correctly.
+     */
     @Test
     fun `insertExampleLink saves link correctly`() {
         val user = User("123456", 0, null)
@@ -105,6 +123,12 @@ class GetUserInformationUseCaseTest {
         assertEquals(linkArgumentCaptor.firstValue.click.hash, hashUrl)
     }
 
+    /**
+     * Tests that `processUser` does not save the user if it exists.
+     *
+     * Mocks the user repository to simulate that the user already exists,
+     * and verifies that the save method was not called.
+     */
     @Test
     fun `processUser does not save user if it exists`() {
         val user = User("123456", 0, null)
@@ -119,6 +143,12 @@ class GetUserInformationUseCaseTest {
         verify(userRepository, never()).save(user)
     }
 
+    /**
+     * Tests that `getLinks` returns an empty list if no links exist for the user.
+     *
+     * Mocks the link repository to simulate that there are no links for the user,
+     * and verifies that no links are returned.
+     */
     @Test
     fun `getLinks returns empty list if no links exist for user`() {
         val user = User("123456", 0 , null)

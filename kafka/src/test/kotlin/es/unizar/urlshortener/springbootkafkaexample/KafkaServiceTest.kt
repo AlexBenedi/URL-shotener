@@ -65,7 +65,19 @@ class KafkaServiceTest {
         reset(kafkaTemplate)
     }
     
-    // Test the KafkaProducerService, which sends a message to Kafka
+    /**
+     * Tests the `sendMessage` function of the `KafkaProducerService`.
+     *
+     * This test verifies that a message is correctly sent to the specified Kafka topic.
+     *
+     * Steps:
+     * 1. Arrange: Set up the topic and message to be sent.
+     * 2. Act: Call the `sendMessage` function with the topic and message.
+     * 3. Capture the arguments passed to the `send` function of the `kafkaTemplate`.
+     * 4. Verify: Ensure that the message was sent to the correct topic with the correct content.
+     *
+     * @throws Exception if the test fails
+     */
     @Test
     fun `test sending message to Kafka`() {
         // Arrange
@@ -85,7 +97,19 @@ class KafkaServiceTest {
         assertEquals(message, messageCaptor.value)
     }
  
-    // Test the KafkaConsumerService, which consumes a message from Kafka
+    /**
+     * Tests the `consume` function of the `KafkaConsumerService`.
+     *
+     * This test verifies that a message is correctly consumed from the specified Kafka topic.
+     *
+     * Steps:
+     * 1. Arrange: Set up the topic and message to be consumed. Initialize `lastConsumedMessage` to null.
+     * 2. Mock: Configure the `kafkaTemplate` to call the `consume` method of `kafkaConsumerService` when a message is sent.
+     * 3. Act: Send the message to the Kafka topic using `kafkaTemplate`.
+     * 4. Assert: Verify that the `lastConsumedMessage` in `kafkaConsumerService` matches the sent message.
+     *
+     * @throws Exception if the test fails
+     */
     @Test
     fun `test consuming message from Kafka`() {
         // Arrange
@@ -106,7 +130,21 @@ class KafkaServiceTest {
         assertEquals(message, kafkaConsumerService.lastConsumedMessage)
     }
 
-    // Test the KafkaConsumerService, which consumes a message from Kafka
+    /**
+     * Tests the safety checking process involving Kafka messaging.
+     *
+     * This test verifies that the safety checking process works correctly by sending a message to the `check-safety` topic,
+     * processing it, and then sending the result to the `safety-checked` topic.
+     *
+     * Steps:
+     * 1. Arrange: Set up the topics, messages, and mock responses.
+     * 2. Mock: Configure the `googleSafeBrowsingClient` to return a predefined response.
+     * 3. Mock: Configure the `kafkaTemplate` to call `consumeSafetyCheck` and `consumeSafetyChecked` methods of `kafkaConsumerService`.
+     * 4. Act: Send the initial message to the `check-safety` topic.
+     * 5. Assert: Verify that the messages were processed and sent to the correct topics, and that the `googleSafeBrowsingClient` was called.
+     *
+     * @throws Exception if the test fails
+     */
     @Test
     fun `test safety checking process works`() {
         // Arrange
@@ -148,6 +186,21 @@ class KafkaServiceTest {
     }
 
 
+    /**
+     * Tests the branded link creation process involving Kafka messaging.
+     *
+     * This test verifies that the branded link creation process works correctly by sending a message to the `branded` topic,
+     * processing it, and ensuring that the profanity filter is called.
+     *
+     * Steps:
+     * 1. Arrange: Set up the topic, message, and mock responses.
+     * 2. Mock: Configure the `ninjaProfanityFilter` to return a predefined response.
+     * 3. Mock: Configure the `kafkaTemplate` to call the `consumeBranded` method of `kafkaConsumerService` when a message is sent.
+     * 4. Act: Send the initial message to the `branded` topic.
+     * 5. Assert: Verify that the message was processed, the `ninjaProfanityFilter` was called, and the Kafka consumer was invoked.
+     *
+     * @throws Exception if the test fails
+     */
     @Test
     fun `branded link creation process works`() {
         // Arrange
@@ -173,6 +226,22 @@ class KafkaServiceTest {
         verify(ninjaProfanityFilter, times(1)).isNameValid(message)
     }
 
+    /**
+     * Tests the QR creation process involving Kafka messaging and WebSocket communication.
+     *
+     * This test verifies that the QR creation process works correctly by sending a message to the `qr` topic,
+     * processing it, generating a QR code, storing it, and sending a WebSocket message.
+     *
+     * Steps:
+     * 1. Arrange: Set up the topic, message, and mock responses.
+     * 2. Mock: Configure the `generateQRCodeUseCase` to return a predefined QR code.
+     * 3. Mock: Configure the `MyWebSocketClient` to simulate WebSocket behavior.
+     * 4. Mock: Configure the `kafkaTemplate` to call the `consumeQr` method of `kafkaConsumerService` when a message is sent.
+     * 5. Act: Send the initial message to the `qr` topic.
+     * 6. Assert: Verify that the message was processed, the QR code was generated and stored, and the WebSocket client was used correctly.
+     *
+     * @throws Exception if the test fails
+     */
     @Test
     fun `QR creation process works`() {
         // Arrange
