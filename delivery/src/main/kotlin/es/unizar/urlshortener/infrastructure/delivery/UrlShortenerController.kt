@@ -370,7 +370,7 @@ class UrlShortenerControllerImpl(
         }
     }
 
-    @GetMapping("/{id}/qr", produces = [MediaType.IMAGE_PNG_VALUE])
+    @GetMapping("/qr/{id}", produces = [MediaType.IMAGE_PNG_VALUE])
     override fun getQRCode(
         @PathVariable id: String,
         @RequestParam(required = false) target: String?

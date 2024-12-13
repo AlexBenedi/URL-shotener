@@ -26,7 +26,7 @@ $(document).ready(function () {
                 // Mostrar el QR en la sección específica
                 const qrDiv = $("#qrSection");
                 qrDiv.html('<img src="data:image/png;base64,' + qrCode + '" alt="QR Code">');
-                var qrCodeDownloadUrl = "/" + id + "/qr";
+                var qrCodeDownloadUrl = "/qr/" + id;
                 qrDiv.append('<p><a href="' + qrCodeDownloadUrl + '" download="qr.png">Descargar QR</a><p>');
                 qrDiv.append('<p><a href="' + window.location.origin + qrCodeDownloadUrl + '" target="_blank">' + window.location.origin + qrCodeDownloadUrl + '</a></p>');
 

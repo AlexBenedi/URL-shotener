@@ -27,7 +27,7 @@ $(document).ready(function () {
         // Mostrar el QR en la página
         var resultDiv = $("#result");
         resultDiv.append('<img src="data:image/png;base64,' + qrCode + '" alt="QR Code">');
-        var qrCodeDownloadUrl = "/" + id + "/qr";
+        var qrCodeDownloadUrl = "/qr/" + id;
         resultDiv.append('<p><a href="' + qrCodeDownloadUrl + '" download="qr.png">Descargar QR</a><p>');
         resultDiv.append('<p><a href="' + window.location.origin + qrCodeDownloadUrl + '" target="_blank">' + window.location.origin + qrCodeDownloadUrl + '</a></p>');
     };
@@ -170,7 +170,7 @@ $(document).ready(function () {
     function generateQRCode(hash, target) {
         $.ajax({
             type: "GET",
-            url: `/${hash}/qr?target=${encodeURIComponent(target)}`,
+            url: `/qr/${hash}?target=${encodeURIComponent(target)}`,
             xhrFields: {
                 responseType: 'blob' // Asegura que recibimos el binario directamente
             },
