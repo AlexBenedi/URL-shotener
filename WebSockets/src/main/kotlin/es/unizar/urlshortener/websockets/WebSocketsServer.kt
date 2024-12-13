@@ -45,13 +45,7 @@ fun RemoteEndpoint.Basic.sendTextSafe(message: String) {
 @ServerEndpoint("/ws-endpoint")
 class WebSocketsServer {
     companion object {
-        var instanceCount = 0
         val sessions = ConcurrentHashMap<String, Session>()
-    }
-
-    init {
-        instanceCount++
-        println("Instancias de WebSocketsServer: $instanceCount")
     }
 
     // Mapa para almacenar las sesiones de los usuarios por su userId
@@ -88,7 +82,6 @@ class WebSocketsServer {
         println("Content: ${webSocketMessage.message}")
         
         // Aquí puedes realizar la lógica para enviar la respuesta con el QR
-        println("Instancias activas kafka: $instanceCount")
         println("Sesiones activas: ${sessions}")
 
         sendMessageToUser(webSocketMessage.userId, webSocketMessage.message)
