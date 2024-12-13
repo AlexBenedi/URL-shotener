@@ -8,7 +8,6 @@ import es.unizar.urlshortener.core.usecases.LogClickUseCaseImpl
 import es.unizar.urlshortener.core.usecases.RedirectUseCaseImpl
 import es.unizar.urlshortener.core.usecases.UpdateUrlSafetyUseCaseImpl
 import es.unizar.urlshortener.core.usecases.UpdateUrlBrandedUseCaseImpl
-import es.unizar.urlshortener.ApplicationConfiguration
 import es.unizar.urlshortener.infrastructure.repositories.ClickEntityRepository
 import es.unizar.urlshortener.infrastructure.repositories.ClickRepositoryServiceImpl
 import es.unizar.urlshortener.infrastructure.repositories.ShortUrlEntityRepository

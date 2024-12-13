@@ -21,8 +21,8 @@ dependencies {
     implementation(libs.spring.boot.starter.web)
     implementation(libs.spring.kafka)
     implementation(libs.gson)
-    implementation("org.springframework.boot:spring-boot-starter-websocket")
-    implementation("org.java-websocket:Java-WebSocket:1.5.2")
+    implementation(libs.spring.boot.starter.websocket)
+    implementation(libs.java.websocket)
 
     runtimeOnly(libs.spring.boot.devtools)
 

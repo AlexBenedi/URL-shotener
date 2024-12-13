@@ -8,7 +8,6 @@ import es.unizar.urlshortener.core.User
 import es.unizar.urlshortener.core.UserRepositoryService
 import es.unizar.urlshortener.core.Link
 import es.unizar.urlshortener.core.LinkRepositoryService
-import org.springframework.data.repository.query.Param
 import org.springframework.stereotype.Service
 
 

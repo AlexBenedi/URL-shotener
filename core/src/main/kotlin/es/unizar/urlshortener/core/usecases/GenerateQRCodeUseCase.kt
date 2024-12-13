@@ -6,8 +6,6 @@ import com.google.zxing.client.j2se.MatrixToImageWriter
 import com.google.zxing.qrcode.QRCodeWriter
 import es.unizar.urlshortener.core.InvalidUrlException
 import es.unizar.urlshortener.core.QRCode
-import es.unizar.urlshortener.core.ShortUrlRepositoryService
-import es.unizar.urlshortener.core.UrlNotFoundException
 import java.io.ByteArrayOutputStream
 import java.util.Base64
 import org.slf4j.LoggerFactory

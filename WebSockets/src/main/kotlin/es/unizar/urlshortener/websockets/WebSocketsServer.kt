@@ -3,7 +3,6 @@ package es.unizar.urlshortener.websockets
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import jakarta.websocket.CloseReason
-import jakarta.websocket.CloseReason.CloseCodes
 import jakarta.websocket.OnClose
 import jakarta.websocket.OnError
 import jakarta.websocket.OnMessage
@@ -11,14 +10,10 @@ import jakarta.websocket.OnOpen
 import jakarta.websocket.RemoteEndpoint
 import jakarta.websocket.Session
 import jakarta.websocket.server.ServerEndpoint
-import org.springframework.boot.autoconfigure.SpringBootApplication
-import org.springframework.boot.runApplication
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.stereotype.Component
 import org.springframework.web.socket.server.standard.ServerEndpointExporter
-import java.util.Locale
-import java.util.Scanner
 import java.util.concurrent.ConcurrentHashMap
 import java.lang.reflect.Type
 

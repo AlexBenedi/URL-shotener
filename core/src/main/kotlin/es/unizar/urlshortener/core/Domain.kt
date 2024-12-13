@@ -6,7 +6,6 @@ import com.google.zxing.qrcode.QRCodeWriter
 import com.google.zxing.client.j2se.MatrixToImageWriter
 import java.nio.file.Path
 import java.nio.file.Paths
-import java.io.IOException
 
 private const val QR_CODE_WIDTH = 200
 private const val QR_CODE_HEIGHT = 200

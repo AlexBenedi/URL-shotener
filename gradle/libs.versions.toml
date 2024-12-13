@@ -14,6 +14,8 @@ googleApi = "1.33.0"
 zxing = "3.5.1"
 gson = "2.8.8"
 slf4jApi = "2.0.7"
+jakartaWebSocketApi = "2.1.0"
+javaWebSocket = "1.5.2"
 
 # Define plugins with their respective IDs and version references
 [plugins]
@@ -65,3 +67,7 @@ google-api-client = { module = "com.google.api-client:google-api-client", versio
 # Kafka dependencies
 spring-kafka = { module = "org.springframework.kafka:spring-kafka"}
 spring-kafka-test = { module = "org.springframework.kafka:spring-kafka-test" }
+
+# WebSockets dependencies
+jakarta-websocket-api = { module = "jakarta.websocket:jakarta.websocket-api", version.ref = "jakartaWebSocketApi" }
+java-websocket = { module = "org.java-websocket:Java-WebSocket", version.ref = "javaWebSocket" }

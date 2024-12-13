@@ -68,7 +68,7 @@ class RedirectUseCaseImpl(
                 throw InvalidNameBrandedUrl(key)
             }
 
-            return shortUrl.redirection ?: throw RedirectionNotFound(key) // url is safe
+            return shortUrl.redirection
         } else {
             throw RedirectionNotFound(key)
         }

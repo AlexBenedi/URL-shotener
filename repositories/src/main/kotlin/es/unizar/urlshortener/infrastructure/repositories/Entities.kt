@@ -3,7 +3,6 @@
 package es.unizar.urlshortener.infrastructure.repositories
 
 import jakarta.persistence.*
-import java.time.LocalDateTime
 import java.time.OffsetDateTime
 
 /**

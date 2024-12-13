@@ -49,15 +49,7 @@ class CreateShortUrlUseCaseImpl(
      *         has exceeded the limit of shortened URLs.
      */
     override fun create(url: String, data: ShortUrlProperties): ShortUrl {
-        // Get the user ID from the data (modify as needed to get the actual user ID)
-        val userId = data.sponsor ?: "anonymous" // or however you identify users
-
-
         if (safeCall { validatorService.isValid(url) }) {
-            /*if (!safeCall { safetyService.isUrlSafe(url) }) {
-                println("URL is not safe")
-                throw UnsafeUrlException(url)
-            }*/
             var id = safeCall { hashService.hasUrl(url) }
 
 
