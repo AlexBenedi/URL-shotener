@@ -32,7 +32,7 @@ subprojects {
 configurations.all {
     resolutionStrategy.eachDependency {
         if (requested.group == "com.fasterxml.jackson.core") {
-            useVersion("2.13.5")
+            useVersion("2.15.0")
         }
     }
 }

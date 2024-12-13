@@ -242,8 +242,7 @@ class UrlShortenerControllerTest {
             .willReturn(shortUrl)
 
         mockMvc.perform(
-            post("/api/linkUser")
-                .param("userId", "user123")
+            post("/api/link/user/{userId}", "user123")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
                 .param("url", "http://example.com")
                 .param("generateQRCode", "true")
