@@ -69,7 +69,26 @@ class UrlShortenerControllerTest {
     @MockBean
     private lateinit var shortUrlRepositoryService: ShortUrlRepositoryService
 
+    /**
+     * Test that verifies that the `clicks` method returns the total number of clicks for a valid hash.
+     */
+    @Test
+    fun `should return total clicks for a valid hash`() {
+        val hash = "valid-hash"
+        val totalClicks = 42
 
+        // Configuramos el comportamiento del caso de uso
+        whenever(logClickUseCase.getTotalClicksByHash(hash)).thenReturn(totalClicks)
+
+        mockMvc.perform(get("/clicks/{hash}", hash))
+            .andExpect(status().isOk)
+            .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+            .andExpect(content().string("42")) // Verifica que el número de clics se devuelve correctamente
+    }
+
+    /**
+     * Test that verifies that the `getUserLink` method returns a list of links for a valid user.
+     */
     @Test
     fun `should return links for a valid user`() {
         val userId = "valid-user-id"
@@ -95,6 +114,9 @@ class UrlShortenerControllerTest {
             .andExpect(jsonPath("$[0].id").value(12))
     }
 
+    /**
+     * Test that verifies that the `getUserLink` method returns a 404 Not Found when the user does not exist.
+     */
     @Test
     fun `should return empty list if user is not found`() {
         val userId = "invalid-user-id"
