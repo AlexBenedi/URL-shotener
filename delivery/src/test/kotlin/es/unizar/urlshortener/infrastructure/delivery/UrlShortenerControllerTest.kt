@@ -11,6 +11,7 @@ import org.mockito.Mockito.`when`
 import org.mockito.kotlin.any
 import org.mockito.kotlin.doNothing
 import org.mockito.kotlin.verify
+import org.mockito.kotlin.whenever
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
@@ -67,9 +68,79 @@ class UrlShortenerControllerTest {
     @MockBean
     private lateinit var shortUrlRepositoryService: ShortUrlRepositoryService
 
-    @MockBean
-    private lateinit var qrService: QrService
+    /**
+     * Test that verifies that the `clicks` method returns the total number of clicks for a valid hash.
+     */
+    @Test
+    fun `should return total clicks for a valid hash`() {
+        val hash = "valid-hash"
+        val totalClicks = 42
 
+        // Configuramos el comportamiento del caso de uso
+        whenever(logClickUseCase.getTotalClicksByHash(hash)).thenReturn(totalClicks)
+
+        mockMvc.perform(get("/clicks/{hash}", hash))
+            .andExpect(status().isOk)
+            .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+            .andExpect(content().string("42")) // Verifica que el número de clics se devuelve correctamente
+    }
+
+    /**
+     * Test that verifies that the `getUserLink` method returns a list of links for a valid user.
+     */
+    @Test
+    fun `should return links for a valid user`() {
+        val userId = "valid-user-id"
+        val user = User(userId = userId, redirections = 2, lastRedirectionTimeStamp = OffsetDateTime.now())
+
+        val links = listOf(
+            Link(Click(hash = "anyone", properties = ClickProperties(null), created = OffsetDateTime.now(),
+                clicks = 0),
+                ShortUrl(hash = "anyone", redirection = Redirection(target = "http://example.com"),
+                    properties = ShortUrlProperties(name = "http://exampleshortened/anyone")), id = 12, user)
+        )
+
+        // Configuramos el comportamiento del caso de uso
+        whenever(getUserInformationUseCase.findById(userId)).thenReturn(user)
+        whenever(getUserInformationUseCase.getLinks(user)).thenReturn(links)
+
+        // Realizamos la petición y verificamos los resultados
+        mockMvc.perform(get("/api/users/{userId}/links", userId))
+            .andExpect(status().isOk)
+            .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+            .andExpect(jsonPath("$.length()").value(1)) // Verifica que hay un enlace
+            .andExpect(jsonPath("$[0].id").value(12))
+    }
+
+    /**
+     * Test that verifies that the `getUserLink` method returns a 404 Not Found when the user does not exist.
+     */
+    @Test
+    fun `should return empty list if user is not found`() {
+        val userId = "invalid-user-id"
+
+        // Simulamos que el usuario no existe
+        whenever(getUserInformationUseCase.findById(userId)).thenReturn(null)
+
+        mockMvc.perform(get("/api/users/{userId}/links", userId))
+            .andExpect(status().isNotFound)
+            .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+            .andExpect(jsonPath("$.length()").value(0)) // Verifica que la lista está vacía
+    }
+
+    @Test
+    fun `should return unauthorized when token is null`() {
+        // Realizamos la solicitud al endpoint "/user" sin enviar un token
+        mockMvc.perform(get("/user"))
+            .andExpect(status().isUnauthorized) // Verificamos que devuelve 401 Unauthorized
+    }
+
+
+
+
+    /**
+     * Test that verifies that we can`t access the user page without authentication.
+     */
     @Test
     fun `should allow access to protected routes with authentication`() {
         // Simulamos un OAuth2Principal con un atributo "sub" que es el user ID
@@ -116,8 +187,7 @@ class UrlShortenerControllerTest {
             .willReturn(shortUrl)
 
         mockMvc.perform(
-            post("/api/linkUser")
-                .param("userId", "user123")
+            post("/api/link/user/{userId}", "user123")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
                 .param("url", "http://example.com")
         )
@@ -131,17 +201,15 @@ class UrlShortenerControllerTest {
      */
     @Test
     fun `shortenerUser returns 404 Not Found when user does not exist`() {
-        // Simular que el usuario no existe
         given(getUserInformationUseCase.findById("invalidUserId")).willReturn(null)
 
         mockMvc.perform(
-            post("/api/linkUser")
-                .param("userId", "invalidUserId")
+            post("/api/link/user/{userId}", "invalidUserId")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
                 .param("url", "http://example.com")
         )
-            .andExpect(status().isNotFound)
-            .andExpect(jsonPath("$.properties.error").value("User not found"))
+        .andExpect(status().isNotFound)
+        .andExpect(jsonPath("$.properties.error").value("User not found"))
     }
 
     /**
@@ -200,17 +268,14 @@ class UrlShortenerControllerTest {
         given(getUserInformationUseCase.findById("user123")).willReturn(user)
 
         mockMvc.perform(
-            post("/api/linkUser")
-                .param("userId", "user123")
-                .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-                .param("url", "http://example.com")
+            post("/api/link/user/{userId}", "user123")
+            .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+            .param("url", "http://example.com")
         )
             .andExpect(status().isTooManyRequests)
             .andExpect(jsonPath("$.properties.error").value("Too many requests. " +
                     "Please try again later."))
     }
-
-
 
     /**
      * Test that verifies that the `getLink` method returns a link when the id exists.

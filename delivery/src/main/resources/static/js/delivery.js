@@ -58,7 +58,7 @@ $(document).ready(function () {
         event.preventDefault();
 
         // Agregar userId y brandedName si es necesario
-        var formData = $(this).serialize() + "&userId=" + userId;
+        var formData = $(this).serialize();
 
         if ($("#brandedCheckbox").prop('checked')) {
             formData += "&isBranded=true&name=" + encodeURIComponent($("#brandedName").val());
@@ -66,7 +66,7 @@ $(document).ready(function () {
 
         $.ajax({
             type: "POST",
-            url: "/api/linkUser",
+            url: "/api/link/user/" + userId,
             data: formData,
             success: function (response) {
                 var resultDiv = $("#result");
@@ -106,12 +106,10 @@ $(document).ready(function () {
     fetchUserLinks();
 
     function fetchUserLinks() {
-        var formData = "userId=" + userId;
 
         $.ajax({
             type: "GET",
-            url: "/api/getUserLink",
-            data: formData,
+            url: "/api/users/" + userId + "/links",
             success: function (links) {
                 var tableBody = $("#linksTable tbody");
                 tableBody.empty();

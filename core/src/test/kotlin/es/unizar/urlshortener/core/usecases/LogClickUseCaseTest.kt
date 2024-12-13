@@ -10,6 +10,12 @@ import kotlin.test.Test
 
 class LogClickUseCaseTest {
 
+    /**
+     * Tests that `logClick` fails silently when the repository throws an exception.
+     *
+     * Mocks the repository and click properties, and verifies that the method does not throw an exception
+     * when the repository's `save` method throws a `RuntimeException`.
+     */
     @Test
     fun `logClick fails silently`() {
         val repository = mock<ClickRepositoryService> ()

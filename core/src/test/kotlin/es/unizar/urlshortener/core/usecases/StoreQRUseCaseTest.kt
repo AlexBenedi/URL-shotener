@@ -17,6 +17,11 @@ import kotlin.test.assertFailsWith
 
 class StoreQRUseCaseTest {
 
+    /**
+     * Tests that `storeQR` updates the database with the new QR code.
+     *
+     * Mocks the repository, redirection, and short URL, and verifies that the QR code information is updated correctly.
+     */
     @Test
     fun `StoreQRUse updates the database with the new qr`() {
         val repository = mock<ShortUrlRepositoryService>()

@@ -28,6 +28,23 @@ import es.unizar.urlshortener.core.usecases.CreateShortUrlUseCase
 import es.unizar.urlshortener.core.LimitExceededException
 
 class CreateShortUrlUseCaseTest {
+    /**
+     * Test case for the `CreateShortUrlUseCaseImpl` class.
+     *
+     * This test verifies that the `create` method returns a basic redirect
+     * if it can compute a hash for the given URL.
+     *
+     * Steps:
+     * 1. Mock the dependencies: `ShortUrlRepositoryService`, `ValidatorService`, `HashService`, 
+     *    `SafetyService`, `ShortUrlProperties`, `BrandedService`, and `QrService`.
+     * 2. Set up the mocks to return expected values:
+     *    - `validatorService.isValid("http://example.com/")` returns `true`.
+     *    - `hashService.hasUrl("http://example.com/")` returns `"f684a3c4"`.
+     *    - `shortUrlRepository.save(any())` returns the argument passed to it.
+     * 3. Create an instance of `CreateShortUrlUseCaseImpl` with the mocked dependencies.
+     * 4. Call the `create` method with the URL `"http://example.com/"` and `shortUrlProperties`.
+     * 5. Verify that the returned `ShortUrl` object has the expected hash `"f684a3c4"`.
+     */
     @Test
     fun `creates returns a basic redirect if it can compute a hash`() {
         val shortUrlRepository = mock<ShortUrlRepositoryService>()
@@ -57,6 +74,20 @@ class CreateShortUrlUseCaseTest {
         assertEquals(shortUrl.hash, "f684a3c4")
     }
 
+    /**
+     * Test case for the `CreateShortUrlUseCaseImpl` class.
+     *
+     * This test verifies that the `create` method throws an `InvalidUrlException`
+     * if the provided URL is not valid.
+     *
+     * Steps:
+     * 1. Mock the dependencies: `ShortUrlRepositoryService`, `ValidatorService`, `SafetyService`, 
+     *    `HashService`, `ShortUrlProperties`, `BrandedService`, and `QrService`.
+     * 2. Set up the mock to return `false` for `validatorService.isValid("ftp://example.com/")`.
+     * 3. Create an instance of `CreateShortUrlUseCaseImpl` with the mocked dependencies.
+     * 4. Call the `create` method with the URL `"ftp://example.com/"` and `shortUrlProperties`.
+     * 5. Verify that the method throws an `InvalidUrlException`.
+     */
     @Test
     fun `creates returns invalid URL exception if the URL is not valid`() {
         val shortUrlRepository = mock<ShortUrlRepositoryService>()
@@ -84,6 +115,20 @@ class CreateShortUrlUseCaseTest {
         }
     }
 
+    /**
+     * Test case for the `CreateShortUrlUseCaseImpl` class.
+     *
+     * This test verifies that the `create` method throws an `InternalError`
+     * if the URI cannot be validated due to an exception in the validator service.
+     *
+     * Steps:
+     * 1. Mock the dependencies: `ShortUrlRepositoryService`, `ValidatorService`, `SafetyService`, 
+     *    `HashService`, `ShortUrlProperties`, `BrandedService`, and `QrService`.
+     * 2. Set up the mock to throw a `RuntimeException` for `validatorService.isValid("http://example.com/")`.
+     * 3. Create an instance of `CreateShortUrlUseCaseImpl` with the mocked dependencies.
+     * 4. Call the `create` method with the URL `"http://example.com/"` and `shortUrlProperties`.
+     * 5. Verify that the method throws an `InternalError`.
+     */
     @Test
     fun `creates returns invalid URL exception if the URI cannot be validated`() {
         val shortUrlRepository = mock<ShortUrlRepositoryService>()
@@ -111,6 +156,22 @@ class CreateShortUrlUseCaseTest {
         }
     }
 
+    /**
+     * Test case for the `CreateShortUrlUseCaseImpl` class.
+     *
+     * This test verifies that the `create` method throws an `InternalError`
+     * if the hash cannot be computed due to an exception in the hash service.
+     *
+     * Steps:
+     * 1. Mock the dependencies: `ShortUrlRepositoryService`, `ValidatorService`, `HashService`, 
+     *    `ShortUrlProperties`, `SafetyService`, `BrandedService`, and `QrService`.
+     * 2. Set up the mocks to return expected values:
+     *    - `validatorService.isValid("http://example.com/")` returns `true`.
+     *    - `hashService.hasUrl("http://example.com/")` throws a `RuntimeException`.
+     * 3. Create an instance of `CreateShortUrlUseCaseImpl` with the mocked dependencies.
+     * 4. Call the `create` method with the URL `"http://example.com/"` and `shortUrlProperties`.
+     * 5. Verify that the method throws an `InternalError`.
+     */
     @Test
     fun `creates returns invalid URL exception if the hash cannot be computed`() {
         val shortUrlRepository = mock<ShortUrlRepositoryService>()
@@ -139,6 +200,23 @@ class CreateShortUrlUseCaseTest {
         }
     }
 
+    /**
+     * Test case for the `CreateShortUrlUseCaseImpl` class.
+     *
+     * This test verifies that the `create` method throws an `InternalError`
+     * if the short URL cannot be saved due to an exception in the repository service.
+     *
+     * Steps:
+     * 1. Mock the dependencies: `ShortUrlRepositoryService`, `ValidatorService`, `HashService`, 
+     *    `ShortUrlProperties`, `SafetyService`, `BrandedService`, and `QrService`.
+     * 2. Set up the mocks to return expected values:
+     *    - `validatorService.isValid("http://example.com/")` returns `true`.
+     *    - `hashService.hasUrl("http://example.com/")` returns `"f684a3c4"`.
+     *    - `shortUrlRepository.save(any())` throws a `RuntimeException`.
+     * 3. Create an instance of `CreateShortUrlUseCaseImpl` with the mocked dependencies.
+     * 4. Call the `create` method with the URL `"http://example.com/"` and `shortUrlProperties`.
+     * 5. Verify that the method throws an `InternalError`.
+     */
     @Test
     fun `creates returns invalid URL exception if the short URL cannot be saved`() {
         val shortUrlRepository = mock<ShortUrlRepositoryService>()
@@ -168,6 +246,23 @@ class CreateShortUrlUseCaseTest {
         }
     }
 
+    /**
+     * Test case for the `CreateShortUrlUseCaseImpl` class.
+     *
+     * This test verifies that the `create` method returns a valid branded short URL
+     * when the `isBranded` property is set to `true`.
+     *
+     * Steps:
+     * 1. Mock the dependencies: `ShortUrlRepositoryService`, `ValidatorService`, `HashService`, 
+     *    `SafetyService`, `ShortUrlProperties`, `BrandedService`, and `QrService`.
+     * 2. Set up the mocks to return expected values:
+     *    - `validatorService.isValid("http://example.com/")` returns `true`.
+     *    - `shortUrlRepository.save(any())` returns the argument passed to it.
+     * 3. Create an instance of `CreateShortUrlUseCaseImpl` with the mocked dependencies.
+     * 4. Create a `ShortUrlProperties` object with `isBranded` set to `true` and `name` set to `"branded"`.
+     * 5. Call the `create` method with the URL `"http://example.com/"` and the `ShortUrlProperties` object.
+     * 6. Verify that the returned `ShortUrl` object has the expected hash `"branded"`.
+     */
     @Test 
     fun `creates returns a valid branded short URL`() {
         val shortUrlRepository = mock<ShortUrlRepositoryService>()
@@ -196,6 +291,23 @@ class CreateShortUrlUseCaseTest {
         assertEquals(shortUrl.hash, "branded")
     }
 
+    /**
+     * Test case for the `CreateShortUrlUseCaseImpl` class.
+     *
+     * This test verifies that the `create` method throws an `InvalidNameBrandedUrl`
+     * exception if the `name` property is not provided for a branded URL.
+     *
+     * Steps:
+     * 1. Mock the dependencies: `ShortUrlRepositoryService`, `ValidatorService`, `HashService`, 
+     *    `SafetyService`, `ShortUrlProperties`, `BrandedService`, and `QrService`.
+     * 2. Set up the mocks to return expected values:
+     *    - `validatorService.isValid("http://example.com/")` returns `true`.
+     *    - `shortUrlRepository.save(any())` returns the argument passed to it.
+     * 3. Create an instance of `CreateShortUrlUseCaseImpl` with the mocked dependencies.
+     * 4. Call the `create` method with the URL `"http://example.com/"` and `ShortUrlProperties` object
+     *    with `isBranded` set to `true` and `name` set to `null`.
+     * 5. Verify that the method throws an `InvalidNameBrandedUrl` exception.
+     */
     @Test
     fun `create a return invalid branded link exception if name is empty`() {
         val shortUrlRepository = mock<ShortUrlRepositoryService>()
@@ -223,6 +335,19 @@ class CreateShortUrlUseCaseTest {
         }
     }
 
+    /**
+     * Test case for the `CreateShortUrlUseCaseImpl` class.
+     * 
+     * This test verifies that the `create` method throws a `LimitExceededException`
+     * if the user has exceeded the limit of shortened URLs.
+     * 1. Mock the dependencies: `ShortUrlRepositoryService`, `ValidatorService`, `HashService`,
+     *   `ShortUrlProperties`, and `SafetyService`.
+     * 2. Set up the mocks to return expected values:
+     *  - `shortUrlRepository.countShortenedUrlsByUser("user123")
+     * 3. Create an instance of `CreateShortUrlUseCaseImpl` with the mocked dependencies.
+     * 4. Call the `create` method with the URL `"http://example.com/"` and `shortUrlProperties`.
+     * 5. Verify that the method throws a `LimitExceededException`.
+     */
     @Test
     fun `creates returns a basic redirect if it can compute a hash and branded flag is desactivated`() {
         val shortUrlRepository = mock<ShortUrlRepositoryService>()

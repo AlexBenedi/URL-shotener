@@ -72,11 +72,25 @@ class GoogleSafeBrowsingClient(
     }
 }
 
-// Google Safe Browsing API response, following the API documentation
+/**
+ * Represents the response from the Google Safe Browsing API.
+ *
+ * @property matches A list of threat matches found by the API.
+ */
 class GoogleSafeBrowsingResponse(
     val matches: List<ThreatMatch>? = null
 )
 
+/**
+ * Represents a match for a threat found by the Google Safe Browsing API.
+ *
+ * @property threatType The type of threat (e.g., MALWARE, SOCIAL_ENGINEERING).
+ * @property platformType The platform type (e.g., WINDOWS, ANDROID).
+ * @property threatEntryType The type of threat entry (e.g., URL).
+ * @property threat Information about the threat.
+ * @property threatEntryMetadata Metadata associated with the threat entry.
+ * @property cacheDuration The duration for which the threat information is cached.
+ */
 class ThreatMatch(
     val threatType: String? = null,
     val platformType: String? = null,
@@ -86,14 +100,30 @@ class ThreatMatch(
     val cacheDuration: String? = null
 )
 
+/**
+ * Represents information about a threat.
+ *
+ * @property url The URL associated with the threat.
+ */
 class ThreatInfo(
     val url: String? = null
 )
 
+/**
+ * Represents metadata associated with a threat entry.
+ *
+ * @property entries A list of metadata entries.
+ */
 class ThreatEntryMetadata(
     val entries: List<Entry>? = null
 )
 
+/**
+ * Represents a metadata entry.
+ *
+ * @property key The key of the metadata entry.
+ * @property value The value of the metadata entry.
+ */
 class Entry(
     val key: String? = null,
     val value: String? = null

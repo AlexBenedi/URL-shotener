@@ -18,6 +18,12 @@ import kotlin.test.assertFailsWith
 
 class UpdateUrlSafetyUseCaseTest {
 
+    /**
+     * Tests that `updateUrlSafety` updates the database with the new URL safety information.
+     *
+     * Mocks the repository, redirection, and safety response, and verifies that the URL 
+     * safety information is updated correctly.
+     */
     @Test
     fun `updateUrlSafety updates the database with the new url safety info`() {
         val repository = mock<ShortUrlRepositoryService> ()
@@ -35,6 +41,11 @@ class UpdateUrlSafetyUseCaseTest {
         assertEquals(safety, updatedUrl?.properties?.safe)
     }
 
+    /**
+     * Tests that `updateUrlSafety` returns `ShortUrlNotFoundException` if the URL is not found.
+     *
+     * Mocks the repository and safety response, and verifies that the method returns null when the URL is not found.
+     */
     @Test
     fun `updateUrlSafety returns ShortUrlNotFoundException if the url is not found`(){
         val repository = mock<ShortUrlRepositoryService> ()

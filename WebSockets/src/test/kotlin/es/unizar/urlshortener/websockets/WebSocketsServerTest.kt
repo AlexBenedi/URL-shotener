@@ -43,6 +43,11 @@ class WebSocketsServerTest {
         lenient().`when`(session.basicRemote).thenReturn(remoteEndpoint)
     }
 
+    /**
+     * Tests that the `onOpen` method adds the session to the sessions map.
+     *
+     * Mocks the session's request URI to include a user ID and verifies that the session is added to the sessions map.
+     */
     @Test
     fun `onOpen should add session to sessions map`() {
         // Arrange
@@ -57,6 +62,11 @@ class WebSocketsServerTest {
         assert(WebSocketsServer.sessions[userId] == session)
     }
 
+    /**
+     * Tests that the `onMessage` method processes the message and sends a response.
+     *
+     * Mocks a WebSocket message and verifies that the response message contains the expected content.
+     */
     @Test
     fun `onMessage should process message and send response`() {
         // Arrange
@@ -73,6 +83,11 @@ class WebSocketsServerTest {
         assert(messageCaptor.value.contains("Respuesta desde el servidor"))
     }
 
+    /**
+     * Tests that the `onClose` method removes the session from the sessions map.
+     *
+     * Mocks the closure of the WebSocket session and verifies that the session is removed from the sessions map.
+     */
     @Test
     fun `onClose should remove session from sessions map`() {
         // Arrange
@@ -87,6 +102,12 @@ class WebSocketsServerTest {
         assert(!WebSocketsServer.sessions.containsKey(userId))
     }
 
+        
+    /**
+     * Tests that the `sendMessageToUser` method sends a message if the session is open.
+     *
+     * Mocks an open session and verifies that the message is sent.
+     */
     @Test
     fun `sendMessageToUser should send message if session is open`() {
         // Arrange
@@ -102,6 +123,11 @@ class WebSocketsServerTest {
         verify(remoteEndpoint).sendText(message)
     }
 
+    /**
+     * Tests that the `sendMessageToUser` method does not send a message if the session is not open.
+     *
+     * Mocks a closed session and verifies that the message is not sent.
+     */
     @Test
     fun `sendMessageToUser should not send message if session is not open`() {
         // Arrange
@@ -117,6 +143,11 @@ class WebSocketsServerTest {
         verify(remoteEndpoint, never()).sendText(message)
     }
 
+    /**
+     * Tests that the `onError` method prints error messages.
+     *
+     * Mocks an error during the WebSocket session and verifies that the error messages are printed.
+     */
     @Test
     fun `onError should print error messages`() {
         System.setOut(PrintStream(outContent))

@@ -17,6 +17,12 @@ import kotlin.test.assertFailsWith
 
 class UpdateUrlBrandedUseCaseTest {
 
+    /**
+     * Tests that `updateUrlBranded` updates the database with the new URL state information.
+     *
+     * Mocks the repository, redirection, and short URL, and verifies that the URL 
+     * state information is updated correctly.
+     */
     @Test
     fun `updateUrlvalidBranded updates the database with the new url state info`() {
         val repository = mock<ShortUrlRepositoryService>()
@@ -34,6 +40,11 @@ class UpdateUrlBrandedUseCaseTest {
         assertEquals(true, updatedUrl?.properties?.validBranded)
     }
 
+    /**
+     * Tests that `updateUrlBranded` returns `ShortUrlNotFoundException` if the URL is not found.
+     *
+     * Mocks the repository and verifies that the method returns null when the URL is not found.
+     */
     @Test
     fun `updateUrlBranded returns ShortUrlNotFoundException if the url is not found`(){
         val repository = mock<ShortUrlRepositoryService>()

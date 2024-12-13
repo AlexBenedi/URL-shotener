@@ -55,7 +55,7 @@ interface UrlShortenerController {
      * @param tocken the user information
      * @return the user information
      */
-    fun user(token: OAuth2AuthenticationToken): ResponseEntity<String>
+    fun user(token: OAuth2AuthenticationToken?): ResponseEntity<String>
 
     /**
      * Retrieves the QR code image associated with a short URL identified by its [id].
@@ -198,14 +198,15 @@ class UrlShortenerControllerImpl(
      *
      * @param data the data required to create a short url
      * @param request the HTTP request
+     * @param userId the ID of the user
      * @return a ResponseEntity with the created short url details
      */
-    @PostMapping("/api/linkUser", consumes = [MediaType.APPLICATION_FORM_URLENCODED_VALUE])
-    override fun shortenerUser(data: ShortUrlDataIn, 
-                              request: HttpServletRequest, 
-                              @RequestParam userId:String
-                              ): ResponseEntity<ShortUrlDataOut> 
-    {
+    @PostMapping("/api/link/user/{userId}", consumes = [MediaType.APPLICATION_FORM_URLENCODED_VALUE])
+    override fun shortenerUser(
+        @ModelAttribute data: ShortUrlDataIn, 
+        request: HttpServletRequest, 
+        @PathVariable userId: String
+    ): ResponseEntity<ShortUrlDataOut> {
         System.out.println("UserId from shortenerUser : $userId")
         System.out.println("URL from shortenerUser : ${data.url}")
 
@@ -222,14 +223,13 @@ class UrlShortenerControllerImpl(
             }
 
             System.out.println("User redirections from shortenerUser : $userRedirections")
-            if (userRedirections >= REDIRECTION_LIMIT){
+            if (userRedirections >= REDIRECTION_LIMIT) {
                 // Return 429 Too Many Requests
                 return ResponseEntity
                     .status(HttpStatus.TOO_MANY_REQUESTS) // Set HTTP status to 429
                     .body(
                         ShortUrlDataOut(
                             url = null,
-                            //qrCode = null,
                             properties = mapOf("error" to "Too many requests. Please try again later.")
                         )
                     )
@@ -262,7 +262,7 @@ class UrlShortenerControllerImpl(
                 println("SHORTURL: $shortUrl")
 
                 val user = User(
-                    userId =userId,
+                    userId = userId,
                     redirections = newRedirections,
                     lastRedirectionTimeStamp = OffsetDateTime.now()
                 )
@@ -294,7 +294,6 @@ class UrlShortenerControllerImpl(
 
                 getUserInformationUseCase.saveLink(link)
 
-
                 // Build the response
                 val shortenedUrl = "${request.scheme}://${request.serverName}:${request.serverPort}/${shortUrl.hash}"
                 val response = ShortUrlDataOut(
@@ -312,36 +311,59 @@ class UrlShortenerControllerImpl(
                 .body(
                     ShortUrlDataOut(
                         url = null,
-                        //qrCode = null,
                         properties = mapOf("error" to "User not found")
                     )
                 )
         }
     }
 
-    @GetMapping("/api/getUserLink")
+    /**
+     * Handles the GET request to retrieve user links.
+     *
+     * @param userId The ID of the user whose links are to be retrieved.
+     * @return A [ResponseEntity] containing a list of [Link] objects associated with the user.
+     */
+    @GetMapping("/api/users/{userId}/links")
     @ResponseBody
-    override fun getUserLinks(@RequestParam userId: String): ResponseEntity<List<Link>> {
+    override fun getUserLinks(@PathVariable userId: String): ResponseEntity<List<Link>> {
         System.out.println("UserId from getUserLinks : $userId")
         val user = getUserInformationUseCase.findById(userId)
+        if(user == null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(emptyList())
+        }
         val links = user?.let { getUserInformationUseCase.getLinks(it) }
         return ResponseEntity.ok(links)
     }
 
+    /**
+     * Handles the GET request to retrieve the client's IP address.
+     *
+     * @param request The [HttpServletRequest] object containing the client's request information.
+     * @return A [ResponseEntity] containing the client's IP address as a [String].
+     */
     @GetMapping("/api/ip")
     fun getClientIp(request: HttpServletRequest): ResponseEntity<String> {
         val ip = request.remoteAddr
         return ResponseEntity.ok(ip)
     }
 
+    /**
+     * Handles the GET request to retrieve the user page.
+     *
+     * @param token The [OAuth2AuthenticationToken] containing the user's authentication information.
+     * @return A [ResponseEntity] containing the user page HTML with the user ID embedded.
+     */
     @GetMapping("/user")
     @ResponseBody
-    override fun user(token: OAuth2AuthenticationToken): ResponseEntity<String> {
+    override fun user(token: OAuth2AuthenticationToken?): ResponseEntity<String> {
+        if(token == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not authenticated")
+        }
         val user = User(token.principal.attributes["sub"].toString(), redirections = 0, lastRedirectionTimeStamp = null)
         val userId = user.userId
         getUserInformationUseCase.processUser(user)
 
-        System.out.println("User ID from users: $userId")
+        println("User ID from users: $userId")
 
         val resource = ClassPathResource("static/user.html")
         var htmlContent = resource.inputStream.bufferedReader().use { it.readText() }
@@ -354,12 +376,25 @@ class UrlShortenerControllerImpl(
             .body(htmlContent)
     }
 
+    /**
+     * Handles the GET request to retrieve the total number of clicks for a given hash.
+     *
+     * @param hash The hash of the shortened URL.
+     * @return A [ResponseEntity] containing the total number of clicks as an [Int].
+     */
     @GetMapping("/clicks/{hash}")
     override fun getClicksByHash(@PathVariable hash: String): ResponseEntity<Int> {
         val totalClicks = logClickUseCase.getTotalClicksByHash(hash) ?: 0
         return ResponseEntity.ok(totalClicks)
     }
 
+    /**
+     * Handles the DELETE request to delete a link by its ID.
+     *
+     * @param idLink The ID of the link to be deleted.
+     * @return A [ResponseEntity] containing a success message if the link is deleted successfully,
+     *         or an error message if the deletion fails.
+     */
     @DeleteMapping("/delete/{idLink}")
     override fun deleteLink(@PathVariable idLink: Long): ResponseEntity<String> {
         return try {
@@ -370,6 +405,13 @@ class UrlShortenerControllerImpl(
         }
     }
 
+    /**
+     * Handles the GET request to retrieve the QR code image for a given short URL ID.
+     *
+     * @param id The ID of the short URL.
+     * @return A [ResponseEntity] containing the QR code image as a [ByteArray] in PNG format,
+     *         or a 404 status if the short URL is not found, or a 500 status if there is an error decoding the QR code.
+     */
     @GetMapping("/qr/{id}", produces = [MediaType.IMAGE_PNG_VALUE])
     override fun getQRCode(
         @PathVariable id: String
