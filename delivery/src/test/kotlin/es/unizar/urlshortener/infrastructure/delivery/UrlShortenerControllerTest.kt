@@ -4,6 +4,7 @@ package es.unizar.urlshortener.infrastructure.delivery
 import es.unizar.urlshortener.core.*
 import es.unizar.urlshortener.core.usecases.*
 import org.hamcrest.CoreMatchers.containsString
+import org.mockito.ArgumentMatchers.eq
 import org.mockito.BDDMockito.given
 import org.mockito.BDDMockito.never
 import org.mockito.Mockito.doThrow
@@ -25,6 +26,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers.print
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.* 
 import java.time.OffsetDateTime
+import java.util.*
 import kotlin.test.Test
 
 
@@ -354,5 +356,53 @@ class UrlShortenerControllerTest {
             .andExpect(status().isBadRequest)
             .andExpect(jsonPath("$.statusCode").value(400))
     }
-    
+
+    /**
+     * Tests that expect to recieve the QR code of a short URL from de database
+     */
+    @Test
+    fun `getQRCode returns existing QR code when qrCode is not null`() {
+        val id = "abc123"
+        val qrCodeBase64 = Base64.getEncoder().encodeToString("existing QR".toByteArray())
+        val shortUrl = ShortUrl(
+            hash = id,
+            redirection = Redirection(target = "http://example.com"),
+            created = OffsetDateTime.now(),
+            properties = ShortUrlProperties(),
+            qrCode = qrCodeBase64
+        )
+
+        given(shortUrlRepositoryService.findByKey(id)).willReturn(shortUrl)
+
+        mockMvc.perform(get("/qr/$id").accept(MediaType.IMAGE_PNG))
+            .andExpect(status().isOk)
+            .andExpect(content().contentType(MediaType.IMAGE_PNG))
+            .andExpect(content().bytes(Base64.getDecoder().decode(qrCodeBase64)))
+    }
+
+    /**
+     * Test that expect to create a new QR code for a short URL that does not have one
+     */
+    @Test
+    fun `should generate and return QR code if not present in database`() {
+        val id = "newId"
+        val generatedQRCodeBase64 = Base64.getEncoder().encodeToString("generatedQRCode".toByteArray())
+        val shortUrl = ShortUrl(
+            hash = id,
+            redirection = Redirection("http://example.com"),
+            created = OffsetDateTime.now(),
+            qrCode = null
+        )
+        val updatedShortUrl = shortUrl.copy(qrCode = generatedQRCodeBase64)
+
+        given(shortUrlRepositoryService.findByKey(id)).willReturn(shortUrl)
+        given(generateQRCodeUseCase.generateQRCode(any(), eq(250))).willReturn(QRCode("http://localhost:8080/"+id, generatedQRCodeBase64, 250))
+        given(shortUrlRepositoryService.save(updatedShortUrl)).willReturn(updatedShortUrl)
+
+        mockMvc.perform(get("/qr/{id}", id))
+            .andExpect(status().isOk)
+            .andExpect(content().contentType(MediaType.IMAGE_PNG))
+    }
+
+
 }

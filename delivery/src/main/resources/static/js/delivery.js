@@ -145,7 +145,7 @@ $(document).ready(function () {
                 $(".generate-qr").click(function () {
                     var hash = $(this).data("hash");
                     var target = $(this).data("target");
-                    generateQRCode(hash, target);
+                    generateQRCode(hash);
                 });
             },
             error: function () {
@@ -167,10 +167,10 @@ $(document).ready(function () {
         });
     }
 
-    function generateQRCode(hash, target) {
+    function generateQRCode(hash) {
         $.ajax({
             type: "GET",
-            url: `/qr/${hash}?target=${encodeURIComponent(target)}`,
+            url: `/qr/${hash}`,
             xhrFields: {
                 responseType: 'blob' // Asegura que recibimos el binario directamente
             },

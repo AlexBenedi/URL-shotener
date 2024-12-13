@@ -63,7 +63,7 @@ interface UrlShortenerController {
      * @param id The identifier of the short URL.
      * @return The QR code as a downloadable image.
      */
-    fun getQRCode(id: String, target: String?): ResponseEntity<ByteArray>
+    fun getQRCode(id: String): ResponseEntity<ByteArray>
 
     fun getUserLinks(userId: String): ResponseEntity<List<Link>>
 
@@ -372,8 +372,7 @@ class UrlShortenerControllerImpl(
 
     @GetMapping("/qr/{id}", produces = [MediaType.IMAGE_PNG_VALUE])
     override fun getQRCode(
-        @PathVariable id: String,
-        @RequestParam(required = false) target: String?
+        @PathVariable id: String
     ): ResponseEntity<ByteArray> {
         val shortUrl = shortUrlRepositoryService.findByKey(id)
             ?: return ResponseEntity(HttpStatus.NOT_FOUND)
@@ -384,14 +383,9 @@ class UrlShortenerControllerImpl(
         val qrCodeBase64 = if (shortUrl.qrCode != null) {
             shortUrl.qrCode
         } else {
-            if (target == null) {
-                // Si no se proporciona el parámetro `target`, no se puede generar el QR
-                return ResponseEntity(HttpStatus.BAD_REQUEST)
-            }
-
             println("QR code is null for short URL with id: $id")
             // Usar el target proporcionado para generar el QR
-            val generatedQRCode = generateQRCodeUseCase.generateQRCode(target).base64Image
+            val generatedQRCode = generateQRCodeUseCase.generateQRCode("http://localhost:8080/" + id).base64Image
             val updatedShortUrl = shortUrl.copy(qrCode = generatedQRCode)
             shortUrlRepositoryService.save(updatedShortUrl)
             generatedQRCode
