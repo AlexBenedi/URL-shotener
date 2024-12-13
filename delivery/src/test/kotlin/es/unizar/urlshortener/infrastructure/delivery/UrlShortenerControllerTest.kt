@@ -5,8 +5,7 @@ import es.unizar.urlshortener.core.*
 import es.unizar.urlshortener.core.usecases.*
 import org.hamcrest.CoreMatchers.containsString
 import org.mockito.ArgumentMatchers.eq
-import org.mockito.BDDMockito.given
-import org.mockito.BDDMockito.never
+import org.mockito.BDDMockito.*
 import org.mockito.Mockito.doThrow
 import org.mockito.Mockito.`when`
 import org.mockito.kotlin.any
@@ -67,6 +66,9 @@ class UrlShortenerControllerTest {
 
     @MockBean
     private lateinit var shortUrlRepositoryService: ShortUrlRepositoryService
+
+    @MockBean
+    private lateinit var qrService: QrService
 
     @Test
     fun `should allow access to protected routes with authentication`() {
@@ -141,6 +143,48 @@ class UrlShortenerControllerTest {
             .andExpect(status().isNotFound)
             .andExpect(jsonPath("$.properties.error").value("User not found"))
     }
+
+    /**
+     * Test that verifies that the `shortenerUser` method returns a shortened link successfull when
+     * the user wants also a QR code.
+     */
+    @Test
+    fun `shortenerUser generates QR code and returns shortened link successfully`() {
+        val user = User(
+            userId = "user123",
+            redirections = 0,
+            lastRedirectionTimeStamp = OffsetDateTime.now().minusMinutes(61) // Límite reiniciado
+        )
+        val shortUrl = ShortUrl(
+            hash = "abc123",
+            redirection = Redirection(target = "http://example.com"),
+            created = OffsetDateTime.now(),
+            properties = ShortUrlProperties(
+                ip = "127.0.0.1",
+                generateQrCode = true
+            )
+        )
+
+        // Simula que el usuario existe
+        given(getUserInformationUseCase.findById("user123")).willReturn(user)
+
+        given(createShortUrlUseCase.save(shortUrl)).willReturn(shortUrl)
+        given(createShortUrlUseCase.create("http://example.com", shortUrl.properties)).willReturn(shortUrl)
+        given(createShortUrlUseCase.createAndDoNotSave("http://example.com", shortUrl.properties, "user123"))
+            .willReturn(shortUrl)
+
+        mockMvc.perform(
+            post("/api/linkUser")
+                .param("userId", "user123")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+                .param("url", "http://example.com")
+                .param("generateQRCode", "true")
+        )
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$.url").value("http://localhost:80/abc123"))
+            .andExpect(jsonPath("$.qrCodeGenerated").value(true))
+    }
+
 
     /**
      * Test that verifies that the `shortenerUser` method returns a 429 when the user has exceeded the limit
