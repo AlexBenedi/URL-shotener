@@ -404,5 +404,39 @@ class UrlShortenerControllerTest {
             .andExpect(content().contentType(MediaType.IMAGE_PNG))
     }
 
+    /**
+     * Test that expect to return a 404 Not Found when the short URL does not exist
+     */
+    @Test
+    fun `should return 404 if short URL id does not exist`() {
+        val id = "nonExistentId"
+
+        given(shortUrlRepositoryService.findByKey(id)).willReturn(null)
+
+        mockMvc.perform(get("/qr/{id}", id))
+            .andExpect(status().isNotFound)
+    }
+
+    /**
+     * Test that expect to return a 500 Internal Server Error when the QR code Base64 is invalid
+     */
+    @Test
+    fun `getQRCode returns 500 when QR code Base64 is invalid`() {
+        val id = "abc123"
+        val invalidBase64 = "invalid_base64_string"
+        val shortUrl = ShortUrl(
+            hash = id,
+            redirection = Redirection(target = "http://example.com"),
+            created = OffsetDateTime.now(),
+            properties = ShortUrlProperties(),
+            qrCode = invalidBase64
+        )
+
+        given(shortUrlRepositoryService.findByKey(id)).willReturn(shortUrl)
+
+        mockMvc.perform(get("/qr/$id").accept(MediaType.IMAGE_PNG))
+            .andExpect(status().isInternalServerError)
+    }
+
 
 }
