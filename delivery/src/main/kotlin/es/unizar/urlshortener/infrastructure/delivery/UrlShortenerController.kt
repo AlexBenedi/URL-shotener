@@ -324,6 +324,9 @@ class UrlShortenerControllerImpl(
     override fun getUserLinks(@RequestParam userId: String): ResponseEntity<List<Link>> {
         System.out.println("UserId from getUserLinks : $userId")
         val user = getUserInformationUseCase.findById(userId)
+        if(user == null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(emptyList())
+        }
         val links = user?.let { getUserInformationUseCase.getLinks(it) }
         return ResponseEntity.ok(links)
     }

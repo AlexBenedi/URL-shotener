@@ -12,6 +12,7 @@ import org.mockito.Mockito.`when`
 import org.mockito.kotlin.any
 import org.mockito.kotlin.doNothing
 import org.mockito.kotlin.verify
+import org.mockito.kotlin.whenever
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
@@ -68,6 +69,49 @@ class UrlShortenerControllerTest {
     @MockBean
     private lateinit var shortUrlRepositoryService: ShortUrlRepositoryService
 
+
+    @Test
+    fun `should return links for a valid user`() {
+        val userId = "valid-user-id"
+        val user = User(userId = userId, redirections = 2, lastRedirectionTimeStamp = OffsetDateTime.now())
+
+        val links = listOf(
+            Link(Click(hash = "anyone", properties = ClickProperties(null), created = OffsetDateTime.now(),
+                clicks = 0),
+                ShortUrl(hash = "anyone", redirection = Redirection(target = "http://example.com"),
+                    properties = ShortUrlProperties(name = "http://exampleshortened/anyone")), id = 12, user)
+        )
+
+        // Configuramos el comportamiento del caso de uso
+        whenever(getUserInformationUseCase.findById(userId)).thenReturn(user)
+        whenever(getUserInformationUseCase.getLinks(user)).thenReturn(links)
+
+        // Realizamos la petición y verificamos los resultados
+        mockMvc.perform(get("/api/getUserLink")
+            .param("userId", userId))
+            .andExpect(status().isOk)
+            .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+            .andExpect(jsonPath("$.length()").value(1)) // Verifica que hay un enlace
+            .andExpect(jsonPath("$[0].id").value(12))
+    }
+
+    @Test
+    fun `should return empty list if user is not found`() {
+        val userId = "invalid-user-id"
+
+        // Simulamos que el usuario no existe
+        whenever(getUserInformationUseCase.findById(userId)).thenReturn(null)
+
+        mockMvc.perform(get("/api/getUserLink")
+            .param("userId", userId))
+            .andExpect(status().isNotFound)
+            .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+            .andExpect(jsonPath("$.length()").value(0)) // Verifica que la lista está vacía
+    }
+
+    /**
+     * Test that verifies that we can`t access the user page without authentication.
+     */
     @Test
     fun `should allow access to protected routes with authentication`() {
         // Simulamos un OAuth2Principal con un atributo "sub" que es el user ID
@@ -165,8 +209,6 @@ class UrlShortenerControllerTest {
             .andExpect(jsonPath("$.properties.error").value("Too many requests. " +
                     "Please try again later."))
     }
-
-
 
     /**
      * Test that verifies that the `getLink` method returns a link when the id exists.
