@@ -396,7 +396,8 @@ class UrlShortenerControllerTest {
         val updatedShortUrl = shortUrl.copy(qrCode = generatedQRCodeBase64)
 
         given(shortUrlRepositoryService.findByKey(id)).willReturn(shortUrl)
-        given(generateQRCodeUseCase.generateQRCode(any(), eq(250))).willReturn(QRCode("http://localhost:8080/"+id, generatedQRCodeBase64, 250))
+        given(generateQRCodeUseCase.generateQRCode(any(), eq(250))
+            ).willReturn(QRCode("http://localhost:8080/"+id, generatedQRCodeBase64, 250))
         given(shortUrlRepositoryService.save(updatedShortUrl)).willReturn(updatedShortUrl)
 
         mockMvc.perform(get("/qr/{id}", id))
