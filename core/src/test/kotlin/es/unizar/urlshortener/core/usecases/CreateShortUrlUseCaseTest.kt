@@ -376,6 +376,99 @@ class CreateShortUrlUseCaseTest {
         assertEquals(shortUrl.hash, "f684a3c4")
     }
 
+    /**
+     * Test case for the `CreateShortUrlUseCaseImpl` class.
+     *
+     * This test verifies that the `createAndDoNotSave` method throws an `InvalidUrlException`
+     * if the provided URL is not valid.
+     *
+     * Steps:
+     * 1. Mock the dependencies: `ShortUrlRepositoryService`, `ValidatorService`, `SafetyService`, 
+     *    `HashService`, `ShortUrlProperties`, `BrandedService`, and `QrService`.
+     * 2. Set up the mock to return `false` for `validatorService.isValid("ftp://example.com/")`.
+     * 3. Create an instance of `CreateShortUrlUseCaseImpl` with the mocked dependencies.
+     * 4. Call the `createAndDoNotSave` method with the URL `"ftp://example.com/"` and `shortUrlProperties`.
+     * 5. Verify that the method throws an `InvalidUrlException`.
+     */
+    @Test
+    fun `creates returns invalid URL exception if the URL is not valid in createAndDoNotSave function`() {
+        val shortUrlRepository = mock<ShortUrlRepositoryService>()
+        val validatorService = mock<ValidatorService>()
+        val safetyService = mock<SafetyService>()
+        val hashService = mock<HashService>()
+        val shortUrlProperties = mock<ShortUrlProperties>()
+        val brandedService = mock<BrandedService>()
+        val qrService = mock<QrService>()
+
+        whenever(validatorService.isValid("ftp://example.com/")).thenReturn(false)
+
+        val createShortUrlUseCase 
+            = CreateShortUrlUseCaseImpl(
+                shortUrlRepository, 
+                validatorService, 
+                hashService,
+                safetyService,
+                brandedService,
+                qrService
+            )
+
+        assertFailsWith<InvalidUrlException> {
+            createShortUrlUseCase.createAndDoNotSave(
+                "ftp://example.com/", 
+                shortUrlProperties, 
+                "user123"
+            )
+        }
+    }
+
+    /**
+     * Test case for the `CreateShortUrlUseCaseImpl` class.
+     *
+     * This test verifies that the `createAndDoNotSave` method throws an `InvalidNameBrandedUrl`
+     * exception if the `name` property is not provided for a branded URL.
+     *
+     * Steps:
+     * 1. Mock the dependencies: `ShortUrlRepositoryService`, `ValidatorService`, `HashService`, 
+     *    `SafetyService`, `ShortUrlProperties`, `BrandedService`, and `QrService`.
+     * 2. Set up the mocks to return expected values:
+     *    - `validatorService.isValid("http://example.com/")` returns `true`.
+     *    - `shortUrlRepository.save(any())` returns the argument passed to it.
+     * 3. Create an instance of `CreateShortUrlUseCaseImpl` with the mocked dependencies.
+     * 4. Call the `createAndDoNotSave` method with the URL `"http://example.com/"` and `ShortUrlProperties` object
+     *    with `isBranded` set to `true` and `name` set to `null`.
+     * 5. Verify that the method throws an `InvalidNameBrandedUrl` exception.
+     */
+    @Test
+    fun `create a return invalid branded link exception if name is empty in createAndDoNotSave function`() {
+        val shortUrlRepository = mock<ShortUrlRepositoryService>()
+        val validatorService = mock<ValidatorService>()
+        val hashService = mock<HashService>()
+        val safetyService = mock<SafetyService>()
+        val shortUrlProperties = mock<ShortUrlProperties>()
+        val brandedService = mock<BrandedService>()
+        val qrService = mock<QrService>()
+
+        whenever(validatorService.isValid("http://example.com/")).thenReturn(true)
+        whenever(shortUrlRepository.save(any())).doAnswer { it.arguments[0] as ShortUrl }
+
+        val createShortUrlUseCase 
+            = CreateShortUrlUseCaseImpl(
+                shortUrlRepository, 
+                validatorService, 
+                hashService,
+                safetyService,
+                brandedService,
+                qrService
+            )
+        assertFailsWith<EmptyNameBrandedUrl> {
+            createShortUrlUseCase.createAndDoNotSave(
+                "http://example.com/", 
+                ShortUrlProperties(isBranded = true), 
+                "user123"
+            )
+        }
+    }
+
     /*
     // New test to simulate user exceeding the limit
     @Test
