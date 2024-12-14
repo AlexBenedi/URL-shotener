@@ -24,7 +24,8 @@ import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers.print
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.* 
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
+import java.time.Instant
 import java.time.OffsetDateTime
 import java.util.*
 import kotlin.test.Test
@@ -547,5 +548,28 @@ class UrlShortenerControllerTest {
             .andExpect(status().isInternalServerError)
     }
 
+    /**
+     * Test that expect a 429 Too many requests when the user wants to create a short URL but has exceeded the limit
+     * of redirections.
+     */
+    @Test
+    fun `creates returns 429 Too Many Requests when redirection limit is exceeded`() {
+        val user = User(
+            userId = "user123",
+            redirections = 6,
+            lastRedirectionTimeStamp = OffsetDateTime.now().minusMinutes(10) // Límite no reiniciado
+        )
+
+        given(getUserInformationUseCase.findById("user123")).willReturn(user)
+
+        mockMvc.perform(
+            post("/api/link/user/{userId}", "user123")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+                .param("url", "http://example.com")
+        )
+            .andExpect(status().isTooManyRequests)
+            .andExpect(jsonPath("$.properties.error").value("Too many requests. " +
+                    "Please try again later."))
+    }
 
 }

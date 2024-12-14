@@ -1,0 +1,21 @@
+spring:
+  profiles:
+    active: default  # Establece el perfil activo como 'dev'
+
+---
+# Configuración para el perfil 'dev'
+spring:
+  config:
+    activate:
+      on-profile: dev
+redirection:
+  limit: -1  # Límite de redirecciones en modo dev
+
+---
+# Configuración para el perfil 'default' (producción)
+spring:
+  config:
+    activate:
+      on-profile: default
+redirection:
+  limit: 6  # Límite de redirecciones en producción

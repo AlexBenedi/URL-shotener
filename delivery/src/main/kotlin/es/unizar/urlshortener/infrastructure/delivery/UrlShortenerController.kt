@@ -16,6 +16,8 @@ import es.unizar.urlshortener.core.usecases.LogClickUseCase
 import es.unizar.urlshortener.core.usecases.CreateShortUrlUseCase
 import es.unizar.urlshortener.core.usecases.GenerateQRCodeUseCase
 import es.unizar.urlshortener.core.usecases.DeleteUserLinkUseCase
+import org.springframework.beans.factory.annotation.Value
+import org.springframework.context.annotation.Profile
 import org.springframework.core.io.ClassPathResource
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken
 import org.springframework.web.bind.annotation.*
@@ -110,6 +112,8 @@ class UrlShortenerControllerImpl(
 
 
 ) : UrlShortenerController {
+    @Value("\${redirection.limit}")
+    private var redirectionLimitConfig: Int = 0
     private val ipRedirectionCounts = ConcurrentHashMap<String, Pair<Int, Instant>>()
     companion object {
         private const val REDIRECTION_LIMIT = 6 // Cambiada a const val
@@ -152,7 +156,7 @@ class UrlShortenerControllerImpl(
         println("IP: $ip")
         if (now.epochSecond - lastTimestamp.epochSecond > TIME_WINDOW_SECONDS) {
             ipRedirectionCounts[ip] = Pair(1, now) // Reset the count
-        } else if (currentCount >= REDIRECTION_LIMIT && ip != "0:0:0:0:0:0:0:1" && ip != "127.0.0.1") { 
+        } else if (currentCount >= REDIRECTION_LIMIT && ip != "0:0:0:0:0:0:0:1" && ip != "127.0.0.1") {
             return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS)
                 .body(ShortUrlDataOut(error = "Too many requests from this IP. Try again later."))
         } else {
@@ -221,9 +225,9 @@ class UrlShortenerControllerImpl(
             if (timeElapsed >= MINUTES_LIMIT) {
                 userRedirections = 0 // Restablece las redirecciones cada 60 minutos
             }
-
+            System.out.println("redirectionLimitConfig : $redirectionLimitConfig")
             System.out.println("User redirections from shortenerUser : $userRedirections")
-            if (userRedirections >= REDIRECTION_LIMIT) {
+            if (redirectionLimitConfig != - 1 && userRedirections >= redirectionLimitConfig) {
                 // Return 429 Too Many Requests
                 return ResponseEntity
                     .status(HttpStatus.TOO_MANY_REQUESTS) // Set HTTP status to 429
