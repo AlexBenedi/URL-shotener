@@ -1,0 +1,34 @@
+services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+    ports:
+      - "2181:2181"
+
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    ports:
+      - "9092:9092"
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - kafka
+    environment:
+      GOOGLE_CLIENT_ID_API_KEY: 967313434685-bcfqtgn6tv5o2t8hlnjbqj7q195pv5i8.apps.googleusercontent.com
+      GOOGLE_SAFE_BROWSING_API_KEY: AIzaSyACY3gS9WFXv8xDNH1fBvrJ7WmJpJwdKSA
+      GOOGLE_CLIENT_SECRET_API_KEY: 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
+      NINJA_PROFANITY_FILTER_API_KEY: 3lzqivEvkEi9dSr41w9lGg==Veaaeh6LEL0guD0i
+      KAFKA_BROKER_IP: kafka:9092
+    ports:
+      - "8080:8080"
+
