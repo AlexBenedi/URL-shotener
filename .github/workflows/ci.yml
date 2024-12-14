@@ -87,6 +87,11 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: repo-artifact
+
+      - name: Copy jar file
+        run: |
+          cp repo-artifact/app/build/libs/app-0.2024.1-SNAPSHOT.jar .
+          ls -lh app.jar
       
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
