@@ -391,7 +391,7 @@ class CreateShortUrlUseCaseTest {
      * 5. Verify that the method throws an `InvalidUrlException`.
      */
     @Test
-    fun `creates returns invalid URL exception if the URL is not valid in createAndDoNotSave function`() {
+    fun `createAndDoNotSave returns invalid URL exception if the URL is not valid`() {
         val shortUrlRepository = mock<ShortUrlRepositoryService>()
         val validatorService = mock<ValidatorService>()
         val safetyService = mock<SafetyService>()
@@ -439,7 +439,7 @@ class CreateShortUrlUseCaseTest {
      * 5. Verify that the method throws an `InvalidNameBrandedUrl` exception.
      */
     @Test
-    fun `create a return invalid branded link exception if name is empty in createAndDoNotSave function`() {
+    fun `createAndDoNotSave returns invalid branded link exception if name is empty`() {
         val shortUrlRepository = mock<ShortUrlRepositoryService>()
         val validatorService = mock<ValidatorService>()
         val hashService = mock<HashService>()
@@ -467,6 +467,97 @@ class CreateShortUrlUseCaseTest {
                 "user123"
             )
         }
+    }
+
+    /**
+     * Test case for the `CreateShortUrlUseCaseImpl` class.
+     *
+     * This test verifies that the `createAndDoNotSave` method returns a valid branded short URL
+     * when the `isBranded` property is set to `true`.
+     *
+     * Steps:
+     * 1. Mock the dependencies: `ShortUrlRepositoryService`, `ValidatorService`, `HashService`, 
+     *    `SafetyService`, `ShortUrlProperties`, `BrandedService`, and `QrService`.
+     * 2. Set up the mocks to return expected values:
+     *    - `validatorService.isValid("http://example.com/")` returns `true`.
+     *    - `shortUrlRepository.save(any())` returns the argument passed to it.
+     * 3. Create an instance of `CreateShortUrlUseCaseImpl` with the mocked dependencies.
+     * 4. Create a `ShortUrlProperties` object with `isBranded` set to `true` and `name` set to `"branded"`.
+     * 5. Call the `createAndDoNotSave` method with the URL `"http://example.com/"` and the `ShortUrlProperties` object.
+     * 6. Verify that the returned `ShortUrl` object has the expected hash `"branded"`.
+     */
+    @Test 
+    fun `createAndDoNotSave returns a valid branded short URL`() {
+        val shortUrlRepository = mock<ShortUrlRepositoryService>()
+        val validatorService = mock<ValidatorService>()
+        val hashService = mock<HashService>()
+        val safetyService = mock<SafetyService>()
+        val shortUrlProperties = mock<ShortUrlProperties>()
+        val brandedService = mock<BrandedService>()
+        val qrService = mock<QrService>()
+
+        whenever(validatorService.isValid("http://example.com/")).thenReturn(true)
+        whenever(shortUrlRepository.save(any())).doAnswer { it.arguments[0] as ShortUrl }
+
+        val createShortUrlUseCase 
+            = CreateShortUrlUseCaseImpl(
+                shortUrlRepository, 
+                validatorService, 
+                hashService,
+                safetyService,
+                brandedService,
+                qrService
+            )
+        val properties = ShortUrlProperties(isBranded = true, name = "branded")
+        val shortUrl = createShortUrlUseCase.createAndDoNotSave("http://example.com/", properties, "user123")
+
+        assertEquals(shortUrl.hash, "branded")
+    }
+
+    /**
+     * Test case for the `CreateShortUrlUseCaseImpl` class.
+     *
+     * This test verifies that the `create` method returns a basic redirect
+     * if it can compute a hash for the given URL.
+     *
+     * Steps:
+     * 1. Mock the dependencies: `ShortUrlRepositoryService`, `ValidatorService`, `HashService`, 
+     *    `SafetyService`, `ShortUrlProperties`, `BrandedService`, and `QrService`.
+     * 2. Set up the mocks to return expected values:
+     *    - `validatorService.isValid("http://example.com/")` returns `true`.
+     *    - `hashService.hasUrl("http://example.com/")` returns `"f684a3c4"`.
+     *    - `shortUrlRepository.save(any())` returns the argument passed to it.
+     * 3. Create an instance of `CreateShortUrlUseCaseImpl` with the mocked dependencies.
+     * 4. Call the `create` method with the URL `"http://example.com/"` and `shortUrlProperties`.
+     * 5. Verify that the returned `ShortUrl` object has the expected hash `"f684a3c4"`.
+     */
+    @Test
+    fun `createAndDoNotSave returns a basic link if it can compute a hash`() {
+        val shortUrlRepository = mock<ShortUrlRepositoryService>()
+        val validatorService = mock<ValidatorService>()
+        val hashService = mock<HashService>()
+        val safetyService = mock<SafetyService>()
+        val shortUrlProperties = mock<ShortUrlProperties>()
+        val brandedService = mock<BrandedService>()
+        val qrService = mock<QrService>()
+
+        whenever(validatorService.isValid("http://example.com/")).thenReturn(true)
+        whenever(hashService.hasUrl("http://example.com/")).thenReturn("f684a3c4")
+        whenever(shortUrlRepository.save(any())).doAnswer { it.arguments[0] as ShortUrl }
+
+        val createShortUrlUseCase 
+            = CreateShortUrlUseCaseImpl(
+                shortUrlRepository, 
+                validatorService, 
+                hashService,
+                safetyService,
+                brandedService,
+                qrService
+            )
+        val shortUrl = createShortUrlUseCase.createAndDoNotSave("http://example.com/", shortUrlProperties, "user123")
+        println(shortUrl)
+
+        assertEquals(shortUrl.hash, "f684a3c4user123")
     }
 
     /*
