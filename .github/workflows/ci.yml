@@ -6,7 +6,7 @@ on:
     branches: [ main ]
   workflow_dispatch:
 jobs:
-  build:
+  prepare:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -34,6 +34,9 @@ jobs:
       - name: Set up Kafka Docker Compose 
         run: docker-compose -f docker-compose.yml up -d
 
+  build:
+    runs-on: ubuntu-latest
+    steps:
       - name: Sanitize kafka I
         run: ./gradlew build --no-daemon || true
         env:
@@ -57,14 +60,6 @@ jobs:
         env:
           NINJA_PROFANITY_FILTER_API_KEY: ${{ secrets.NINJA_PROFANITY_FILTER_API_KEY }}
           GOOGLE_SAFE_BROWSING_API_KEY: ${{ secrets.GOOGLE_API_SAFETY_KEY }}
-      
-      - name: Check with Gradle
-        run: ./gradlew check --no-daemon
-        env:
-          GOOGLE_SAFE_BROWSING_API_KEY: ${{ secrets.GOOGLE_API_SAFETY_KEY }}
-          GOOGLE_CLIENT_ID_API_KEY: ${{ secrets.GOOGLE_CLIENT_ID_API_KEY }}
-          GOOGLE_CLIENT_SECRET_API_KEY: ${{ secrets.GOOGLE_CLIENT_SECRET_API_KEY }}
-          NINJA_PROFANITY_FILTER_API_KEY: ${{ secrets.NINJA_PROFANITY_FILTER_API_KEY }}
 
       - name: Build with Gradle
         run: ./gradlew build --no-daemon
@@ -73,7 +68,26 @@ jobs:
           GOOGLE_CLIENT_ID_API_KEY: ${{ secrets.GOOGLE_CLIENT_ID_API_KEY }}
           GOOGLE_CLIENT_SECRET_API_KEY: ${{ secrets.GOOGLE_CLIENT_SECRET_API_KEY }}
           NINJA_PROFANITY_FILTER_API_KEY: ${{ secrets.NINJA_PROFANITY_FILTER_API_KEY }}
+
       - name: Cleanup Gradle CacheGOOGLE_API_SAFETY_KEY
         run: |
           rm -f ~/.gradle/caches/modules-2/modules-2.lock
           rm -f ~/.gradle/caches/modules-2/gc.properties
+          
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Test with Gradle
+        run: ./gradlew test --no-daemon
+        env:
+          GOOGLE_SAFE_BROWSING_API_KEY: ${{ secrets.GOOGLE_API_SAFETY_KEY }}
+          GOOGLE_CLIENT_ID_API_KEY: ${{ secrets.GOOGLE_CLIENT_ID_API_KEY }}
+          GOOGLE_CLIENT_SECRET_API_KEY: ${{ secrets.GOOGLE_CLIENT_SECRET_API_KEY }}
+          NINJA_PROFANITY_FILTER_API_KEY: ${{ secrets.NINJA_PROFANITY_FILTER_API_KEY }}
+
+      - name: Cleanup Gradle CacheGOOGLE_API_SAFETY_KEY
+        run: |
+          rm -f ~/.gradle/caches/modules-2/modules-2.lock
+          rm -f ~/.gradle/caches/modules-2/gc.properties
+  
+    
