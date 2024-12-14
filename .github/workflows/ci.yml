@@ -21,20 +21,20 @@ jobs:
       - name: Validate Gradle wrapper
         uses: gradle/wrapper-validation-action@e6e38bacfdf1a337459f332974bb2327a31aaf4b
       
-      #- name: Install Docker
-      #  run: |
-      #    curl -fsSL https://get.docker.com -o get-docker.sh
-      #    sudo sh get-docker.sh
-      #    sudo usermod -aG docker $USER
+      - name: Install Docker
+        run: |
+          curl -fsSL https://get.docker.com -o get-docker.sh
+          sudo sh get-docker.sh
+          sudo usermod -aG docker $USER
         
-      #- name: Install Docker Compose
-      #  run: |
-      #    sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-      #    sudo chmod +x /usr/local/bin/docker-compose
-      #    docker-compose --version
+      - name: Install Docker Compose
+        run: |
+          sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+          sudo chmod +x /usr/local/bin/docker-compose
+          docker-compose --version
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+      #- name: Set up Docker Buildx
+      #  uses: docker/setup-buildx-action@v3
         
       - name: Set up Kafka Docker Compose 
         run: docker-compose -f docker-compose.yml up -d
@@ -134,6 +134,11 @@ jobs:
       #  run: |
       #    cp app.jar docker-compose-deploy/app.jar
       #    ls -lh docker-compose-deploy/app.jar
+
+      - name: Load docker image
+        run: |
+          docker load < app.tar
+          docker images
 
 
       
