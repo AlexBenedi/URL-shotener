@@ -94,8 +94,8 @@ jobs:
 
       - name: Copy jar file
         run: |
-          ls -lh repo-artifact
-          cp repo-artifact/app/build/libs/app-0.2024.1-SNAPSHOT.jar .
+          ls -lh .
+          cp . /app/build/libs/app-0.2024.1-SNAPSHOT.jar .
           ls -lh app.jar
       
       - name: Set up Docker Buildx
@@ -135,10 +135,10 @@ jobs:
       #    cp app.jar docker-compose-deploy/app.jar
       #    ls -lh docker-compose-deploy/app.jar
 
-      - name: Load docker image
-        run: |
-          docker load < app.tar
-          docker images
+      #- name: Load docker image
+      #  run: |
+      #    docker load < /home/${{AZURE_USERNAME}}.app.tar
+      #    docker images
 
 
       
