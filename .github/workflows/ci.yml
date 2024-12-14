@@ -95,7 +95,7 @@ jobs:
       - name: Copy jar file
         run: |
           ls -lh .
-          cp . /app/build/libs/app-0.2024.1-SNAPSHOT.jar .
+          cp ./app/build/libs/app-0.2024.1-SNAPSHOT.jar .
           ls -lh app.jar
       
       - name: Set up Docker Buildx
