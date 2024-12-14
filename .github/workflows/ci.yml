@@ -34,6 +34,12 @@ jobs:
       - name: Set up Kafka Docker Compose 
         run: docker-compose -f docker-compose.yml up -d
 
+      - name: Sanitize kafka I
+        run: ./gradlew build --no-daemon || true
+        env:
+          NINJA_PROFANITY_FILTER_API_KEY: ${{ secrets.NINJA_PROFANITY_FILTER_API_KEY }}
+          GOOGLE_SAFE_BROWSING_API_KEY: ${{ secrets.GOOGLE_API_SAFETY_KEY }}
+
   build:
     runs-on: ubuntu-latest
     needs:  prepare
