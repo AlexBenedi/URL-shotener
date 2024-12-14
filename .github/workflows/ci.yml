@@ -109,18 +109,27 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Build and Push Docker Image
-        uses: docker/build-push-action@v5
-        with:
-            context: .
-            tags: app:latest
-            push: false
-            build-args: |
-              GOOGLE_CLIENT_ID_API_KEY=${{ secrets.GOOGLE_CLIENT_ID_API_KEY }}
-              GOOGLE_SAFE_BROWSING_API_KEY=${{ secrets.GOOGLE_API_SAFETY_KEY }}
-              GOOGLE_CLIENT_SECRET_API_KEY=${{ secrets.GOOGLE_CLIENT_SECRET_API_KEY }}
-              NINJA_PROFANITY_FILTER_API_KEY=${{ secrets.NINJA_PROFANITY_FILTER_API_KEY }}
-              KAFKA_BROKER_IP=kafka:9092
+      #- name: Build and Push Docker Image
+      #  uses: docker/build-push-action@v5
+      #  with:
+      #      context: .
+      #      tags: app:latest
+      #      push: false
+      #      build-args: |
+      #        GOOGLE_CLIENT_ID_API_KEY=${{ secrets.GOOGLE_CLIENT_ID_API_KEY }}
+      #        GOOGLE_SAFE_BROWSING_API_KEY=${{ secrets.GOOGLE_API_SAFETY_KEY }}
+      #        GOOGLE_CLIENT_SECRET_API_KEY=${{ secrets.GOOGLE_CLIENT_SECRET_API_KEY }}
+      #        NINJA_PROFANITY_FILTER_API_KEY=${{ secrets.NINJA_PROFANITY_FILTER_API_KEY }}
+      #       KAFKA_BROKER_IP=kafka:9092
+
+      - name: Build Docker Image
+        run: docker build \
+              --build-arg GOOGLE_CLIENT_ID_API_KEY="${GOOGLE_CLIENT_ID_API_KEY}" \
+              --build-arg GOOGLE_SAFE_BROWSING_API_KEY="${GOOGLE_SAFE_BROWSING_API_KEY}" \
+              --build-arg GOOGLE_CLIENT_SECRET_API_KEY="${GOOGLE_CLIENT_SECRET_API_KEY}" \
+              --build-arg NINJA_PROFANITY_FILTER_API_KEY="${NINJA_PROFANITY_FILTER_API_KEY}" \
+              --build-arg KAFKA_BROKER_IP="kafka:9092" \
+              -t app:latest .
       
       - name: Check Docker Image
         run: docker images 
