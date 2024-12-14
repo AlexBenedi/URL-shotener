@@ -43,12 +43,6 @@ jobs:
           NINJA_PROFANITY_FILTER_API_KEY: ${{ secrets.NINJA_PROFANITY_FILTER_API_KEY }}
           GOOGLE_SAFE_BROWSING_API_KEY: ${{ secrets.GOOGLE_API_SAFETY_KEY }}
 
-      - name: Sanitize kafka I
-        run: ./gradlew build --no-daemon || true
-        env:
-          NINJA_PROFANITY_FILTER_API_KEY: ${{ secrets.NINJA_PROFANITY_FILTER_API_KEY }}
-          GOOGLE_SAFE_BROWSING_API_KEY: ${{ secrets.GOOGLE_API_SAFETY_KEY }}
-
       - name: Sanitize kafka II
         run: ./gradlew build --no-daemon || true
         env:
@@ -65,14 +59,14 @@ jobs:
       
       # Test
       - name: Test with Gradle
-        run: ./gradlew test --no-daemon
+        run: ./gradlew check --no-daemon
         env:
           GOOGLE_SAFE_BROWSING_API_KEY: ${{ secrets.GOOGLE_API_SAFETY_KEY }}
           GOOGLE_CLIENT_ID_API_KEY: ${{ secrets.GOOGLE_CLIENT_ID_API_KEY }}
           GOOGLE_CLIENT_SECRET_API_KEY: ${{ secrets.GOOGLE_CLIENT_SECRET_API_KEY }}
           NINJA_PROFANITY_FILTER_API_KEY: ${{ secrets.NINJA_PROFANITY_FILTER_API_KEY }}
 
-      - name: Cleanup Gradle CacheGOOGLE_API_SAFETY_KEY
+      - name: Cleanup Gradle Cache GOOGLE_API_SAFETY_KEY
         run: |
           rm -f ~/.gradle/caches/modules-2/modules-2.lock
           rm -f ~/.gradle/caches/modules-2/gc.properties
@@ -93,6 +87,35 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: repo-artifact
+      
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and Push Docker Image
+        uses: docker/build-push-action@v5
+        with:
+            context: .
+            tags: app:latest
+            push: false
+            build-args: |
+              GOOGLE_CLIENT_ID_API_KEY=${{ secrets.GOOGLE_CLIENT_ID_API_KEY }}
+              GOOGLE_SAFE_BROWSING_API_KEY=${{ secrets.GOOGLE_API_SAFETY_KEY }}
+              GOOGLE_CLIENT_SECRET_API_KEY=${{ secrets.GOOGLE_CLIENT_SECRET_API_KEY }}
+              NINJA_PROFANITY_FILTER_API_KEY=${{ secrets.NINJA_PROFANITY_FILTER_API_KEY }}
+              KAFKA_BROKER_IP=kafka:9092
+      
+      - name: Export docker image
+        run: |
+          docker save app:latest > app.tar
+          ls -lh app.tar
+
+      - name: Upload docker
+        uses: actions/upload-artifact@v3
+        with:
+          path: .
+          name: app.tar
+
+
 
   
   
