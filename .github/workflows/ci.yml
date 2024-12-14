@@ -51,6 +51,7 @@ jobs:
         env:
           NINJA_PROFANITY_FILTER_API_KEY: ${{ secrets.NINJA_PROFANITY_FILTER_API_KEY }}
           GOOGLE_SAFE_BROWSING_API_KEY: ${{ secrets.GOOGLE_API_SAFETY_KEY }}
+          KAFKA_BROKER_IP: localhost:9092
 
       - name: Build with Gradle
         run: ./gradlew build --no-daemon
@@ -59,6 +60,7 @@ jobs:
           GOOGLE_CLIENT_ID_API_KEY: ${{ secrets.GOOGLE_CLIENT_ID_API_KEY }}
           GOOGLE_CLIENT_SECRET_API_KEY: ${{ secrets.GOOGLE_CLIENT_SECRET_API_KEY }}
           NINJA_PROFANITY_FILTER_API_KEY: ${{ secrets.NINJA_PROFANITY_FILTER_API_KEY }}
+          KAFKA_BROKER_IP: localhost:9092
       
       # Test
       - name: Test with Gradle
@@ -68,6 +70,7 @@ jobs:
           GOOGLE_CLIENT_ID_API_KEY: ${{ secrets.GOOGLE_CLIENT_ID_API_KEY }}
           GOOGLE_CLIENT_SECRET_API_KEY: ${{ secrets.GOOGLE_CLIENT_SECRET_API_KEY }}
           NINJA_PROFANITY_FILTER_API_KEY: ${{ secrets.NINJA_PROFANITY_FILTER_API_KEY }}
+          KAFKA_BROKER_IP: localhost:9092
 
       - name: Cleanup Gradle Cache GOOGLE_API_SAFETY_KEY
         run: |
@@ -96,7 +99,12 @@ jobs:
         run: |
           ls -lh .
           cp ./app/build/libs/app-0.2024.1-SNAPSHOT.jar .
-          ls -lh app.jar
+          ls -lh .
+
+      - name: Change permissions
+        run: |
+          chmod +x app-0.2024.1-SNAPSHOT.jar
+          ls -lh app-0.2024.1-SNAPSHOT.jar
       
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
