@@ -188,17 +188,6 @@ jobs:
           target: /home/${{secrets.AZURE_USERNAME}}
           overwrite: true
 
-      - name: copy docker-compose-deploy.yml via ssh key
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{secrets.AZURE_HOST}}
-          username: ${{secrets.AZURE_USERNAME}}
-          port: 22
-          key: ${{ secrets.AZURE_SSH_KEY }}
-          source: "tests.csv"
-          target: /home/${{secrets.AZURE_USERNAME}}
-          overwrite: true
-
       #- name: Copy app.jar to Azure VM
       #  run: |
       #    scp -i azure_ssh_key app.tar ${{secrets.AZURE_USERNAME}}@${{secrets.AZURE_HOST}}:/home/${{secrets.AZURE_USERNAME}}
