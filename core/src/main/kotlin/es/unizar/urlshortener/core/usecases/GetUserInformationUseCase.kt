@@ -143,10 +143,21 @@ class GetUserInformationUseCaseImpl(
         safeCall { linkRepository.save(link) }
     }
 
+    /**
+     * Save a user in the database
+     *
+     * @param user The user to be saved.
+     */
     override fun save(user: User) {
         safeCall { userRepository.save(user) }
     }
 
+    /**
+     * Find a user by its id.
+     *
+     * @param id The id of the user.
+     * @return The found user or null if not found.
+     */
     override fun findById(id: String): User? {
         return safeCall { userRepository.findById(id) }
     }
