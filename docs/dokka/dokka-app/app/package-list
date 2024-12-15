@@ -24,6 +24,7 @@ $dokka.location:es.unizar.urlshortener/ApplicationConfigurationUseCases/Applicat
 $dokka.location:es.unizar.urlshortener/ApplicationConfigurationUseCases/brandedServiceImpl/#/PointingToDeclaration/app/es.unizar.urlshortener/-application-configuration-use-cases/branded-service-impl.html
 $dokka.location:es.unizar.urlshortener/ApplicationConfigurationUseCases/clickEntityRepository/#/PointingToDeclaration/app/es.unizar.urlshortener/-application-configuration-use-cases/click-entity-repository.html
 $dokka.location:es.unizar.urlshortener/ApplicationConfigurationUseCases/createShortUrlUseCase/#/PointingToDeclaration/app/es.unizar.urlshortener/-application-configuration-use-cases/create-short-url-use-case.html
+$dokka.location:es.unizar.urlshortener/ApplicationConfigurationUseCases/dataInitializer/#/PointingToDeclaration/app/es.unizar.urlshortener/-application-configuration-use-cases/data-initializer.html
 $dokka.location:es.unizar.urlshortener/ApplicationConfigurationUseCases/deleteUserLinkUseCase/#/PointingToDeclaration/app/es.unizar.urlshortener/-application-configuration-use-cases/delete-user-link-use-case.html
 $dokka.location:es.unizar.urlshortener/ApplicationConfigurationUseCases/generateQRCodeUseCase/#/PointingToDeclaration/app/es.unizar.urlshortener/-application-configuration-use-cases/generate-q-r-code-use-case.html
 $dokka.location:es.unizar.urlshortener/ApplicationConfigurationUseCases/getUserInformationUseCase/#/PointingToDeclaration/app/es.unizar.urlshortener/-application-configuration-use-cases/get-user-information-use-case.html
