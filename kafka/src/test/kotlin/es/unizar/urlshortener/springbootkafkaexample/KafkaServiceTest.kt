@@ -212,9 +212,11 @@ class KafkaServiceTest {
     fun `branded link creation process works`() {
         // Arrange
         val topic = "branded"
+        val topicChecked = "branded-checked"
         val message = "exampleBrand"
         val profanityResponse = true
         var timesKafka = 0
+        var timesKafkaCheked = 0
 
         `when`(ninjaProfanityFilter.isNameValid(message)).thenReturn(profanityResponse)
 
@@ -225,11 +227,21 @@ class KafkaServiceTest {
             null
         }.`when`(kafkaTemplate).send(eq(topic), eq(message))
 
+        val checkedResponse = Pair(message, profanityResponse)
+        val checkedResponseJson = Gson().toJson(checkedResponse)
+
+        doAnswer {
+            kafkaConsumerService.consumeBrandedChecked(checkedResponseJson)
+            timesKafkaCheked++
+            null
+        }.`when`(kafkaTemplate).send(eq(topicChecked), eq(checkedResponseJson))
+
         // Act
         kafkaTemplate.send(topic, message)
 
         // Assert
         assertEquals(1, timesKafka)
+        assertEquals(1, timesKafkaCheked)
         verify(ninjaProfanityFilter, times(1)).isNameValid(message)
     }
 

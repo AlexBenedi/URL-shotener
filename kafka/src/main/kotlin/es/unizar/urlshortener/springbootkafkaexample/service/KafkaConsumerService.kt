@@ -20,9 +20,6 @@ import com.google.gson.reflect.TypeToken
 import java.lang.reflect.Type
 
 
-
-
-
 // quizá esta clase irá en core? o en otro paquete?
 // no le acabo de ver sentido a tenerla separada es una clase con mucho acoplamiento
 // con otras pero no logro ver donde habrá q meterla, tengo q darle una vuelta más
@@ -87,7 +84,20 @@ class KafkaConsumerService(
         println("Serielized branded received: $message")
         //Check
         val valid = ninjaProfanityFilter.isNameValid(message)
+
+        val validPair = Pair(message, valid)
+        val validPairJson = Gson().toJson(validPair)  
+
+        kafkaProducerService.sendMessage("branded-checked", validPairJson)
         updateUrlBrandedUseCase.updateUrlBranded(message, valid)
+    }
+
+    @KafkaListener(topics = ["branded-checked"], groupId = "group_id")
+    fun consumeBrandedChecked(message: String) {
+        println("Serielized branded received: $message")
+        val pairType = object : TypeToken<Pair<String, Boolean>>() {}.type
+        val deserializedObject: Pair<String, Boolean> = Gson().fromJson(message, pairType)
+        updateUrlBrandedUseCase.updateUrlBranded(deserializedObject.first, deserializedObject.second)
     }
 
     @KafkaListener(topics = ["qr"], groupId = "group_id")
