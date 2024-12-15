@@ -21,13 +21,19 @@ jobs:
       - name: Validate Gradle wrapper
         uses: gradle/wrapper-validation-action@e6e38bacfdf1a337459f332974bb2327a31aaf4b
 
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
       - name: Build Docker Image
-        run: docker build --build-arg GOOGLE_CLIENT_ID_API_KEY="${{secrets.GOOGLE_CLIENT_ID_API_KEY}}" \
-                          --build-arg GOOGLE_SAFE_BROWSING_API_KEY="${{secrets.GOOGLE_API_SAFETY_KEY}}" \
-                          --build-arg GOOGLE_CLIENT_SECRET_API_KEY="${{secrets.GOOGLE_CLIENT_SECRET_API_KEY}}" \
-                          --build-arg NINJA_PROFANITY_FILTER_API_KEY="${{secrets.NINJA_PROFANITY_FILTER_API_KEY}}" \
-                          --build-arg KAFKA_BROKER_IP="kafka:9092" \
-                          -t app:latest .
+        run: docker buildx build \
+                        --build-arg GOOGLE_CLIENT_ID_API_KEY="${{secrets.GOOGLE_CLIENT_ID_API_KEY}}" \
+                        --build-arg GOOGLE_SAFE_BROWSING_API_KEY="${{secrets.GOOGLE_API_SAFETY_KEY}}" \
+                        --build-arg GOOGLE_CLIENT_SECRET_API_KEY="${{secrets.GOOGLE_CLIENT_SECRET_API_KEY}}" \
+                        --build-arg NINJA_PROFANITY_FILTER_API_KEY="${{secrets.NINJA_PROFANITY_FILTER_API_KEY}}" \
+                        --build-arg KAFKA_BROKER_IP="kafka:9092" \
+                        -t app:latest \
+                        .
+      
       
       - name: Install Docker
         run: |
