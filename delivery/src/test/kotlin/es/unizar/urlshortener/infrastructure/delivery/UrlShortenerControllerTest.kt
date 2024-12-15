@@ -184,7 +184,9 @@ class UrlShortenerControllerTest {
         given(getUserInformationUseCase.findById("user123")).willReturn(user)
         given(createShortUrlUseCase.save(shortUrl)).willReturn(shortUrl)
         given(createShortUrlUseCase.create("http://example.com", shortUrl.properties)).willReturn(shortUrl)
-        given(createShortUrlUseCase.createAndDoNotSave("http://example.com", shortUrl.properties, "user123"))
+        given(createShortUrlUseCase.createAndDoNotSave("http://example.com", shortUrl.properties,
+            "user123",
+            false))
             .willReturn(shortUrl)
 
         mockMvc.perform(
@@ -239,7 +241,8 @@ class UrlShortenerControllerTest {
 
         given(createShortUrlUseCase.save(shortUrl)).willReturn(shortUrl)
         given(createShortUrlUseCase.create("http://example.com", shortUrl.properties)).willReturn(shortUrl)
-        given(createShortUrlUseCase.createAndDoNotSave("http://example.com", shortUrl.properties, "user123"))
+        given(createShortUrlUseCase.createAndDoNotSave("http://example.com", shortUrl.properties,
+            "user123", false))
             .willReturn(shortUrl)
 
         mockMvc.perform(

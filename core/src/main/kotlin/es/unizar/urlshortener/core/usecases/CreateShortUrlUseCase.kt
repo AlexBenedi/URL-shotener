@@ -20,7 +20,7 @@ interface CreateShortUrlUseCase {
      */
     fun create(url: String, data: ShortUrlProperties): ShortUrl
 
-    fun createAndDoNotSave(url: String, data: ShortUrlProperties, userId : String): ShortUrl
+    fun createAndDoNotSave(url: String, data: ShortUrlProperties, userId : String, isSyncMode : Boolean): ShortUrl
 
     fun findByKey(key: String): ShortUrl?
 
@@ -66,7 +66,6 @@ class CreateShortUrlUseCaseImpl(
             if (data.generateQrCode == true) {
                 qrService.generateQr(UrlForQr(url, id, idName))
             }
-
             safeCall { safetyService.isUrlSafe(UrlSafetyPetition(url, id)) } // post kafka message
             val su = ShortUrl(
                 hash = id,
@@ -90,7 +89,8 @@ class CreateShortUrlUseCaseImpl(
         }
     }
 
-    override fun createAndDoNotSave(url: String, data: ShortUrlProperties, userId : String): ShortUrl{
+    override fun createAndDoNotSave(url: String, data: ShortUrlProperties, userId : String, isSyncMode : Boolean):
+            ShortUrl{
         // Get the user ID from the data (modify as needed to get the actual user ID)
 
         if (safeCall { validatorService.isValid(url) }) {
@@ -109,8 +109,14 @@ class CreateShortUrlUseCaseImpl(
             if (data.generateQrCode == true) {
                 qrService.generateQr(UrlForQr(url, id, userId))
             }
-            
-            safeCall { safetyService.isUrlSafe(UrlSafetyPetition(url, id)) }// this must be async
+            // Si es sincrono, se llama a la funcion sincrona, si no, se llama a la asincrona
+            if(!isSyncMode){
+                safeCall { safetyService.isUrlSafe(UrlSafetyPetition(url, id)) }// this must be async
+            }
+            else{
+                safeCall { safetyService.isUrlSafeSync(url); }// this must be async
+            }
+
             println("Data dentro : $data")
             val su = ShortUrl(
                 hash = id,

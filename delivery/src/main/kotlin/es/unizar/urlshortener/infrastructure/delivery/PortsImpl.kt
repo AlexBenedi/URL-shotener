@@ -7,6 +7,8 @@ import com.google.common.hash.Hashing
 import es.unizar.urlshortener.core.*
 import es.unizar.urlshortener.springbootkafkaexample.service.KafkaProducerService
 import es.unizar.urlshortener.websockets.WebSocketsServer
+import es.unizar.urlshortener.gateway.GoogleSafeBrowsingClient
+import es.unizar.urlshortener.gateway.NinjaProfanityFilter
 import org.apache.commons.validator.routines.UrlValidator
 import org.springframework.stereotype.Service
 import java.nio.charset.StandardCharsets
@@ -53,7 +55,8 @@ class HashServiceImpl : HashService {
  */
 @Service
 class SafetyServiceImpl(
-    private val kafkaProducerService: KafkaProducerService
+    private val kafkaProducerService: KafkaProducerService,
+    private val googleSafeBrowsingClient: GoogleSafeBrowsingClient
 ) : SafetyService {
     companion object{
         /**
@@ -70,7 +73,17 @@ class SafetyServiceImpl(
      */
     override fun isUrlSafe(petition: UrlSafetyPetition) = 
         // need to serialize the object as kafka onlin accepts strings
-        kafkaProducerService.sendMessage(CHECK_SAFETY_TOPIC, Gson().toJson(petition)) 
+        kafkaProducerService.sendMessage(CHECK_SAFETY_TOPIC, Gson().toJson(petition))
+
+    /**
+     * Checks if the given URL is safe.
+     *
+     * @param url The URL to be checked for safety.
+     * @return UrlSafetyResponse containing the safety status and threat details if any.
+     */
+    override fun isUrlSafeSync(url: String): UrlSafetyResponse {
+        return googleSafeBrowsingClient.isUrlSafe(url)
+    }
 }
 
 
@@ -108,7 +121,8 @@ class NonRegisteredUserService {
 
 @Service
 class BrandedServiceImpl(
-    private val kafkaProducerService: KafkaProducerService
+    private val kafkaProducerService: KafkaProducerService,
+    private val ninjaProfanityFilter: NinjaProfanityFilter
 ) : BrandedService {
 
     companion object{
@@ -125,6 +139,16 @@ class BrandedServiceImpl(
      */
     override fun isValidBrandedUrl(id: String) {
         kafkaProducerService.sendMessage(BRANDED_TOPIC, id) 
+    }
+
+    /**
+     * Validates if the given id can be used.
+     *
+     * @param id The id to be validated.
+     * @return True if the id is valid, false otherwise.
+     */
+    override fun isValidBrandedUrlSync(id: String): Boolean {
+        return ninjaProfanityFilter.isNameValid(id)
     }
 }
 
@@ -144,8 +168,8 @@ class QrServiceImpl(
         *
         * @param id The id to generate the QR code.
         */
-    override fun generateQr(id: UrlForQr?) {
-        kafkaProducerService.sendMessage(QR_TOPIC, Gson().toJson(id))
+    override fun generateQr(url: UrlForQr?) {
+        kafkaProducerService.sendMessage(QR_TOPIC, Gson().toJson(url))
     }
 }
 

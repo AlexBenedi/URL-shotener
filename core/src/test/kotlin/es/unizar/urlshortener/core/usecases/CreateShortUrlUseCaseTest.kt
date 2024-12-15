@@ -416,7 +416,8 @@ class CreateShortUrlUseCaseTest {
             createShortUrlUseCase.createAndDoNotSave(
                 "ftp://example.com/", 
                 shortUrlProperties, 
-                "user123"
+                "user123",
+                false
             )
         }
     }
@@ -464,7 +465,8 @@ class CreateShortUrlUseCaseTest {
             createShortUrlUseCase.createAndDoNotSave(
                 "http://example.com/", 
                 ShortUrlProperties(isBranded = true), 
-                "user123"
+                "user123",
+                false
             )
         }
     }
@@ -509,7 +511,10 @@ class CreateShortUrlUseCaseTest {
                 qrService
             )
         val properties = ShortUrlProperties(isBranded = true, name = "branded")
-        val shortUrl = createShortUrlUseCase.createAndDoNotSave("http://example.com/", properties, "user123")
+        val shortUrl = createShortUrlUseCase.createAndDoNotSave("http://example.com/", properties,
+            "user123",
+            false
+        )
 
         assertEquals(shortUrl.hash, "branded")
     }
@@ -554,7 +559,10 @@ class CreateShortUrlUseCaseTest {
                 brandedService,
                 qrService
             )
-        val shortUrl = createShortUrlUseCase.createAndDoNotSave("http://example.com/", shortUrlProperties, "user123")
+        val shortUrl = createShortUrlUseCase.createAndDoNotSave("http://example.com/", shortUrlProperties,
+            "user123",
+            false
+        )
         println(shortUrl)
 
         assertEquals(shortUrl.hash, "f684a3c4user123")

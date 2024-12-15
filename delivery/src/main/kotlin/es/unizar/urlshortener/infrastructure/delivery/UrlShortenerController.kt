@@ -114,6 +114,8 @@ class UrlShortenerControllerImpl(
 ) : UrlShortenerController {
     @Value("\${redirection.limit}")
     private var redirectionLimitConfig: Int = 0
+    @Value("\${app.sync-mode}")
+    private var isSyncMode: Boolean = false
     private val ipRedirectionCounts = ConcurrentHashMap<String, Pair<Int, Instant>>()
     companion object {
         private const val REDIRECTION_LIMIT = 6 // Cambiada a const val
@@ -214,6 +216,8 @@ class UrlShortenerControllerImpl(
         System.out.println("UserId from shortenerUser : $userId")
         System.out.println("URL from shortenerUser : ${data.url}")
 
+        System.out.println("El sistema esta en modo sincrono? : $isSyncMode")
+
         val user1 = getUserInformationUseCase.findById(userId)
 
         if (user1 != null) {
@@ -252,7 +256,8 @@ class UrlShortenerControllerImpl(
                         generateQrCode = data.generateQRCode,
                         name = data.name
                     ),
-                    userId = userId
+                    userId = userId,
+                    isSyncMode = isSyncMode
                 )
                 println("ShortUrlCreation: $shortUrlCreation")
                 println("ShortUrlCreation hash: ${shortUrlCreation.properties.safe}")
@@ -296,7 +301,7 @@ class UrlShortenerControllerImpl(
                     id = null
                 )
 
-                getUserInformationUseCase.saveLink(link)
+                getUserInformationUseCase.saveLink(link, isSyncMode)
 
                 // Build the response
                 val shortenedUrl = "${request.scheme}://${request.serverName}:${request.serverPort}/${shortUrl.hash}"

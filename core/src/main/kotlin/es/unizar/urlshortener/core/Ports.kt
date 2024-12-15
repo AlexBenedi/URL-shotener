@@ -144,6 +144,14 @@ interface SafetyService {
      * @return True if the URL is safe, false otherwise.
      */
     fun isUrlSafe(petition: UrlSafetyPetition)
+
+    /**
+     * Checks if the given URL is safe.
+     *
+     * @param url The URL to be checked for safety.
+     * @return UrlSafetyResponse containing the safety status and threat details if any.
+     */
+    fun isUrlSafeSync(url: String): UrlSafetyResponse
 }
 
 /**
@@ -157,6 +165,14 @@ interface BrandedService {
      * @return True if the id is valid, false otherwise.
      */
     fun isValidBrandedUrl(id: String)
+
+    /**
+     * Validates if the given id can be used.
+     *
+     * @param id The id to be validated.
+     * @return True if the id is valid, false otherwise.
+     */
+    fun isValidBrandedUrlSync(id: String): Boolean
 }
 
 /**

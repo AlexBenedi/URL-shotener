@@ -3,6 +3,7 @@ package es.unizar.urlshortener.core.usecases
 
 import es.unizar.urlshortener.core.*
 import java.time.OffsetDateTime
+import javax.sound.midi.Sequencer.SyncMode
 
 /**
  * Given an url returns the key that is used to create a short URL.
@@ -32,7 +33,7 @@ interface GetUserInformationUseCase {
     /**
      * Save a link in the database
      */
-    fun saveLink(link: Link)
+    fun saveLink(link: Link, isSyncMode: Boolean)
 
     fun save(user: User)
 
@@ -134,10 +135,15 @@ class GetUserInformationUseCaseImpl(
      *
      * @param link The link to be saved.
      */
-    override fun saveLink(link: Link) {
+    override fun saveLink(link: Link, isSyncMode: Boolean) {
 
         if (link.shortUrl.properties.isBranded == true) {
-            brandedService.isValidBrandedUrl(link.shortUrl.hash)
+            if (!isSyncMode) {
+                brandedService.isValidBrandedUrl(link.shortUrl.hash)
+            }
+            else{
+                brandedService.isValidBrandedUrlSync(link.shortUrl.hash)
+            }
         }
 
         safeCall { linkRepository.save(link) }

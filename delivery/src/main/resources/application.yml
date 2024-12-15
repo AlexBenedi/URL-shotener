@@ -1,10 +1,23 @@
-# Configuración para el perfil 'dev'
+# Configuración para el perfil 'dev' (sin límite de redirecciones y modo síncrono)
 spring:
   config:
     activate:
-      on-profile: dev
+      on-profile: dev-sync
 redirection:
-  limit: -1  # Límite de redirecciones en modo dev
+  limit: -1  # Sin límite de redirecciones
+app:
+  sync-mode: true  # Modo síncrono activado
+
+---
+# Configuración para el perfil 'dev-async' (sin límite de redirecciones y modo asíncrono)
+spring:
+  config:
+    activate:
+      on-profile: dev-async
+redirection:
+  limit: -1  # Sin límite de redirecciones
+app:
+  sync-mode: false  # Modo asíncrono activado
 
 ---
 # Configuración para el perfil 'default' (producción)
@@ -14,3 +27,5 @@ spring:
       on-profile: default
 redirection:
   limit: 6  # Límite de redirecciones en producción
+app:
+  sync-mode: false  # Modo asíncrono por defecto
