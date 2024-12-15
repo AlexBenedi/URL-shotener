@@ -26,7 +26,7 @@ class DataInitializer(
                     val userId = line.trim() // Extraer el ID del usuario
                     if (userId.isNotBlank()) {
                         // Crear usuario con solo el ID
-                        System.out.println("Anyadiendo usuario con ID: " + userId)
+                        //System.out.println("Anyadiendo usuario con ID: " + userId)
                         users.add(
                             User(
                                 userId = userId,
