@@ -136,10 +136,16 @@ class CreateShortUrlUseCaseImpl(
         }
     }
 
+    /**
+     * Finds a short URL by its key.
+     */
     override fun findByKey(key: String): ShortUrl? {
         return safeCall { shortUrlRepository.findByKey(key) }
     }
 
+    /**
+     * Saves a short URL in the repository.
+     */
     override fun save(shortUrl: ShortUrl): ShortUrl {
         return safeCall { shortUrlRepository.save(shortUrl) }
     }

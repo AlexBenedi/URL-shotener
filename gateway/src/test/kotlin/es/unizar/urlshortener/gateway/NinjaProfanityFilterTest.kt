@@ -17,6 +17,9 @@ class NinjaProfanityFilterTest {
     @Autowired 
     lateinit var ninja: NinjaProfanityFilter
 
+    /**
+     * Tests that `isNameValid` returns true when the API response has no profanity.
+     */
     @Test
     fun `isNameValid returns true when API response has no profanity`() { 
         val result = ninja.isNameValid("Unizar")
@@ -25,6 +28,9 @@ class NinjaProfanityFilterTest {
         assertTrue(result == true) // If null, it is not safe yet.
     }
 
+    /**
+     * Tests that `isNameValid` returns false when the API response has profanity.
+     */
     @Test
     fun `isNameValid returns false when API response has profanity`() {
         val result = ninja.isNameValid("Puta")

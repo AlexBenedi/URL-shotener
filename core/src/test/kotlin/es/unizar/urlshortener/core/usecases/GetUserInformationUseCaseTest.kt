@@ -21,6 +21,7 @@ import java.time.OffsetDateTime
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
+import kotlin.test.assertNotNull
 
 class GetUserInformationUseCaseTest {
 
@@ -162,4 +163,143 @@ class GetUserInformationUseCaseTest {
         // Verificar que no se devuelven enlaces
         assertEquals(0, links.size)
     }
+
+    /**
+     * Tests that `saveLink` saves a non-branded link.
+     */
+    @Test
+    fun `saveLink saves a non-branded link`() {
+        val user = User(userId = "user123", redirections = 0, lastRedirectionTimeStamp = OffsetDateTime.now())
+        val click = Click(hash = "hash", clicks = 0)
+        val shortUrl = 
+                    ShortUrl(
+                        hash = "hash", 
+                        properties = ShortUrlProperties(isBranded = false), 
+                        redirection = Redirection("http://example.com", 307)
+                    )
+        val link = Link(click = click, shortUrl = shortUrl, id = null, user = user)
+
+        // Ejecutar el caso de uso
+        getUserInformationUseCase.saveLink(link)
+
+        // Verificar que el enlace fue guardado
+        verify(linkRepository).save(link)
+    }
+
+    /**
+     * Tests that `saveLink` saves a branded link.
+     */
+    @Test
+    fun `saveLink saves a branded link`() {
+        val user = User(userId = "user123", redirections = 0, lastRedirectionTimeStamp = OffsetDateTime.now())
+        val click = Click(hash = "hash", clicks = 0)
+        val shortUrl = 
+                    ShortUrl(
+                        hash = "hash", 
+                        properties = ShortUrlProperties(isBranded = true, name = "brand", owner = "brand"), 
+                        redirection = Redirection("http://example.com", 307)
+                    )
+        val link = Link(click = click, shortUrl = shortUrl, id = null, user = user)
+
+        getUserInformationUseCase.saveLink(link)
+
+        verify(linkRepository).save(link)
+    }
+
+    /**
+     * Tests that `saveLink` handles exception when saving link.
+     */
+    @Test
+    fun `saveLink handles exception when saving link`() {
+        val user = User(userId = "user123", redirections = 0, lastRedirectionTimeStamp = OffsetDateTime.now())
+        val click = Click(hash = "hash", clicks = 0)
+        val shortUrl = 
+                ShortUrl(
+                         hash = "hash", 
+                         properties = ShortUrlProperties(isBranded = false), 
+                         redirection = Redirection("http://example.com", 307),
+                        )
+        val link = Link(click = click, shortUrl = shortUrl, id = null, user = user)
+
+        whenever(linkRepository.save(any())).thenThrow(RuntimeException())
+
+        assertFailsWith<RuntimeException> {
+            getUserInformationUseCase.saveLink(link)
+        }
+
+        verify(linkRepository).save(link)
+    }
+
+    /**
+     * Tests that `save` saves user successfully.
+     */
+    @Test
+    fun `save saves user successfully`() {
+        val user = 
+                User(
+                    userId = "user123", 
+                    redirections = 0, 
+                    lastRedirectionTimeStamp = OffsetDateTime.now(),
+                    )
+
+        getUserInformationUseCase.save(user)
+
+        verify(userRepository).save(user)
+    }
+
+    /**
+     * Tests that `save` handles exception when saving user.
+     */
+    @Test
+    fun `save handles exception when saving user`() {
+        val user = 
+                User(
+                    userId = "user123", 
+                    redirections = 0, 
+                    lastRedirectionTimeStamp = OffsetDateTime.now(),
+                    )
+
+        whenever(userRepository.save(any())).thenThrow(RuntimeException())
+
+        assertFailsWith<RuntimeException> {
+            getUserInformationUseCase.save(user)
+        }
+
+        verify(userRepository).save(user)
+    }
+
+    /**
+     * Tests that `findById` returns user when found.
+     */
+    @Test
+    fun `findById returns user when found`() {
+        val user = 
+                User(
+                     userId = "user123", 
+                     redirections = 0, 
+                     lastRedirectionTimeStamp = OffsetDateTime.now(),
+                    )
+        whenever(userRepository.findById("user123")).thenReturn(user)
+
+        val result = getUserInformationUseCase.findById("user123")
+
+        assertNotNull(result)
+        assertEquals("user123", result?.userId)
+        verify(userRepository).findById("user123")
+    }
+
+    /**
+     * Tests that `findById` returns null when user not found.
+     */
+    @Test
+    fun `findById returns null when user not found`() {
+        whenever(userRepository.findById("user123")).
+            thenReturn(null)
+        
+        val result = getUserInformationUseCase.findById("user123")
+
+        assertEquals(null, result)
+        verify(userRepository).findById("user123")
+    }
+
 }

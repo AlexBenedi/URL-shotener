@@ -575,4 +575,17 @@ class UrlShortenerControllerTest {
                     "Please try again later."))
     }
 
+    /**
+     * Test to check that getClientIp returns the correct IP address.
+     */
+    @Test
+    fun `getClientIp returns the client's IP address`() {
+        // Perform a GET request to the /api/ip endpoint
+        mockMvc.perform(get("/api/ip").with { request ->
+            request.remoteAddr = "127.0.0.1"
+            request
+        })
+            .andExpect(status().isOk)
+            .andExpect(content().string("127.0.0.1"))
+    }
 }
