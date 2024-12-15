@@ -1,8 +1,3 @@
-spring:
-  profiles:
-    active: default  # Establece el perfil activo como 'dev'
-
----
 # Configuración para el perfil 'dev'
 spring:
   config:
