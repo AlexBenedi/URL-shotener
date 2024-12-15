@@ -30,7 +30,6 @@ import java.time.OffsetDateTime
 import java.util.*
 import kotlin.test.Test
 
-
 @WebMvcTest
 @ContextConfiguration(
     classes = [
@@ -571,5 +570,17 @@ class UrlShortenerControllerTest {
             .andExpect(jsonPath("$.properties.error").value("Too many requests. " +
                     "Please try again later."))
     }
+
+    /*
+    @Test
+    fun `branded link not checked`() {
+        val redirection = Redirection("http://example.com")
+        val shortUrlProperties = ShortUrlProperties(validBranded = null, isBranded = true)
+        given(shortUrlRepositoryService.findByKey("key")).willReturn(
+            ShortUrl("key", redirection, properties = shortUrlProperties))
+        mockMvc.perform(get("/{id}", "key"))
+            .andExpect(status().isBadRequest)
+    }
+    */
 
 }

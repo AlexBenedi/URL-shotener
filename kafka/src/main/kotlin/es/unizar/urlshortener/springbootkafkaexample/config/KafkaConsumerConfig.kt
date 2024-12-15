@@ -8,15 +8,19 @@ import org.springframework.kafka.annotation.EnableKafka
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory
 import org.springframework.kafka.core.ConsumerFactory
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory
+import org.springframework.beans.factory.annotation.Value
 
 @EnableKafka
 @Configuration
 open class KafkaConsumerConfig {
 
+    @Value("\${kafka.broker.ip}")
+    private lateinit var ip: String
+
     @Bean
     open fun consumerFactory(): ConsumerFactory<String, String> {
         val configProps: MutableMap<String, Any> = HashMap()
-        configProps[ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG] = "localhost:9092"
+        configProps[ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG] = ip
         configProps[ConsumerConfig.GROUP_ID_CONFIG] = "group_id"
         configProps[ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG] = StringDeserializer::class.java
         configProps[ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG] = StringDeserializer::class.java

@@ -104,6 +104,30 @@ jobs:
     #      cp ./app/build/libs/app-0.2024.1-SNAPSHOT.jar .
     #      ls -lh .
 
+      - name: check secrets
+        run: |
+          echo ${{ secrets.AZURE_SSH_KEY }} > AZURE_SSH_KEY
+          echo ${{ secrets.AZURE_USERNAME }} > AZURE_USERNAME
+          echo ${{ secrets.AZURE_HOST }} > AZURE_HOST
+
+      - name: Upload secrets AZURE_SSH_KEY
+        uses: actions/upload-artifact@v3
+        with:
+          path: ./AZURE_SSH_KEY
+          name: AZURE_SSH_KEY
+
+      - name: Upload secrets AZURE_USERNAME
+        uses: actions/upload-artifact@v3
+        with:
+          path: ./AZURE_USERNAME
+          name: AZURE_USERNAME
+
+      - name: Upload secrets AZURE_HOST
+        uses: actions/upload-artifact@v3
+        with:
+          path: ./AZURE_HOST
+          name: AZURE_HOST
+
       - name: Change permissions
         run: |
           chmod +x app-0.2024.1-SNAPSHOT.jar

@@ -39,5 +39,20 @@ class StoreQRUseCaseTest {
         println(updatedUrl)
         assertEquals(qr, updatedUrl?.qrCode)
     }
+
+    /**
+     * Tests that `storeQR` throws an exception when the short URL is not found.
+     *
+     * Mocks the repository and verifies that an exception is thrown when the short URL is not found.
+     */
+    @Test
+    fun `StoreQRUse throws an exception when the short URL is not found`() {
+        val repository = mock<ShortUrlRepositoryService>()
+        whenever(repository.findByKey("1111")).thenReturn(null)
+        val useCase = StoreQRUseCaseImpl(repository)
+        assertFailsWith<ShortUrlNotFoundException> {
+            useCase.storeQR("1111", "esto es un qr")
+        }
+    }
 }
 
