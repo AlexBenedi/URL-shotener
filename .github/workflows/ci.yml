@@ -145,25 +145,25 @@ jobs:
           path: .
           name: app.tar
 
-      #- name: Copy docker-compose-deploy.yml to Azure VM
-      #  run: |
-      #    scp -i ${{secrets.AZURE_SSH_KEY}} docker-compose-deploy.yml  ${{secrets.AZURE_USERNAME}}@${{secrets.AZURE_HOST}}:/home/${{secrets.AZURE_USERNAME}}
+      - name: Copy docker-compose-deploy.yml to Azure VM
+        run: |
+          scp -i ${{secrets.AZURE_SSH_KEY}} docker-compose-deploy.yml  ${{secrets.AZURE_USERNAME}}@${{secrets.AZURE_HOST}}:/home/${{secrets.AZURE_USERNAME}}
 
-      #- name: Copy app.jar to Azure VM
-      #  run: |
-      #    scp -i ${{secrets.AZURE_SSH_KEY}} app.tar ${{secrets.secrets.AZURE_USERNAME}}@${{secrets.AZURE_HOST}}:/home/${{secrets.AZURE_USERNAME}}
+      - name: Copy app.jar to Azure VM
+        run: |
+          scp -i ${{secrets.AZURE_SSH_KEY}} app.tar ${{secrets.AZURE_USERNAME}}@${{secrets.AZURE_HOST}}:/home/${{secrets.AZURE_USERNAME}}
 
-      #- name: Load docker image
-      #  run: |
-      #    ssh -i ${{secrets.AZURE_SSH_KEY}} ${{secrets.AZURE_USERNAME}}@${{secrets.AZURE_HOST}} "docker load < /home/${{secrets.AZURE_USERNAME}}/app.tar"
+      - name: Load docker image
+        run: |
+          ssh -i ${{secrets.AZURE_SSH_KEY}} ${{secrets.AZURE_USERNAME}}@${{secrets.AZURE_HOST}} "docker load < /home/${{secrets.AZURE_USERNAME}}/app.tar"
 
-      #- name: Stop docker-compose-deploy.yml
-      #  run: |
-      #    ssh -i ${{secrets.AZURE_SSH_KEY}} ${{secrets.AZURE_USERNAME}}@${{secrets.AZURE_HOST}} "docker compose -f /home/${{secrets.AZURE_USERNAME}}/docker-compose-deploy.yml down"
+      - name: Stop docker-compose-deploy.yml
+        run: |
+          ssh -i ${{secrets.AZURE_SSH_KEY}} ${{secrets.AZURE_USERNAME}}@${{secrets.AZURE_HOST}} "docker compose -f /home/${{secrets.AZURE_USERNAME}}/docker-compose-deploy.yml down"
 
-      #- name: Run docker-compose-deploy.yml
-      #  run: |
-      #    ssh -i ${{secrets.AZURE_SSH_KEY}} ${{secrets.AZURE_USERNAME}}@${{secrets.AZURE_HOST}} "docker compose -f /home/${{secrets.AZURE_USERNAME}}/docker-compose-deploy.yml up -d"
+      - name: Run docker-compose-deploy.yml
+        run: |
+          ssh -i ${{secrets.AZURE_SSH_KEY}} ${{secrets.AZURE_USERNAME}}@${{secrets.AZURE_HOST}} "docker compose -f /home/${{secrets.AZURE_USERNAME}}/docker-compose-deploy.yml up -d"
 
 
       
