@@ -155,7 +155,7 @@ jobs:
       
       - name: Save Docker Image
         run: |
-          docker save app:latest -o app.tar
+          docker save app:latest > app.tar
           ls -lh app.tar
 
       #- name: Upload docker
@@ -186,6 +186,18 @@ jobs:
           key: ${{ secrets.AZURE_SSH_KEY }}
           source: "docker-compose-deploy.yml"
           target: /home/${{secrets.AZURE_USERNAME}}
+          overwrite: true
+
+      - name: copy docker-compose-deploy.yml via ssh key
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{secrets.AZURE_HOST}}
+          username: ${{secrets.AZURE_USERNAME}}
+          port: 22
+          key: ${{ secrets.AZURE_SSH_KEY }}
+          source: "tests.csv"
+          target: /home/${{secrets.AZURE_USERNAME}}
+          overwrite: true
 
       #- name: Copy app.jar to Azure VM
       #  run: |
@@ -200,6 +212,7 @@ jobs:
           key: ${{ secrets.AZURE_SSH_KEY }}
           source: "app.tar"
           target: /home/${{secrets.AZURE_USERNAME}}
+          overwrite: true
 
       #- name: Load docker image
       #  run: |
