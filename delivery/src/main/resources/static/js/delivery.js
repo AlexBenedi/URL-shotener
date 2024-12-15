@@ -3,8 +3,7 @@ $(document).ready(function () {
     var userId = $("#userIdValue").text(); // Supone que hay un elemento en el HTML con este ID
     console.log("userId from AJAX: " + userId);
 
-    // Establecer la conexión WebSocket con el userIp como identificador
-    // Establecer la conexión WebSocket con el userIp como identificador
+    // Establecer la conexión WebSocket con el userId como identificador
     const protocol = window.location.protocol === "https:" ? "wss://" : "ws://";
     const wsUrl = `${protocol}${window.location.host}/ws-endpoint?userId=${encodeURIComponent(userId)}`;
 
