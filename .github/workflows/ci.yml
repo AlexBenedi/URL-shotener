@@ -147,30 +147,23 @@ jobs:
 
       #- name: Copy docker-compose-deploy.yml to Azure VM
       #  run: |
-      #    cp repo-artifact/docker-compose-deploy.yml .
-      #    ls -lh docker-compose-deploy.yml
+      #    scp -i ${{secrets.AZURE_SSH_KEY}} docker-compose-deploy.yml  ${{secrets.AZURE_USERNAME}}@${{secrets.AZURE_HOST}}:/home/${{secrets.AZURE_USERNAME}}
 
       #- name: Copy app.jar to Azure VM
       #  run: |
-      #    cp app.jar docker-compose-deploy/app.jar
-      #    ls -lh docker-compose-deploy/app.jar
+      #    scp -i ${{secrets.AZURE_SSH_KEY}} app.tar ${{secrets.secrets.AZURE_USERNAME}}@${{secrets.AZURE_HOST}}:/home/${{secrets.AZURE_USERNAME}}
 
       #- name: Load docker image
       #  run: |
-      #    docker load < /home/${{AZURE_USERNAME}}.app.tar
-      #    docker images
+      #    ssh -i ${{secrets.AZURE_SSH_KEY}} ${{secrets.AZURE_USERNAME}}@${{secrets.AZURE_HOST}} "docker load < /home/${{secrets.AZURE_USERNAME}}/app.tar"
 
-      #- name: multiple command
-      #  uses: appleboy/ssh-action@v1.2.0
-      #  with:
-      #    host: ${{ secrets.AZURE_HOST }}
-      #    username: ${{ secrets.AZURE_USERNAME }}
-      #    key: ${{ secrets.AZURE_SSH_KEY  }}
-      #    port: 22
-      #    script: |
-      #      docker load < app.tar
-      #      docker images
-      #      docker-compose -f docker-compose-deploy.yml up -d
+      #- name: Stop docker-compose-deploy.yml
+      #  run: |
+      #    ssh -i ${{secrets.AZURE_SSH_KEY}} ${{secrets.AZURE_USERNAME}}@${{secrets.AZURE_HOST}} "docker compose -f /home/${{secrets.AZURE_USERNAME}}/docker-compose-deploy.yml down"
+
+      #- name: Run docker-compose-deploy.yml
+      #  run: |
+      #    ssh -i ${{secrets.AZURE_SSH_KEY}} ${{secrets.AZURE_USERNAME}}@${{secrets.AZURE_HOST}} "docker compose -f /home/${{secrets.AZURE_USERNAME}}/docker-compose-deploy.yml up -d"
 
 
       

@@ -18,17 +18,9 @@ services:
       - "9092:9092"
 
   app:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: app:latest
     depends_on:
       - kafka
-    environment:
-      GOOGLE_CLIENT_ID_API_KEY: 967313434685-bcfqtgn6tv5o2t8hlnjbqj7q195pv5i8.apps.googleusercontent.com
-      GOOGLE_SAFE_BROWSING_API_KEY: AIzaSyACY3gS9WFXv8xDNH1fBvrJ7WmJpJwdKSA
-      GOOGLE_CLIENT_SECRET_API_KEY: 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
-      NINJA_PROFANITY_FILTER_API_KEY: 3lzqivEvkEi9dSr41w9lGg==Veaaeh6LEL0guD0i
-      KAFKA_BROKER_IP: kafka:9092
     ports:
       - "8080:8080"
 
