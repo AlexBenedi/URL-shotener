@@ -180,7 +180,7 @@ class GetUserInformationUseCaseTest {
         val link = Link(click = click, shortUrl = shortUrl, id = null, user = user)
 
         // Ejecutar el caso de uso
-        getUserInformationUseCase.saveLink(link)
+        getUserInformationUseCase.saveLink(link, false)
 
         // Verificar que el enlace fue guardado
         verify(linkRepository).save(link)
@@ -201,7 +201,7 @@ class GetUserInformationUseCaseTest {
                     )
         val link = Link(click = click, shortUrl = shortUrl, id = null, user = user)
 
-        getUserInformationUseCase.saveLink(link)
+        getUserInformationUseCase.saveLink(link, false)
 
         verify(linkRepository).save(link)
     }
@@ -224,7 +224,7 @@ class GetUserInformationUseCaseTest {
         whenever(linkRepository.save(any())).thenThrow(RuntimeException())
 
         assertFailsWith<RuntimeException> {
-            getUserInformationUseCase.saveLink(link)
+            getUserInformationUseCase.saveLink(link, false)
         }
 
         verify(linkRepository).save(link)

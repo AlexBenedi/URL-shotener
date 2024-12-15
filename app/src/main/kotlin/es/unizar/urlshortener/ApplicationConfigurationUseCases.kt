@@ -121,4 +121,7 @@ class ApplicationConfigurationUseCases(
         ShortUrlRepositoryServiceImpl(shortUrlEntityRepository)
     )
 
+    @Bean
+    fun dataInitializer() = DataInitializer(getUserInformationUseCase = getUserInformationUseCase())
+
 }

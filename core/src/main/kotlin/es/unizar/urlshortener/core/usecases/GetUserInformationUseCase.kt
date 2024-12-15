@@ -58,8 +58,10 @@ class GetUserInformationUseCaseImpl(
         //If the user does not exist, it is saved
         if (safeCall {userRepository.findById(user.userId)} == null) {
             safeCall {userRepository.save(user)}
+            //System.out.println("User saved: " + user.userId)
             //insertExampleLink(user, user.userId)
         }
+
     }
 
     /**
