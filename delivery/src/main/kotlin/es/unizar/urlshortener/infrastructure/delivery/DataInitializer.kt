@@ -14,8 +14,7 @@ class DataInitializer(
 ) : CommandLineRunner {
 
     override fun run(vararg args: String?) {
-        val filePath = "C:\\Users\\Kamal\\Desktop\\SeptimoCuatrimestre\\IngenieriaWeb\\FractalLink\\FractalLink" +
-                "\\usersId.csv" // Ruta del archivo CSV
+        val filePath = javaClass.classLoader.getResource("usersId.csv")?.file
         val users = mutableListOf<User>()
 
         println("INICIALZANDO USUARIOS PARA TEST DESDE CSV...")
@@ -27,7 +26,7 @@ class DataInitializer(
                     val userId = line.trim() // Extraer el ID del usuario
                     if (userId.isNotBlank()) {
                         // Crear usuario con solo el ID
-                        //System.out.println("Anyadiendo usuario con ID: " + userId)
+                        System.out.println("Anyadiendo usuario con ID: " + userId)
                         users.add(
                             User(
                                 userId = userId,
