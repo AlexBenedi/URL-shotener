@@ -23,6 +23,7 @@ import es.unizar.urlshortener.infrastructure.delivery.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.Profile
 
 @Configuration
 class ApplicationConfigurationUseCases(
@@ -121,6 +122,11 @@ class ApplicationConfigurationUseCases(
         ShortUrlRepositoryServiceImpl(shortUrlEntityRepository)
     )
 
+    /**
+     * Provides an implementation of the DataInitializer.
+     * @return an instance of DataInitializer.
+     */
+    @Profile("dev-sync", "dev-async")
     @Bean
     fun dataInitializer() = DataInitializer(getUserInformationUseCase = getUserInformationUseCase())
 
