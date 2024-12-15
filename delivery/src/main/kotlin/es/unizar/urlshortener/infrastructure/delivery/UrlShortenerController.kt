@@ -158,7 +158,7 @@ class UrlShortenerControllerImpl(
         println("IP: $ip")
         if (now.epochSecond - lastTimestamp.epochSecond > TIME_WINDOW_SECONDS) {
             ipRedirectionCounts[ip] = Pair(1, now) // Reset the count
-        } else if (currentCount >= REDIRECTION_LIMIT && ip != "0:0:0:0:0:0:0:1" && ip != "127.0.0.1") {
+        } else if (currentCount >= REDIRECTION_LIMIT && redirectionLimitConfig != -1) {
             return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS)
                 .body(ShortUrlDataOut(error = "Too many requests from this IP. Try again later."))
         } else {
