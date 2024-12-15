@@ -4,8 +4,12 @@ $(document).ready(function () {
     console.log("userId from AJAX: " + userId);
 
     // Establecer la conexión WebSocket con el userIp como identificador
-    console.log("Intentando conectar al WebSocket...");
-    var socket = new WebSocket("wss://" + window.location.host + "/ws-endpoint?userId=" + userId);
+    // Establecer la conexión WebSocket con el userIp como identificador
+    const protocol = window.location.protocol === "https:" ? "wss://" : "ws://";
+    const wsUrl = `${protocol}${window.location.host}/ws-endpoint?userId=${encodeURIComponent(userId)}`;
+
+    // Crear conexión WebSocket
+    socket = new WebSocket(wsUrl);
 
     // Eventos del WebSocket
     socket.onopen = function () {
