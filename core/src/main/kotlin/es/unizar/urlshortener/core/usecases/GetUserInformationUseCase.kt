@@ -3,7 +3,6 @@ package es.unizar.urlshortener.core.usecases
 
 import es.unizar.urlshortener.core.*
 import java.time.OffsetDateTime
-import javax.sound.midi.Sequencer.SyncMode
 
 /**
  * Given an url returns the key that is used to create a short URL.
