@@ -89,12 +89,11 @@ class KafkaConsumerService(
         val validPairJson = Gson().toJson(validPair)  
 
         kafkaProducerService.sendMessage("branded-checked", validPairJson)
-        updateUrlBrandedUseCase.updateUrlBranded(message, valid)
     }
 
     @KafkaListener(topics = ["branded-checked"], groupId = "group_id")
     fun consumeBrandedChecked(message: String) {
-        println("Serielized branded received: $message")
+        println("Serielized branded checked received: $message")
         val pairType = object : TypeToken<Pair<String, Boolean>>() {}.type
         val deserializedObject: Pair<String, Boolean> = Gson().fromJson(message, pairType)
         updateUrlBrandedUseCase.updateUrlBranded(deserializedObject.first, deserializedObject.second)
