@@ -25,7 +25,7 @@ if [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]]; then
   docker-compose up -d
   echo "Initializing kafka...."
   sleep 10
-  ./gradlew bootrun > /dev/null 2>&1 &
+  ./gradlew bootRun --args='--spring.profiles.active=dev-async' > /dev/null 2>&1 &
   echo "Initializing the application...."
   sleep 10
   echo "===================================================================================================="
