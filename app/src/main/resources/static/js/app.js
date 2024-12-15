@@ -10,7 +10,7 @@ $(document).ready(function () {
             console.log("User IP:", userIp);
 
             // Establecer la conexión WebSocket con el userIp como identificador
-            const socket = new WebSocket("ws://" + window.location.host + "/ws-endpoint?userId=" + userIp);
+            const socket = new WebSocket("wss://" + window.location.host + "/ws-endpoint?userId=" + userIp);
 
             socket.onopen = function () {
                 console.log("WebSocket conectado para el usuario: " + userIp);
