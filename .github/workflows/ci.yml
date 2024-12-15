@@ -104,29 +104,29 @@ jobs:
           cp ./app/build/libs/app-0.2024.1-SNAPSHOT.jar .
           ls -lh .
 
-      - name: Check secrets
-        run: |
-          echo -n "${{ secrets.AZURE_SSH_KEY }}" > AZURE_SSH_KEY
-          echo -n "${{ secrets.AZURE_USERNAME }}" > AZURE_USERNAME
-          echo -n "${{ secrets.AZURE_HOST }}" > AZURE_HOST
+      #- name: Check secrets
+      #  run: |
+      #    echo -n "${{ secrets.AZURE_SSH_KEY }}" > AZURE_SSH_KEY
+      #    echo -n "${{ secrets.AZURE_USERNAME }}" > AZURE_USERNAME
+      #    echo -n "${{ secrets.AZURE_HOST }}" > AZURE_HOST
 
-      - name: Upload secrets AZURE_SSH_KEY
-        uses: actions/upload-artifact@v3
-        with:
-          path: ./AZURE_SSH_KEY
-          name: AZURE_SSH_KEY
+      #- name: Upload secrets AZURE_SSH_KEY
+      #  uses: actions/upload-artifact@v3
+      #  with:
+      #    path: ./AZURE_SSH_KEY
+      #    name: AZURE_SSH_KEY
 
-      - name: Upload secrets AZURE_USERNAME
-        uses: actions/upload-artifact@v3
-        with:
-          path: ./AZURE_USERNAME
-          name: AZURE_USERNAME
+      #- name: Upload secrets AZURE_USERNAME
+      #  uses: actions/upload-artifact@v3
+      #  with:
+      #    path: ./AZURE_USERNAME
+      #    name: AZURE_USERNAME
 
-      - name: Upload secrets AZURE_HOST
-        uses: actions/upload-artifact@v3
-        with:
-          path: ./AZURE_HOST
-          name: AZURE_HOST
+      #- name: Upload secrets AZURE_HOST
+      #  uses: actions/upload-artifact@v3
+      #  with:
+      #    path: ./AZURE_HOST
+      #    name: AZURE_HOST
 
       - name: Change permissions
         run: |
@@ -158,31 +158,40 @@ jobs:
           docker save app:latest -o app.tar
           ls -lh app.tar
 
-      - name: Upload docker
-        uses: actions/upload-artifact@v3
-        with:
-          path: ./app.tar
-          name: app.tar
+      #- name: Upload docker
+      #  uses: actions/upload-artifact@v3
+      #  with:
+      #    path: ./app.tar
+      #    name: app.tar
+
+      - name: Create SSH Key File
+        run: |
+          echo "${{ secrets.AZURE_SSH_KEY }}" > azure_ssh_key
+          chmod 600 azure_ssh_key
 
       - name: Copy docker-compose-deploy.yml to Azure VM
         run: |
-          scp -i ${{secrets.AZURE_SSH_KEY}} docker-compose-deploy.yml  ${{secrets.AZURE_USERNAME}}@${{secrets.AZURE_HOST}}:/home/${{secrets.AZURE_USERNAME}}
+          scp -i azure_ssh_key docker-compose-deploy.yml  ${{secrets.AZURE_USERNAME}}@${{secrets.AZURE_HOST}}:/home/${{secrets.AZURE_USERNAME}}
 
       - name: Copy app.jar to Azure VM
         run: |
-          scp -i ${{secrets.AZURE_SSH_KEY}} app.tar ${{secrets.AZURE_USERNAME}}@${{secrets.AZURE_HOST}}:/home/${{secrets.AZURE_USERNAME}}
+          scp -i azure_ssh_key app.tar ${{secrets.AZURE_USERNAME}}@${{secrets.AZURE_HOST}}:/home/${{secrets.AZURE_USERNAME}}
 
       - name: Load docker image
         run: |
-          ssh -i ${{secrets.AZURE_SSH_KEY}} ${{secrets.AZURE_USERNAME}}@${{secrets.AZURE_HOST}} "docker load < /home/${{secrets.AZURE_USERNAME}}/app.tar"
+          ssh -i azure_ssh_key ${{secrets.AZURE_USERNAME}}@${{secrets.AZURE_HOST}} "docker load < /home/${{secrets.AZURE_USERNAME}}/app.tar"
 
       - name: Stop docker-compose-deploy.yml
         run: |
-          ssh -i ${{secrets.AZURE_SSH_KEY}} ${{secrets.AZURE_USERNAME}}@${{secrets.AZURE_HOST}} "docker compose -f /home/${{secrets.AZURE_USERNAME}}/docker-compose-deploy.yml down"
+          ssh -i azure_ssh_key ${{secrets.AZURE_USERNAME}}@${{secrets.AZURE_HOST}} "docker compose -f /home/${{secrets.AZURE_USERNAME}}/docker-compose-deploy.yml down"
 
       - name: Run docker-compose-deploy.yml
         run: |
-          ssh -i ${{secrets.AZURE_SSH_KEY}} ${{secrets.AZURE_USERNAME}}@${{secrets.AZURE_HOST}} "docker compose -f /home/${{secrets.AZURE_USERNAME}}/docker-compose-deploy.yml up -d"
+          ssh -i azure_ssh_key ${{secrets.AZURE_USERNAME}}@${{secrets.AZURE_HOST}} "docker compose -f /home/${{secrets.AZURE_USERNAME}}/docker-compose-deploy.yml up -d"
+
+      - name: Clean up SSH Key
+        run: |
+          rm -f azure_ssh_key
 
 
       
