@@ -169,6 +169,10 @@ jobs:
           echo "${{ secrets.AZURE_SSH_KEY }}" > azure_ssh_key
           chmod 600 azure_ssh_key
 
+      - name: Add Azure Host to known_hosts
+        run: |
+          ssh-keyscan -H ${{ secrets.AZURE_HOST }} >> ~/.ssh/known_hosts
+
       - name: Copy docker-compose-deploy.yml to Azure VM
         run: |
           scp -i azure_ssh_key docker-compose-deploy.yml  ${{secrets.AZURE_USERNAME}}@${{secrets.AZURE_HOST}}:/home/${{secrets.AZURE_USERNAME}}
