@@ -184,7 +184,11 @@ class UrlShortenerControllerImpl(
 
             println("Key hachis: $hash")
 
-            val urlForQR = "http://${serverIp}/qr/${hash}"
+            val urlForQR = if(data.generateQRCode == true) {
+                "http://${serverIp}/qr/${hash}"
+            } else {
+                null
+            }
             val response = ShortUrlDataOut(
                 url = url,
                 qrCodeGenerated = data.generateQRCode, // Assign the QR code if generated
@@ -310,7 +314,11 @@ class UrlShortenerControllerImpl(
 
                 // Build the response
                 val shortenedUrl = "${request.scheme}://${request.serverName}:${request.serverPort}/${shortUrl.hash}"
-                val urlForQR = "http://${serverIp}/qr/${shortUrl.hash}"
+                val urlForQR = if(data.generateQRCode == true) {
+                    "http://${serverIp}/qr/${shortUrl.hash}"
+                } else {
+                    null
+                }
                 val response = ShortUrlDataOut(
                     url = URI.create(shortenedUrl), // Convert String to URI
                     qrCodeGenerated = data.generateQRCode, // Assign the QR code if generated

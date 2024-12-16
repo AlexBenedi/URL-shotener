@@ -253,6 +253,7 @@ class UrlShortenerControllerTest {
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.url").value("http://localhost:80/abc123"))
             .andExpect(jsonPath("$.qrCodeGenerated").value(true))
+            .andExpect(jsonPath("$.urlQR").value("http://localhost:8080/qr/abc123"))
     }
 
 
