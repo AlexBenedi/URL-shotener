@@ -30,9 +30,9 @@ $(document).ready(function () {
         // Mostrar el QR en la página
         var resultDiv = $("#result");
         resultDiv.append('<img src="data:image/png;base64,' + qrCode + '" alt="QR Code">');
-        var qrCodeDownloadUrl = "/qr/" + id;
-        resultDiv.append('<p><a href="' + qrCodeDownloadUrl + '" download="qr.png">Descargar QR</a><p>');
-        resultDiv.append('<p><a href="' + window.location.origin + qrCodeDownloadUrl + '" target="_blank">' + window.location.origin + qrCodeDownloadUrl + '</a></p>');
+        //var qrCodeDownloadUrl = "/qr/" + id;
+        //resultDiv.append('<p><a href="' + qrCodeDownloadUrl + '" download="qr.png">Descargar QR</a><p>');
+        //resultDiv.append('<p><a href="' + window.location.origin + qrCodeDownloadUrl + '" target="_blank">' + window.location.origin + qrCodeDownloadUrl + '</a></p>');
     };
 
     // Manejar el cierre de la conexión WebSocket
@@ -85,16 +85,15 @@ $(document).ready(function () {
                     "</div>"
                 );
                 
-                /*
+
                 console.log("QR Code generated:", response.qrCodeGenerated);
                 // Display the QR code if it exists
                 if (response.qrCodeGenerated === true) {
                     resultDiv.append('<p>QR Code:</p>');
-                    var qrCodeDownloadUrl = "/" + response.url.split('/').pop() + "/qr";
-                    resultDiv.append('<p><a href="' + qrCodeDownloadUrl + '" download="qrcode.png">Download QR Code</a></p>');
-                    resultDiv.append('<p>' + window.location.origin + qrCodeDownloadUrl + '</p>');
+                    resultDiv.append('<p><a href="' + response.urlQR + '" download="qrcode.png">Download QR Code</a></p>');
+                    resultDiv.append('<p><a href="' + response.urlQR + '" target="_blank">' + response.urlQR + '</a></p>');
                 }
-                */
+
                 fetchUserLinks();
             },
             error: function () {

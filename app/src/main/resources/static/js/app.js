@@ -30,9 +30,9 @@ $(document).ready(function () {
                 // Mostrar el QR en la sección específica
                 const qrDiv = $("#qrSection");
                 qrDiv.html('<img src="data:image/png;base64,' + qrCode + '" alt="QR Code">');
-                var qrCodeDownloadUrl = "/qr/" + id;
-                qrDiv.append('<p><a href="' + qrCodeDownloadUrl + '" download="qr.png">Descargar QR</a><p>');
-                qrDiv.append('<p><a href="' + window.location.origin + qrCodeDownloadUrl + '" target="_blank">' + window.location.origin + qrCodeDownloadUrl + '</a></p>');
+                //var qrCodeDownloadUrl = "/qr/" + id;
+                //qrDiv.append('<p><a href="' + qrCodeDownloadUrl + '" download="qr.png">Descargar QR</a><p>');
+                //qrDiv.append('<p><a href="' + window.location.origin + qrCodeDownloadUrl + '" target="_blank">' + window.location.origin + qrCodeDownloadUrl + '</a></p>');
 
             };
 
@@ -82,6 +82,12 @@ $(document).ready(function () {
                     + shortenedUrl
                     + "</a></div>"
                 );
+                // Display the QR code if it exists
+                if (msg.qrCodeGenerated === true) {
+                    resultDiv.append('<p>QR Code:</p>');
+                    resultDiv.append('<p><a href="' + msg.urlQR + '" download="qrcode.png">Download QR Code</a></p>');
+                    resultDiv.append('<p><a href="' + msg.urlQR + '" target="_blank">' + msg.urlQR + '</a></p>');
+                }
             },
             error: function () {
                 $("#result").html("<div class='alert alert-danger lead'>ERROR</div>");

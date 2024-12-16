@@ -91,6 +91,7 @@ data class ShortUrlDataIn(
 data class ShortUrlDataOut(
     val url: URI? = null,
     val qrCodeGenerated: Boolean? = null,
+    val urlQR: String? = null,
     val properties: Map<String, Any> = emptyMap(),
     val error: String? = null
 )
@@ -122,6 +123,8 @@ class UrlShortenerControllerImpl(
         private val TIME_WINDOW_SECONDS = TimeUnit.HOURS.toSeconds(1)
         private const val MINUTES_LIMIT = 60
     }
+    @Value("\${server.ip}")
+    private lateinit var serverIp: String
     /**
      * Redirects and logs a short url identified by its [id].
      *
@@ -181,9 +184,11 @@ class UrlShortenerControllerImpl(
 
             println("Key hachis: $hash")
 
+            val urlForQR = "http://${serverIp}/qr/${hash}"
             val response = ShortUrlDataOut(
                 url = url,
                 qrCodeGenerated = data.generateQRCode, // Assign the QR code if generated
+                urlQR = urlForQR,
                 properties = mapOf(
                     "safe" to mapOf(
                         "isSafe" to properties.safe?.isSafe,
@@ -305,9 +310,11 @@ class UrlShortenerControllerImpl(
 
                 // Build the response
                 val shortenedUrl = "${request.scheme}://${request.serverName}:${request.serverPort}/${shortUrl.hash}"
+                val urlForQR = "http://${serverIp}/qr/${shortUrl.hash}"
                 val response = ShortUrlDataOut(
                     url = URI.create(shortenedUrl), // Convert String to URI
                     qrCodeGenerated = data.generateQRCode, // Assign the QR code if generated
+                    urlQR = urlForQR,
                     properties = mapOf("message" to "Link created successfully")
                 )
                 println(response)
