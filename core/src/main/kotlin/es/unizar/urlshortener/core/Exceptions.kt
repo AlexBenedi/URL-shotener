@@ -49,7 +49,9 @@ class UnsafeUrlException(
  * An exception indicating that the safety of a URL has not been checked.
  * This exception is thrown when the safety of a URL has not been verified before use.
  */
-class UrlSafetyNotCheckedException : DomainException("The safety of the URL has not been checked")
+class UrlSafetyNotCheckedException : DomainException(
+    "The safety of the URL has not been checked. Please try again later"
+    )
 
 /**
  * An exception indicating that a short URL could not be found.
@@ -77,7 +79,9 @@ class EmptyNameBrandedUrl : DomainException("Name must not be empty")
  * An exception indicating that the name of a Branded link has not been checked.
  * This exception is thrown when the name of a branded link has not been verified before use.
  */
-class BrandedNotCheckedException : DomainException("The name of the branded link has not been checked yet")
+class BrandedNotCheckedException : DomainException(
+    "The name of the branded link has not been checked yet. Please try again later"
+    )
 
 /**
  * An exception indicating that the name of a Branded link is invalid.
