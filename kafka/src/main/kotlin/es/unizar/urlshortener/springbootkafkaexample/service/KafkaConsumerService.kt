@@ -18,6 +18,7 @@ import es.unizar.urlshortener.websockets.WebSocketMessage
 import java.net.URI
 import com.google.gson.reflect.TypeToken
 import java.lang.reflect.Type
+import org.springframework.beans.factory.annotation.Value
 
 
 // quizá esta clase irá en core? o en otro paquete?
@@ -38,6 +39,9 @@ class KafkaConsumerService(
 
     @Autowired
     lateinit var kafkaProducerService: KafkaProducerService
+
+    @Value("\${server.ip}")
+    private lateinit var serverIp: String
 
     var lastConsumedMessage: String? = null
 
@@ -105,7 +109,8 @@ class KafkaConsumerService(
         val deserializedObject = Gson().fromJson(url, UrlForQr::class.java)
         println("Url for the Qr received in Kafka: ${deserializedObject.id}")
         // Generate the QR code
-        val qrCode = generateQRCodeUseCase.generateQRCode("http://localhost:8080/"+deserializedObject.id).base64Image
+        val url = "http://${serverIp}/${deserializedObject.id}"
+        val qrCode = generateQRCodeUseCase.generateQRCode(url).base64Image
         println("QR code generated: $qrCode")
 
         // Enviar mensaje al WebSocket del usuario

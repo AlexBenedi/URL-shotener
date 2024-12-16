@@ -49,6 +49,7 @@ jobs:
           NINJA_PROFANITY_FILTER_API_KEY: ${{ secrets.NINJA_PROFANITY_FILTER_API_KEY }}
           GOOGLE_SAFE_BROWSING_API_KEY: ${{ secrets.GOOGLE_API_SAFETY_KEY }}
           KAFKA_BROKER_IP: localhost:9092
+          SERVER_IP: locahost:8080
 
       - name: Sanitize kafka II
         run: ./gradlew build --no-daemon || true
@@ -56,6 +57,7 @@ jobs:
           NINJA_PROFANITY_FILTER_API_KEY: ${{ secrets.NINJA_PROFANITY_FILTER_API_KEY }}
           GOOGLE_SAFE_BROWSING_API_KEY: ${{ secrets.GOOGLE_API_SAFETY_KEY }}
           KAFKA_BROKER_IP: localhost:9092
+          SERVER_IP: locahost:8080
 
       - name: Build with Gradle
         run: ./gradlew build --no-daemon
@@ -65,6 +67,7 @@ jobs:
           GOOGLE_CLIENT_SECRET_API_KEY: ${{ secrets.GOOGLE_CLIENT_SECRET_API_KEY }}
           NINJA_PROFANITY_FILTER_API_KEY: ${{ secrets.NINJA_PROFANITY_FILTER_API_KEY }}
           KAFKA_BROKER_IP: localhost:9092
+          SERVER_IP: locahost:8080
       
       # Test
       - name: Test with Gradle
@@ -75,6 +78,7 @@ jobs:
           GOOGLE_CLIENT_SECRET_API_KEY: ${{ secrets.GOOGLE_CLIENT_SECRET_API_KEY }}
           NINJA_PROFANITY_FILTER_API_KEY: ${{ secrets.NINJA_PROFANITY_FILTER_API_KEY }}
           KAFKA_BROKER_IP: localhost:9092
+          SERVER_IP: locahost:8080
 
       - name: Cleanup Gradle Cache GOOGLE_API_SAFETY_KEY
         run: |
@@ -150,6 +154,7 @@ jobs:
             GOOGLE_CLIENT_SECRET_API_KEY=${{ secrets.GOOGLE_CLIENT_SECRET_API_KEY }}
             NINJA_PROFANITY_FILTER_API_KEY=${{ secrets.NINJA_PROFANITY_FILTER_API_KEY }}
             KAFKA_BROKER_IP=kafka:9092
+            SERVER_IP=${{secrets.AZURE_HOST}}
 
       - name: Check Docker Image
         run: docker images
