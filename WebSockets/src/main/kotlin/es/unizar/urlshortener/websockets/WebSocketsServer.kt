@@ -85,7 +85,7 @@ class WebSocketsServer {
 
     @OnError
     fun onError(session: Session, throwable: Throwable) {
-        println("Error en la conexión: ${throwable.message}")
+        println("Error en la conexión: ${throwable.message}, sessionId: ${session.id}")
     }
 
     // Metodo para enviar el QR al usuario específico

@@ -443,6 +443,7 @@ class UrlShortenerControllerImpl(
                 .contentType(MediaType.IMAGE_PNG)
                 .body(qrCodeImage)
         } catch (e: IllegalArgumentException) {
+            println("Error decoding Base64 QR code: ${e.message}")
             ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }

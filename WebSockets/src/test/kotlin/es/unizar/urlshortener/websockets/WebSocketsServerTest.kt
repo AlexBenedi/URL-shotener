@@ -161,8 +161,7 @@ class WebSocketsServerTest {
 
         // Assert
         val output = outContent.toString()
-        assert(output.contains("Se ha producido un error en la sesión: $sessionId"))
-        assert(output.contains("Error en la conexión: ${throwable.message}"))
+        assert(output.contains("Error en la conexión: ${throwable.message}, sessionId: $sessionId"))
         System.setOut(originalOut)
     }
 }
