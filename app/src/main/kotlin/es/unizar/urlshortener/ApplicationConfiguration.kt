@@ -46,6 +46,10 @@ class ApplicationConfiguration(
             .authorizeHttpRequests { registry ->
                 registry.requestMatchers("/ws-endpoint").permitAll()  // Permitir acceso al WebSocket
                 registry.requestMatchers("/user").authenticated()  // Rutas autenticadas
+                registry.requestMatchers("/api/users/{userId}/links").authenticated()
+                registry.requestMatchers("/clicks/{hash}").authenticated()
+                registry.requestMatchers("/delete/{idLink}").authenticated()
+                registry.requestMatchers("/api/link/user/{userId}").authenticated()
                 registry.anyRequest().permitAll()  // Rutas públicas
             }
             .oauth2Login(Customizer.withDefaults())  // Configura OAuth2 Login
