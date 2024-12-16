@@ -8,6 +8,5 @@ class KafkaProducerService(private val kafkaTemplate: KafkaTemplate<String, Stri
 
     fun sendMessage(topic: String, message: String) {
         kafkaTemplate.send(topic, message)
-        println("Message sent: $message")
     }
 }

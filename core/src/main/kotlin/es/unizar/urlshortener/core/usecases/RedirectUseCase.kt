@@ -43,13 +43,10 @@ class RedirectUseCaseImpl(
      */
     override fun redirectTo(key: String) : Redirection {
         val shortUrl = safeCall { shortUrlRepository.findByKey(key) }
-        println("Short Url retrieved: $shortUrl")
-        println("Key: $key")
         if(shortUrl != null){
             val safetyResponse = shortUrl.properties.safe
             val isBranded = shortUrl.properties.isBranded
             val validBranded = shortUrl.properties.validBranded
-            println(shortUrl)
             if(safetyResponse == null || safetyResponse.isSafe == null){ // safety not checked yet
                 throw UrlSafetyNotCheckedException()
             } 

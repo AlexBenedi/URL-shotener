@@ -55,14 +55,9 @@ class WebSocketsServer {
 
         if (userId != null) {
             sessions[userId] = session
-            val sesionPrueba = sessions[userId]
-            println("Conexión establecida para userId: $userId")
-            println("Valor de la sesión: $sesionPrueba")
-            println("La sesión está abierta: ${sesionPrueba?.isOpen}")
         } else {
             println("No se proporcionó userId en la URL")
         }
-        println("Sesiones activas: ${sessions}")
     }
 
     @OnMessage
@@ -72,12 +67,8 @@ class WebSocketsServer {
 
         val tupleType: Type = object : TypeToken<WebSocketMessage>() {}.type
         val webSocketMessage: WebSocketMessage = gson.fromJson(message, tupleType)
-
-        println("User ID: ${webSocketMessage.userId}")
-        println("Content: ${webSocketMessage.message}")
         
         // Aquí puedes realizar la lógica para enviar la respuesta con el QR
-        println("Sesiones activas: ${sessions}")
 
         sendMessageToUser(webSocketMessage.userId, webSocketMessage.message)
         
@@ -94,7 +85,6 @@ class WebSocketsServer {
 
     @OnError
     fun onError(session: Session, throwable: Throwable) {
-        println("Se ha producido un error en la sesión: ${session.id}")
         println("Error en la conexión: ${throwable.message}")
     }
 
@@ -102,8 +92,6 @@ class WebSocketsServer {
     fun sendMessageToUser(userId: String, message: String) {
         val session = sessions[userId]
         println("Enviando mensaje al usuario: $userId")
-        println("Valor de la sesión: $session")
-        println("La sesión está abierta: ${session?.isOpen}")
         if (session != null && session.isOpen) {
             session.basicRemote.sendText(message)
         } else {

@@ -138,7 +138,6 @@ class UrlShortenerControllerImpl(
             logClickUseCase.logClick(id, ClickProperties(ip = request.remoteAddr))
             val h = HttpHeaders()
             h.location = URI.create(target)
-            println("Redirecting to: $target")
             ResponseEntity<Unit>(h, HttpStatus.valueOf(mode))
         }
 
@@ -158,7 +157,6 @@ class UrlShortenerControllerImpl(
         val (currentCount, lastTimestamp) = ipRedirectionCounts[ip] ?: Pair(0, now)
 
         // Check if the time window has expired
-        println("IP: $ip")
         if (now.epochSecond - lastTimestamp.epochSecond > TIME_WINDOW_SECONDS) {
             ipRedirectionCounts[ip] = Pair(1, now) // Reset the count
         } else if (currentCount >= REDIRECTION_LIMIT && redirectionLimitConfig != -1) {
@@ -181,8 +179,6 @@ class UrlShortenerControllerImpl(
             val h = HttpHeaders()
             val url = linkTo<UrlShortenerControllerImpl> { redirectTo(hash, request) }.toUri()
             h.location = url
-
-            println("Key hachis: $hash")
 
             val urlForQR = if(data.generateQRCode == true) {
                 "http://${serverIp}/qr/${hash}"
@@ -222,10 +218,6 @@ class UrlShortenerControllerImpl(
         request: HttpServletRequest, 
         @PathVariable userId: String
     ): ResponseEntity<ShortUrlDataOut> {
-        System.out.println("UserId from shortenerUser : $userId")
-        System.out.println("URL from shortenerUser : ${data.url}")
-
-        System.out.println("El sistema esta en modo sincrono? : $isSyncMode")
 
         val user1 = getUserInformationUseCase.findById(userId)
 
@@ -238,8 +230,7 @@ class UrlShortenerControllerImpl(
             if (timeElapsed >= MINUTES_LIMIT) {
                 userRedirections = 0 // Restablece las redirecciones cada 60 minutos
             }
-            System.out.println("redirectionLimitConfig : $redirectionLimitConfig")
-            System.out.println("User redirections from shortenerUser : $userRedirections")
+
             if (redirectionLimitConfig != - 1 && userRedirections >= redirectionLimitConfig) {
                 // Return 429 Too Many Requests
                 return ResponseEntity
@@ -252,8 +243,6 @@ class UrlShortenerControllerImpl(
                     )
             } else {
                 val newRedirections = user1.redirections + 1
-
-                println("Data: $data")
 
                 // Crear el ShortUrl con el use case
                 val shortUrlCreation = createShortUrlUseCase.createAndDoNotSave(
@@ -268,16 +257,13 @@ class UrlShortenerControllerImpl(
                     userId = userId,
                     isSyncMode = isSyncMode
                 )
-                println("ShortUrlCreation: $shortUrlCreation")
-                println("ShortUrlCreation hash: ${shortUrlCreation.properties.safe}")
+
                 val shortUrl = ShortUrl(
                     hash = shortUrlCreation.hash,
                     redirection = Redirection(target = data.url),
                     created = OffsetDateTime.now(),
                     properties = shortUrlCreation.properties
                 )
-
-                println("SHORTURL: $shortUrl")
 
                 val user = User(
                     userId = userId,
@@ -286,8 +272,6 @@ class UrlShortenerControllerImpl(
                 )
 
                 getUserInformationUseCase.save(user)
-
-                System.out.println("Short hash  : ${shortUrlCreation.hash}")
 
                 // Crear el objeto Click (o recuperarlo si ya tienes la información en algún otro lugar)
                 val click = Click(
@@ -443,13 +427,9 @@ class UrlShortenerControllerImpl(
         val shortUrl = shortUrlRepositoryService.findByKey(id)
             ?: return ResponseEntity(HttpStatus.NOT_FOUND)
 
-        println("The hash of the short URL is: $id")
-        println("The value of the qrCode field is: ${shortUrl.qrCode}")
-
         val qrCodeBase64 = if (shortUrl.qrCode != null) {
             shortUrl.qrCode
         } else {
-            println("QR code is null for short URL with id: $id")
             // Usar el target proporcionado para generar el QR
             val generatedQRCode = generateQRCodeUseCase.generateQRCode("http://localhost:8080/" + id).base64Image
             val updatedShortUrl = shortUrl.copy(qrCode = generatedQRCode)
@@ -463,7 +443,6 @@ class UrlShortenerControllerImpl(
                 .contentType(MediaType.IMAGE_PNG)
                 .body(qrCodeImage)
         } catch (e: IllegalArgumentException) {
-            println("Error decoding Base64 QR code: ${e.message}")
             ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }

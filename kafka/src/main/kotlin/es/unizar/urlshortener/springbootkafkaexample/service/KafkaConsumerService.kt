@@ -62,9 +62,9 @@ class KafkaConsumerService(
         // deserialize the message to obtain the petition object
         val deserializedObject = Gson().fromJson(url, UrlSafetyPetition::class.java) 
         val res = googleSafeBrowsingClient.isUrlSafe(deserializedObject.url)
-        println("Safety check requested for: $url, $res")
+
         val checkedRes = UrlSafetyChecked(deserializedObject.id, res)
-        println("Checked res: $checkedRes")
+
         // serialize the response and send it to the kafka topic
         val checkedResJson = Gson().toJson(checkedRes)
         kafkaProducerService.sendMessage("safety-checked", checkedResJson)
@@ -73,19 +73,15 @@ class KafkaConsumerService(
     /* this method will be modified when spring integration/camel is implemented */
     @KafkaListener(topics = ["safety-checked"], groupId = "group_id")
     fun consumeSafetyChecked(message: String) {
-        // habrá que ver como desacoplar esto....
-        println("Serielized safety check result received: $message")
         // deserialize the message to obtain the safety check result object
         val deserializedObject = Gson().fromJson(message, UrlSafetyChecked::class.java)
-        println("Safety check result received: $deserializedObject")
-        // THIS WILL BE DONE USING WEBSOCKETS INSTEAD OF JUST CALLING THE FUNCTION DIRECTLY
+
         // send the safety check result to the client
         updateUrlSafetyUseCase.updateUrlSafety(deserializedObject.id, deserializedObject.information)
     }
 
     @KafkaListener(topics = ["branded"], groupId = "group_id")
     fun consumeBranded(message: String) {
-        println("Serielized branded received: $message")
         //Check
         val valid = ninjaProfanityFilter.isNameValid(message)
 
@@ -97,7 +93,6 @@ class KafkaConsumerService(
 
     @KafkaListener(topics = ["branded-checked"], groupId = "group_id")
     fun consumeBrandedChecked(message: String) {
-        println("Serielized branded checked received: $message")
         val pairType = object : TypeToken<Pair<String, Boolean>>() {}.type
         val deserializedObject: Pair<String, Boolean> = Gson().fromJson(message, pairType)
         updateUrlBrandedUseCase.updateUrlBranded(deserializedObject.first, deserializedObject.second)
@@ -105,17 +100,12 @@ class KafkaConsumerService(
 
     @KafkaListener(topics = ["qr"], groupId = "group_id")
     fun consumeQr(url: String) {
-        println("Serielized QR received: $url")
         val deserializedObject = Gson().fromJson(url, UrlForQr::class.java)
-        println("Url for the Qr received in Kafka: ${deserializedObject.id}")
         // Generate the QR code
         val url = "http://${serverIp}/${deserializedObject.id}"
         val qrCode = generateQRCodeUseCase.generateQRCode(url).base64Image
-        println("QR code generated: $qrCode")
 
         // Enviar mensaje al WebSocket del usuario
-        // Enviar el mensaje al WebSocket del usuario
-        println("User id kafka: ${deserializedObject.userId}")
         val serverUri = URI("ws://localhost:8080/ws-endpoint")
         val webSocketClient = MyWebSocketClient(serverUri)
         webSocketClient.connectBlocking()
@@ -127,12 +117,9 @@ class KafkaConsumerService(
 
         val webSocketMessage = WebSocketMessage(deserializedObject.userId, serializedContent)
 
-        println("User and QR code serialized: $webSocketMessage")
         webSocketClient.send(Gson().toJson(webSocketMessage))
         webSocketClient.close()
         // Store the QR code in the database
         storeQRUseCase.storeQR(deserializedObject.id, qrCode)
-        println("QR code stored in the database")
-        // Send the QR code to the client VIA WEB SOCKETS
     }
 }

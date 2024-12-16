@@ -94,13 +94,9 @@ class CreateShortUrlUseCaseImpl(
         // Get the user ID from the data (modify as needed to get the actual user ID)
 
         if (safeCall { validatorService.isValid(url) }) {
-            /*if (!safeCall { safetyService.isUrlSafe(url) }) {
-                println("URL is not safe")
-                throw UnsafeUrlException(url)
-            }*/
+
             var id = safeCall { hashService.hasUrl(url) }
             id += userId
-            System.out.println("ID de la url a insertar: " + id)
 
             if (data.isBranded == true) {
                 id = data.name ?: throw EmptyNameBrandedUrl()
@@ -117,7 +113,6 @@ class CreateShortUrlUseCaseImpl(
                 safeCall { safetyService.isUrlSafeSync(url); }// this must be async
             }
 
-            println("Data dentro : $data")
             val su = ShortUrl(
                 hash = id,
                 redirection = Redirection(target = url),

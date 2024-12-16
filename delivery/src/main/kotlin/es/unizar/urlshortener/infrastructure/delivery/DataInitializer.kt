@@ -17,8 +17,6 @@ class DataInitializer(
         val filePath = javaClass.classLoader.getResource("usersId.csv")?.file
         val users = mutableListOf<User>()
 
-        println("INICIALZANDO USUARIOS PARA TEST DESDE CSV...")
-
         // Leer el archivo CSV
         File(filePath).useLines { lines ->
             lines.drop(1) // Saltar la cabecera
@@ -26,7 +24,6 @@ class DataInitializer(
                     val userId = line.trim() // Extraer el ID del usuario
                     if (userId.isNotBlank()) {
                         // Crear usuario con solo el ID
-                        //System.out.println("Anyadiendo usuario con ID: " + userId)
                         users.add(
                             User(
                                 userId = userId,
@@ -42,7 +39,5 @@ class DataInitializer(
         users.forEach { user ->
             getUserInformationUseCase.processUser(user)
         }
-
-        println("Users initialized successfully from CSV!")
     }
 }

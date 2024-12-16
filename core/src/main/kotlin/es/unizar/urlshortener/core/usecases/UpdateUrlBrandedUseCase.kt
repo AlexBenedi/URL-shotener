@@ -37,11 +37,9 @@ class UpdateUrlBrandedUseCaseImpl(
         return try {
             val shortUrl = safeCall { shortUrlRepository.findByKey(url) }
                 ?: throw ShortUrlNotFoundException("Short URL not found for key: $url")
-            println("Branded antes $shortUrl")
             
             // update validBranded property with the state
             val updatedShortUrl = shortUrl.copy(properties = shortUrl.properties.copy(validBranded = isValid))
-            println("Branded actualizado $updatedShortUrl")
             safeCall { shortUrlRepository.save(updatedShortUrl) }
         } catch (e: ShortUrlNotFoundException) {
             println("Database hasn't been updated yet! $e.message")

@@ -39,7 +39,6 @@ class StoreQRUseCaseImpl(
             val shortUrl = safeCall { shortUrlRepository.findByKey(url) }
                 ?: throw ShortUrlNotFoundException("Short URL not found for key: $url")
             val updatedShortUrl = shortUrl.copy(qrCode = qrCode)
-            println("Qr code guardado $updatedShortUrl")
             safeCall { shortUrlRepository.save(updatedShortUrl) }
         } catch (e: ShortUrlNotFoundException) {
             println("Database hasn't been updated yet! $e.message")
