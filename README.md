@@ -18,9 +18,12 @@
 
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=fractallink_url-shortener-repositories&metric=coverage)](https://sonarcloud.io/summary/new_code?id=fractallink_url-shortener-repositories)
 
-# URL Shortener project by FractalLink
+# URL Shortener project
 
-This repository is a modification of the `https://github.com/UNIZAR-30246-WebEngineering/urlshortener` project. Read its README to understand its architecture, requirements, and main functionalities.
+This project is a URL Shortener similar to Bitly. It is a monolithic but asynchronous application. Kafka is used to process different requests in parallel.
+
+A user system has been implemented, allowing users to register using Google and save a limited number of shortened links. Additionally, the system allows users to generate QR codes for the shortened URLs and create branded URLs to make them more memorable.
+
 # Setup & execution instructions 
 
 This project is using the following technologies: 
